@@ -6,6 +6,7 @@ target '09' do
   use_frameworks!
 
   # Pods for 09
-pod 'Alamofire', '~> 5.2'
-
+pod 'RxSwift', '6.2.0'
+pod 'RxCocoa', '6.2.0'
+pod 'Alamofire', '~> 5.4'
 end
