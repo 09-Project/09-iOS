@@ -14,6 +14,9 @@
 		3831121C270817C900F56E40 /* banner_09.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 38311218270817C900F56E40 /* banner_09.jpg */; };
 		3831121F270828F000F56E40 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3831121E270828F000F56E40 /* SignInViewController.swift */; };
 		383112212708296900F56E40 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 383112202708296900F56E40 /* SignUpViewController.swift */; };
+		3873D6D1270B223B00CD983D /* NotoSansCJKkr-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3873D6CE270B223800CD983D /* NotoSansCJKkr-Regular.otf */; };
+		3873D6D2270B223B00CD983D /* NotoSansCJKkr-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3873D6CF270B223A00CD983D /* NotoSansCJKkr-Medium.otf */; };
+		3873D6D3270B223B00CD983D /* NotoSansCJKkr-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3873D6D0270B223B00CD983D /* NotoSansCJKkr-Bold.otf */; };
 		38D3932526EB4185008BF247 /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38D3932426EB4185008BF247 /* Header.swift */; };
 		38D3932726EB4302008BF247 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38D3932626EB4302008BF247 /* LoginViewModel.swift */; };
 		38D3932926EB4643008BF247 /* ViewModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38D3932826EB4643008BF247 /* ViewModelType.swift */; };
@@ -33,6 +36,9 @@
 		38311218270817C900F56E40 /* banner_09.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = banner_09.jpg; sourceTree = "<group>"; };
 		3831121E270828F000F56E40 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
 		383112202708296900F56E40 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
+		3873D6CE270B223800CD983D /* NotoSansCJKkr-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansCJKkr-Regular.otf"; sourceTree = "<group>"; };
+		3873D6CF270B223A00CD983D /* NotoSansCJKkr-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansCJKkr-Medium.otf"; sourceTree = "<group>"; };
+		3873D6D0270B223B00CD983D /* NotoSansCJKkr-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansCJKkr-Bold.otf"; sourceTree = "<group>"; };
 		38D3932426EB4185008BF247 /* Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Header.swift; sourceTree = "<group>"; };
 		38D3932626EB4302008BF247 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		38D3932826EB4643008BF247 /* ViewModelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelType.swift; sourceTree = "<group>"; };
@@ -64,6 +70,16 @@
 				33ACA38D3686901B49145C33 /* Pods_09.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		382A78EB270B10AD00EBE7AA /* font */ = {
+			isa = PBXGroup;
+			children = (
+				3873D6D0270B223B00CD983D /* NotoSansCJKkr-Bold.otf */,
+				3873D6CF270B223A00CD983D /* NotoSansCJKkr-Medium.otf */,
+				3873D6CE270B223800CD983D /* NotoSansCJKkr-Regular.otf */,
+			);
+			path = font;
 			sourceTree = "<group>";
 		};
 		383112102708166C00F56E40 /* images */ = {
@@ -153,6 +169,7 @@
 				38D3932026EB4143008BF247 /* Networking */,
 				38D3931F26EB413C008BF247 /* View */,
 				38D3931E26EB412F008BF247 /* ViewModel */,
+				382A78EB270B10AD00EBE7AA /* font */,
 				38FE843C26EACF48009587FC /* AppDelegate.swift */,
 				38FE843E26EACF48009587FC /* SceneDelegate.swift */,
 				38FE844526EACF4B009587FC /* Assets.xcassets */,
@@ -232,11 +249,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				3831121A270817C900F56E40 /* symbol_black_09.png in Resources */,
+				3873D6D1270B223B00CD983D /* NotoSansCJKkr-Regular.otf in Resources */,
 				38FE844926EACF4B009587FC /* LaunchScreen.storyboard in Resources */,
 				3831121C270817C900F56E40 /* banner_09.jpg in Resources */,
 				3831121B270817C900F56E40 /* logo_09.png in Resources */,
 				38311219270817C900F56E40 /* symbol_09.png in Resources */,
 				38FE844626EACF4B009587FC /* Assets.xcassets in Resources */,
+				3873D6D2270B223B00CD983D /* NotoSansCJKkr-Medium.otf in Resources */,
+				3873D6D3270B223B00CD983D /* NotoSansCJKkr-Bold.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
