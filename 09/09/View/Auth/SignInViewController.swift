@@ -9,6 +9,9 @@ import UIKit
 
 class SignInViewController: UIViewController {
     
+    private let fontBold = "NotoSansCJKkr-Bold"
+    private let fontRegular = "NotoSansCJKkr-Regular"
+    private let fontMedium = "NotoSansCJKkr-Medium"
     private let symbolImg = UIImage(named: "symbol_09")
     private let logoImg = UIImage(named: "logo_09")
     
@@ -26,6 +29,7 @@ class SignInViewController: UIViewController {
     
     private lazy var loginLabel = UILabel().then {
         $0.text = "LOG IN"
+        $0.font = UIFont(name: fontBold, size: 24)
         $0.textColor = .black
         $0.backgroundColor = .white
     }
@@ -34,6 +38,7 @@ class SignInViewController: UIViewController {
         $0.borderStyle = .none
         $0.textAlignment = .left
         $0.backgroundColor = .white
+        $0.font = UIFont(name: fontRegular, size: 14)
         $0.textColor = UIColor.init(named: "mainColor")
         $0.attributedPlaceholder = NSAttributedString(string: "ID", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
     }
@@ -43,15 +48,17 @@ class SignInViewController: UIViewController {
         $0.textAlignment = .left
         $0.backgroundColor = .white
         $0.textColor = UIColor.init(named: "mainColor")
+        $0.font = UIFont(name: fontRegular, size: 14)
         $0.attributedPlaceholder = NSAttributedString(string: "PASSWORD", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
     }
     
     private lazy var checkBtn = UIButton().then {
         $0.setImage(UIImage(systemName: "checkmark.square"), for: .normal)
-        $0.setTitleColor(.init(named: "mainColor"), for: .normal)
+        $0.setTitleColor(.init(named: "idCheckColor"), for: .normal)
     }
     
     private lazy var idCheckLabel = UILabel().then {
+        $0.font = UIFont(name: fontMedium, size: 10)
         $0.text = "아이디 저장"
         $0.textColor = .black
         $0.backgroundColor = .white
@@ -60,6 +67,7 @@ class SignInViewController: UIViewController {
         $0.backgroundColor = .init(named: "mainColor")
         $0.setTitle("LOGIN", for: .normal)
         $0.setTitleColor(.white, for: .normal)
+        $0.titleLabel?.font = UIFont(name: fontMedium, size: 14)
         $0.layer.cornerRadius = 10
     }
     
@@ -67,14 +75,13 @@ class SignInViewController: UIViewController {
         $0.backgroundColor = .white
         $0.text = "계정이 없으신가요?"
         $0.textColor = .black
-        $0.font = UIFont.preferredFont(forTextStyle: .caption1)
+        $0.font = UIFont(name: fontRegular, size: 12)
     }
     private lazy var moveSignupBtn = UIButton().then {
         $0.backgroundColor = .white
         $0.setTitle("회원가입하기", for: .normal)
         $0.setTitleColor(.init(named: "mainColor"), for: .normal)
-        $0.titleLabel!.font = UIFont.preferredFont(forTextStyle: .caption1)
-        
+        $0.titleLabel!.font = UIFont(name: fontRegular, size: 12)
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -101,39 +108,41 @@ class SignInViewController: UIViewController {
         view.addSubview(moveSignupBtn)
         
         self.symbolImgView.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(170)
+            $0.leading.lessThanOrEqualToSuperview().offset(170.5)
             $0.top.equalToSuperview().offset(70)
             $0.trailing.equalTo(self.logoImgView.snp.leading).offset(-10)
             $0.height.width.equalTo(31)
         }
         self.logoImgView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(70)
+            $0.trailing.greaterThanOrEqualToSuperview().offset(-170.5)
             $0.height.equalTo(33)
             $0.width.equalTo(45)
         }
         
         self.loginLabel.snp.makeConstraints {
             $0.top.equalTo(self.logoImgView.snp.bottom).offset(90)
-            $0.leading.equalToSuperview().offset(180)
+            $0.leading.lessThanOrEqualToSuperview().offset(167)
+            $0.trailing.greaterThanOrEqualToSuperview().offset(-167)
             $0.width.equalTo(85)
             $0.height.equalTo(42)
         }
         self.idTxt.snp.makeConstraints {
             $0.top.equalTo(self.loginLabel.snp.bottom).offset(50)
-            $0.width.equalTo(320)
             $0.height.equalTo(31)
-            $0.leading.equalToSuperview().offset(45)
+            $0.leading.lessThanOrEqualToSuperview().offset(45)
+            $0.trailing.greaterThanOrEqualToSuperview().offset(-45)
         }
         self.pwTxt.snp.makeConstraints {
             $0.top.equalTo(self.idTxt.snp.bottom).offset(70)
-            $0.width.equalTo(320)
             $0.height.equalTo(31)
-            $0.leading.equalToSuperview().offset(45)
+            $0.leading.lessThanOrEqualToSuperview().offset(45)
+            $0.trailing.greaterThanOrEqualToSuperview().offset(-45)
         }
         self.checkBtn.snp.makeConstraints {
             $0.top.equalTo(self.pwTxt.snp.bottom).offset(21.5)
             $0.leading.equalToSuperview().offset(45)
-            $0.height.width.equalTo(18)
+            $0.height.width.equalTo(12)
         }
         self.idCheckLabel.snp.makeConstraints {
             $0.top.equalTo(self.pwTxt.snp.bottom).offset(20)
@@ -143,16 +152,17 @@ class SignInViewController: UIViewController {
         }
         self.loginBtn.snp.makeConstraints {
             $0.top.equalTo(self.pwTxt.snp.bottom).offset(200)
-            $0.leading.equalToSuperview().offset(45)
-            $0.width.equalTo(320)
-            $0.height.equalTo(65)
+            $0.leading.lessThanOrEqualToSuperview().offset(39)
+            $0.trailing.greaterThanOrEqualToSuperview().offset(-39)
+            $0.height.equalTo(46)
         }
         self.label.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(120)
+            $0.leading.lessThanOrEqualToSuperview().offset(120)
             $0.top.equalTo(self.loginBtn.snp.bottom).offset(20)
         }
         self.moveSignupBtn.snp.makeConstraints {
             $0.leading.equalTo(self.label.snp.trailing).offset(5)
+            $0.trailing.greaterThanOrEqualToSuperview().offset(-120)
             $0.top.equalTo(self.loginBtn.snp.bottom).offset(12.5)
         }
     }
