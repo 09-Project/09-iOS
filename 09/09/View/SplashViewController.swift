@@ -28,7 +28,8 @@ class SplashViewController: UIViewController {
     
     private lazy var label = UILabel().then {
         $0.text = "\"공동구매부터 무료나눔까지\""
-        $0.backgroundColor = .white
+        $0.font = UIFont(name: "NotoSansCJKkr-Regular", size: 16) ?? UIFont.systemFont(ofSize: 16)
+        $0.backgroundColor = UIColor.white
         $0.textColor = .black
         $0.textAlignment = .center
     }
@@ -38,6 +39,8 @@ class SplashViewController: UIViewController {
         view.backgroundColor = .white
         // Do any additional setup after loading the view.
         setUpView()
+    }
+    override func viewDidLayoutSubviews() {
         setLabel()
     }
     
@@ -48,22 +51,24 @@ class SplashViewController: UIViewController {
         view.addSubview(label)
         
         self.symbolImgView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(240)
-            $0.height.width.equalTo(87)
-            $0.trailing.leading.equalTo(self.view)
+            $0.top.lessThanOrEqualToSuperview().offset(283)
+            $0.height.width.equalTo(80)
+            $0.leading.lessThanOrEqualToSuperview().offset(151)
+            $0.trailing.greaterThanOrEqualToSuperview().offset(-151)
         }
         
         self.label.snp.makeConstraints {
-            $0.top.equalTo(self.symbolImgView.snp.bottom).offset(50)
-            $0.trailing.equalTo(self.view)
-            $0.leading.equalTo(self.view)
+            $0.top.equalTo(self.symbolImgView.snp.bottom).offset(28)
+            $0.trailing.lessThanOrEqualToSuperview().offset(-108.5)
+            $0.leading.lessThanOrEqualToSuperview().offset(108.5)
         }
         
         self.logoImgView.snp.makeConstraints {
-            $0.top.equalTo(self.label.snp.bottom).offset(20)
-            $0.width.equalTo(45)
-            $0.height.equalTo(33)
-            $0.trailing.leading.equalTo(self.view)
+            $0.top.equalTo(self.label.snp.bottom).offset(8)
+            $0.width.equalTo(40)
+            $0.height.equalTo(27)
+            $0.leading.lessThanOrEqualToSuperview().offset(171)
+            $0.trailing.greaterThanOrEqualToSuperview().offset(-171)
         }
         
     }
@@ -75,12 +80,12 @@ class SplashViewController: UIViewController {
         
         attributedStr.addAttribute(.foregroundColor, value: UIColor.init(named: "mainColor"), range: (label.text! as NSString).range(of: "무료나눔"))
         
-        attributedStr.addAttribute(.font, value: UIFont.boldSystemFont(ofSize: 18), range: (label.text! as NSString).range(of: "공동구매"))
+        attributedStr.addAttribute(.font, value: UIFont(name: "NotoSansCJKkr-Bold", size: 16), range: (label.text! as NSString).range(of: "공동구매"))
         
-        attributedStr.addAttribute(.font, value: UIFont.boldSystemFont(ofSize: 18), range: (label.text! as NSString).range(of: "무료나눔"))
+        attributedStr.addAttribute(.font, value: UIFont(name: "NotoSansCJKkr-Bold", size: 16), range: (label.text! as NSString).range(of: "무료나눔"))
         
         label.attributedText = attributedStr
     }
-
+    
 }
 
