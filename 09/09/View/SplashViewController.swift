@@ -53,22 +53,19 @@ class SplashViewController: UIViewController {
         self.symbolImgView.snp.makeConstraints {
             $0.top.lessThanOrEqualToSuperview().offset(283)
             $0.height.width.equalTo(80)
-            $0.leading.lessThanOrEqualToSuperview().offset(151)
-            $0.trailing.greaterThanOrEqualToSuperview().offset(-151)
+            $0.centerX.equalTo(self.view)
         }
         
         self.label.snp.makeConstraints {
             $0.top.equalTo(self.symbolImgView.snp.bottom).offset(28)
-            $0.trailing.lessThanOrEqualToSuperview().offset(-108.5)
-            $0.leading.lessThanOrEqualToSuperview().offset(108.5)
+            $0.centerX.equalTo(self.view)
         }
         
         self.logoImgView.snp.makeConstraints {
             $0.top.equalTo(self.label.snp.bottom).offset(8)
             $0.width.equalTo(40)
             $0.height.equalTo(27)
-            $0.leading.lessThanOrEqualToSuperview().offset(171)
-            $0.trailing.greaterThanOrEqualToSuperview().offset(-171)
+            $0.centerX.equalTo(self.view)
         }
         
     }
