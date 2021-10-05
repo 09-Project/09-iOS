@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 class SignInViewController: UIViewController {
     
@@ -14,6 +16,8 @@ class SignInViewController: UIViewController {
     private let fontMedium = "NotoSansCJKkr-Medium"
     private let symbolImg = UIImage(named: "symbol_09")
     private let logoImg = UIImage(named: "logo_09")
+    private var eyeBtnBool: Bool = false
+    private var checkBtnBool: Bool = false
     
     private lazy var symbolImgView = UIImageView().then {
         $0.image = symbolImg
@@ -40,7 +44,7 @@ class SignInViewController: UIViewController {
         $0.backgroundColor = .white
         $0.font = UIFont(name: fontRegular, size: 14)
         $0.textColor = UIColor.init(named: "mainColor")
-        $0.attributedPlaceholder = NSAttributedString(string: "ID", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
+        $0.attributedPlaceholder = NSAttributedString(string: "     ID", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
     }
     
     private lazy var pwTxt = UITextField().then {
@@ -49,12 +53,17 @@ class SignInViewController: UIViewController {
         $0.backgroundColor = .white
         $0.textColor = UIColor.init(named: "mainColor")
         $0.font = UIFont(name: fontRegular, size: 14)
-        $0.attributedPlaceholder = NSAttributedString(string: "PASSWORD", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
+        $0.attributedPlaceholder = NSAttributedString(string: "     PASSWORD", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
+    }
+    
+    private lazy var eyeBtn = UIButton().then {
+        $0.setImage(UIImage(systemName: "eye"), for: .normal)
+        $0.tintColor = .init(named: "placeholderColor")
     }
     
     private lazy var checkBtn = UIButton().then {
         $0.setImage(UIImage(systemName: "checkmark.square"), for: .normal)
-        $0.setTitleColor(.init(named: "idCheckColor"), for: .normal)
+        $0.tintColor = .init(named: "idCheckColor")
     }
     
     private lazy var idCheckLabel = UILabel().then {
@@ -90,9 +99,16 @@ class SignInViewController: UIViewController {
         setupView()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+       UserDefaults.standard.string(forKey: "id")
+        pwTxt.text! = ""
+    }
+    
     override func viewDidLayoutSubviews() {
         idCheckLabel.sizeToFit()
         setObj()
+        self.eyeBtn.addTarget(self, action: #selector(changeEyeBtnImg), for: .touchUpInside)
+        self.checkBtn.addTarget(self, action: #selector(changeCheckBtnImg), for: .touchUpInside)
     }
     
     private func setupView() {
@@ -101,6 +117,7 @@ class SignInViewController: UIViewController {
         view.addSubview(loginLabel)
         view.addSubview(idTxt)
         view.addSubview(pwTxt)
+        view.addSubview(eyeBtn)
         view.addSubview(checkBtn)
         view.addSubview(idCheckLabel)
         view.addSubview(loginBtn)
@@ -122,11 +139,11 @@ class SignInViewController: UIViewController {
         
         self.loginLabel.snp.makeConstraints {
             $0.top.equalTo(self.logoImgView.snp.bottom).offset(90)
-            $0.leading.lessThanOrEqualToSuperview().offset(167)
-            $0.trailing.greaterThanOrEqualToSuperview().offset(-167)
+            $0.centerX.equalTo(self.view)
             $0.width.equalTo(85)
             $0.height.equalTo(42)
         }
+        
         self.idTxt.snp.makeConstraints {
             $0.top.equalTo(self.loginLabel.snp.bottom).offset(50)
             $0.height.equalTo(31)
@@ -138,6 +155,13 @@ class SignInViewController: UIViewController {
             $0.height.equalTo(31)
             $0.leading.lessThanOrEqualToSuperview().offset(45)
             $0.trailing.greaterThanOrEqualToSuperview().offset(-45)
+        }
+        
+        self.eyeBtn.snp.makeConstraints {
+            $0.top.equalTo(self.idTxt.snp.bottom).offset(83)
+            $0.trailing.equalToSuperview().offset(-55)
+            $0.width.equalTo(14)
+            $0.height.equalTo(10)
         }
         self.checkBtn.snp.makeConstraints {
             $0.top.equalTo(self.pwTxt.snp.bottom).offset(21.5)
@@ -181,5 +205,33 @@ class SignInViewController: UIViewController {
         border1.frame = CGRect(x: 0, y: pwTxt.frame.size.height+5, width: pwTxt.frame.width, height: 1)
         border1.backgroundColor = UIColor.init(named: "placeholderColor")?.cgColor
         pwTxt.layer.addSublayer(border1)
+    }
+    
+    @objc
+    func changeEyeBtnImg() {
+        if eyeBtnBool {
+            pwTxt.isSecureTextEntry = false
+            eyeBtnBool.toggle()
+            eyeBtn.setImage(UIImage(systemName: "eye"), for: .normal)
+        }
+        else {
+            pwTxt.isSecureTextEntry = true
+            eyeBtnBool.toggle()
+            eyeBtn.setImage(UIImage(systemName: "eye.slash"), for: .normal)
+        }
+    }
+    @objc
+    func changeCheckBtnImg() {
+        if checkBtnBool {
+            checkBtn.setImage(UIImage(systemName: "checkmark.square"), for: .normal)
+            UserDefaults.standard.set(nil, forKey: "id")
+            checkBtnBool.toggle()
+        }
+        
+        else {
+            checkBtn.setImage(UIImage(systemName: "checkmark.square.fill"), for: .normal)
+            UserDefaults.standard.set(idTxt.text!, forKey: "id")
+            checkBtnBool.toggle()
+        }
     }
 }
