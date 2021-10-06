@@ -14,19 +14,13 @@ class SignInViewController: UIViewController {
     private let fontBold = "NotoSansCJKkr-Bold"
     private let fontRegular = "NotoSansCJKkr-Regular"
     private let fontMedium = "NotoSansCJKkr-Medium"
-    private let symbolImg = UIImage(named: "symbol_09")
-    private let logoImg = UIImage(named: "logo_09")
+    private let img = UIImage(named: "symbol&logo_09")
     private var eyeBtnBool: Bool = false
     private var checkBtnBool: Bool = false
     
-    private lazy var symbolImgView = UIImageView().then {
-        $0.image = symbolImg
-        $0.contentMode = .scaleAspectFit
-        $0.backgroundColor = .white
-    }
     
-    private lazy var logoImgView = UIImageView().then {
-        $0.image = logoImg
+    private lazy var imgView = UIImageView().then {
+        $0.image = img
         $0.contentMode = .scaleAspectFit
         $0.backgroundColor = .white
     }
@@ -56,7 +50,14 @@ class SignInViewController: UIViewController {
         $0.attributedPlaceholder = NSAttributedString(string: "     PASSWORD", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
     }
     
+    private lazy var errorLabel = UILabel().then {
+        $0.backgroundColor = .white
+        $0.font = .init(name: fontRegular, size: 10)
+        $0.textColor = .init(named: "mainColor")
+    }
+    
     private lazy var eyeBtn = UIButton().then {
+        $0.backgroundColor = .white
         $0.setImage(UIImage(systemName: "eye"), for: .normal)
         $0.tintColor = .init(named: "placeholderColor")
     }
@@ -100,20 +101,20 @@ class SignInViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-       UserDefaults.standard.string(forKey: "id")
+        UserDefaults.standard.string(forKey: "id")
+        self.eyeBtn.addTarget(self, action: #selector(changeEyeBtnImg), for: .touchUpInside)
+        self.checkBtn.addTarget(self, action: #selector(changeCheckBtnImg), for: .touchUpInside)
         pwTxt.text! = ""
     }
     
     override func viewDidLayoutSubviews() {
         idCheckLabel.sizeToFit()
         setObj()
-        self.eyeBtn.addTarget(self, action: #selector(changeEyeBtnImg), for: .touchUpInside)
-        self.checkBtn.addTarget(self, action: #selector(changeCheckBtnImg), for: .touchUpInside)
+        setupView()
     }
     
     private func setupView() {
-        view.addSubview(symbolImgView)
-        view.addSubview(logoImgView)
+        view.addSubview(imgView)
         view.addSubview(loginLabel)
         view.addSubview(idTxt)
         view.addSubview(pwTxt)
@@ -124,21 +125,15 @@ class SignInViewController: UIViewController {
         view.addSubview(label)
         view.addSubview(moveSignupBtn)
         
-        self.symbolImgView.snp.makeConstraints {
-            $0.leading.lessThanOrEqualToSuperview().offset(170.5)
-            $0.top.equalToSuperview().offset(70)
-            $0.trailing.equalTo(self.logoImgView.snp.leading).offset(-10)
-            $0.height.width.equalTo(31)
-        }
-        self.logoImgView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(70)
-            $0.trailing.greaterThanOrEqualToSuperview().offset(-170.5)
-            $0.height.equalTo(33)
-            $0.width.equalTo(45)
+        self.imgView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(52)
+            $0.centerX.equalTo(self.view)
+            $0.height.equalTo(28)
+            $0.width.equalTo(73)
         }
         
         self.loginLabel.snp.makeConstraints {
-            $0.top.equalTo(self.logoImgView.snp.bottom).offset(90)
+            $0.top.equalTo(self.imgView.snp.bottom).offset(80)
             $0.centerX.equalTo(self.view)
             $0.width.equalTo(85)
             $0.height.equalTo(42)
@@ -175,7 +170,7 @@ class SignInViewController: UIViewController {
             $0.height.equalTo(20)
         }
         self.loginBtn.snp.makeConstraints {
-            $0.top.equalTo(self.pwTxt.snp.bottom).offset(200)
+            $0.top.lessThanOrEqualTo(self.pwTxt.snp.bottom).offset(230)
             $0.leading.lessThanOrEqualToSuperview().offset(39)
             $0.trailing.greaterThanOrEqualToSuperview().offset(-39)
             $0.height.equalTo(46)
@@ -208,20 +203,20 @@ class SignInViewController: UIViewController {
     }
     
     @objc
-    func changeEyeBtnImg() {
+    private func changeEyeBtnImg() {
         if eyeBtnBool {
             pwTxt.isSecureTextEntry = false
-            eyeBtnBool.toggle()
             eyeBtn.setImage(UIImage(systemName: "eye"), for: .normal)
+            eyeBtnBool.toggle()
         }
         else {
             pwTxt.isSecureTextEntry = true
-            eyeBtnBool.toggle()
             eyeBtn.setImage(UIImage(systemName: "eye.slash"), for: .normal)
+            eyeBtnBool.toggle()
         }
     }
     @objc
-    func changeCheckBtnImg() {
+    private func changeCheckBtnImg() {
         if checkBtnBool {
             checkBtn.setImage(UIImage(systemName: "checkmark.square"), for: .normal)
             UserDefaults.standard.set(nil, forKey: "id")
@@ -233,5 +228,9 @@ class SignInViewController: UIViewController {
             UserDefaults.standard.set(idTxt.text!, forKey: "id")
             checkBtnBool.toggle()
         }
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
     }
 }
