@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1C31373B1E22763C1F298A92 /* Pods_09.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33ACA38D3686901B49145C33 /* Pods_09.framework */; };
+		3828D1F0270D420F005231E4 /* symbol&logo_09.png in Resources */ = {isa = PBXBuildFile; fileRef = 3828D1EF270D420F005231E4 /* symbol&logo_09.png */; };
 		38311219270817C900F56E40 /* symbol_09.png in Resources */ = {isa = PBXBuildFile; fileRef = 38311215270817C800F56E40 /* symbol_09.png */; };
 		3831121A270817C900F56E40 /* symbol_black_09.png in Resources */ = {isa = PBXBuildFile; fileRef = 38311216270817C800F56E40 /* symbol_black_09.png */; };
 		3831121B270817C900F56E40 /* logo_09.png in Resources */ = {isa = PBXBuildFile; fileRef = 38311217270817C900F56E40 /* logo_09.png */; };
@@ -30,6 +31,7 @@
 /* Begin PBXFileReference section */
 		2EFBF1C2E20FAA9900E33E6D /* Pods-09.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-09.release.xcconfig"; path = "Target Support Files/Pods-09/Pods-09.release.xcconfig"; sourceTree = "<group>"; };
 		33ACA38D3686901B49145C33 /* Pods_09.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_09.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3828D1EF270D420F005231E4 /* symbol&logo_09.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "symbol&logo_09.png"; sourceTree = "<group>"; };
 		38311215270817C800F56E40 /* symbol_09.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = symbol_09.png; sourceTree = "<group>"; };
 		38311216270817C800F56E40 /* symbol_black_09.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = symbol_black_09.png; sourceTree = "<group>"; };
 		38311217270817C900F56E40 /* logo_09.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo_09.png; sourceTree = "<group>"; };
@@ -88,6 +90,7 @@
 				38311218270817C900F56E40 /* banner_09.jpg */,
 				38311217270817C900F56E40 /* logo_09.png */,
 				38311215270817C800F56E40 /* symbol_09.png */,
+				3828D1EF270D420F005231E4 /* symbol&logo_09.png */,
 				38311216270817C800F56E40 /* symbol_black_09.png */,
 			);
 			path = images;
@@ -248,6 +251,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3828D1F0270D420F005231E4 /* symbol&logo_09.png in Resources */,
 				3831121A270817C900F56E40 /* symbol_black_09.png in Resources */,
 				3873D6D1270B223B00CD983D /* NotoSansCJKkr-Regular.otf in Resources */,
 				38FE844926EACF4B009587FC /* LaunchScreen.storyboard in Resources */,
