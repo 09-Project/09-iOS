@@ -19,7 +19,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let splashVC = SplashViewController()
         let loginVC = SignInViewController()
         let signupVC = SignUpViewController()
-        let naviagtionVC = UINavigationController(rootViewController: splashVC)
+        let mainVC = MainViewController()
+        let naviagtionVC = UINavigationController(rootViewController: mainVC)
         window?.rootViewController = loginVC
         window?.makeKeyAndVisible()
     }
