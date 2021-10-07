@@ -18,7 +18,9 @@
 		3873D6D1270B223B00CD983D /* NotoSansCJKkr-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3873D6CE270B223800CD983D /* NotoSansCJKkr-Regular.otf */; };
 		3873D6D2270B223B00CD983D /* NotoSansCJKkr-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3873D6CF270B223A00CD983D /* NotoSansCJKkr-Medium.otf */; };
 		3873D6D3270B223B00CD983D /* NotoSansCJKkr-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3873D6D0270B223B00CD983D /* NotoSansCJKkr-Bold.otf */; };
+		387A880C270F0BD0004F3C16 /* pin.gif in Resources */ = {isa = PBXBuildFile; fileRef = 387A880B270F0BD0004F3C16 /* pin.gif */; };
 		38B3AD2E270E68C800E59627 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38B3AD2D270E68C800E59627 /* MainViewController.swift */; };
+		38B3AD34270EFA0200E59627 /* MainCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38B3AD33270EFA0200E59627 /* MainCollectionViewCell.swift */; };
 		38D3932526EB4185008BF247 /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38D3932426EB4185008BF247 /* Header.swift */; };
 		38D3932726EB4302008BF247 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38D3932626EB4302008BF247 /* LoginViewModel.swift */; };
 		38D3932926EB4643008BF247 /* ViewModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38D3932826EB4643008BF247 /* ViewModelType.swift */; };
@@ -42,7 +44,9 @@
 		3873D6CE270B223800CD983D /* NotoSansCJKkr-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansCJKkr-Regular.otf"; sourceTree = "<group>"; };
 		3873D6CF270B223A00CD983D /* NotoSansCJKkr-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansCJKkr-Medium.otf"; sourceTree = "<group>"; };
 		3873D6D0270B223B00CD983D /* NotoSansCJKkr-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansCJKkr-Bold.otf"; sourceTree = "<group>"; };
+		387A880B270F0BD0004F3C16 /* pin.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = pin.gif; sourceTree = "<group>"; };
 		38B3AD2D270E68C800E59627 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		38B3AD33270EFA0200E59627 /* MainCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCollectionViewCell.swift; sourceTree = "<group>"; };
 		38D3932426EB4185008BF247 /* Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Header.swift; sourceTree = "<group>"; };
 		38D3932626EB4302008BF247 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		38D3932826EB4643008BF247 /* ViewModelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelType.swift; sourceTree = "<group>"; };
@@ -92,6 +96,7 @@
 				38311218270817C900F56E40 /* banner_09.jpg */,
 				38311217270817C900F56E40 /* logo_09.png */,
 				38311215270817C800F56E40 /* symbol_09.png */,
+				387A880B270F0BD0004F3C16 /* pin.gif */,
 				3828D1EF270D420F005231E4 /* symbol&logo_09.png */,
 				38311216270817C800F56E40 /* symbol_black_09.png */,
 			);
@@ -152,6 +157,7 @@
 		38D3932326EB4176008BF247 /* cell */ = {
 			isa = PBXGroup;
 			children = (
+				38B3AD33270EFA0200E59627 /* MainCollectionViewCell.swift */,
 			);
 			path = cell;
 			sourceTree = "<group>";
@@ -269,6 +275,7 @@
 				3831121C270817C900F56E40 /* banner_09.jpg in Resources */,
 				3831121B270817C900F56E40 /* logo_09.png in Resources */,
 				38311219270817C900F56E40 /* symbol_09.png in Resources */,
+				387A880C270F0BD0004F3C16 /* pin.gif in Resources */,
 				38FE844626EACF4B009587FC /* Assets.xcassets in Resources */,
 				3873D6D2270B223B00CD983D /* NotoSansCJKkr-Medium.otf in Resources */,
 				3873D6D3270B223B00CD983D /* NotoSansCJKkr-Bold.otf in Resources */,
@@ -331,6 +338,7 @@
 				383112212708296900F56E40 /* SignUpViewController.swift in Sources */,
 				38D3932526EB4185008BF247 /* Header.swift in Sources */,
 				38B3AD2E270E68C800E59627 /* MainViewController.swift in Sources */,
+				38B3AD34270EFA0200E59627 /* MainCollectionViewCell.swift in Sources */,
 				38FE843D26EACF48009587FC /* AppDelegate.swift in Sources */,
 				38FE843F26EACF48009587FC /* SceneDelegate.swift in Sources */,
 			);
