@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SignUpViewController: UIViewController {
+class SignUpViewController: UIViewController, UITextFieldDelegate {
     
     private let fontBold = "NotoSansCJKkr-Bold"
     private let fontRegular = "NotoSansCJKkr-Regular"
@@ -72,7 +72,7 @@ class SignUpViewController: UIViewController {
     private lazy var eyeBtn = UIButton().then {
         $0.backgroundColor = .white
         $0.tintColor = .init(named: "placeholderColor")
-        $0.setImage(.init(systemName: "eye"), for: .normal)
+        $0.setImage(.init(systemName: "eye.slash"), for: .normal)
     }
     
     private lazy var signupBtn = UIButton().then {
@@ -100,18 +100,63 @@ class SignUpViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        idTxt.delegate = self
+        pwTxt.delegate = self
+        nickNameTxt.delegate = self
         eyeBtn.addTarget(self, action: #selector(changeBtn), for: .touchUpInside)
         // Do any additional setup after loading the view.
     }
     
-        override func viewDidAppear(_ animated: Bool) {
-            idErrorLabel.isHidden = true
-            nickErrorLabel.isHidden = true
-        }
+    override func viewDidAppear(_ animated: Bool) {
+        idErrorLabel.isHidden = true
+        nickErrorLabel.isHidden = true
+    }
     
     override func viewDidLayoutSubviews() {
         setUpView()
         setObj()
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        let border = CALayer()
+        border.frame = CGRect(x: 0, y: idTxt.frame.size.height+5, width: idTxt.frame.width, height: 1)
+        border.backgroundColor = UIColor.init(named: "mainColor")?.cgColor
+        idTxt.layer.addSublayer(border)
+        
+        let border1 = CALayer()
+        border1.frame = CGRect(x: 0, y: pwTxt.frame.size.height+5, width: pwTxt.frame.width, height: 1)
+        border1.backgroundColor = UIColor.init(named: "mainColor")?.cgColor
+        pwTxt.layer.addSublayer(border1)
+        
+        let border2 = CALayer()
+        border2.frame = CGRect(x: 0, y: nickNameTxt.frame.size.height+5, width: nickNameTxt.frame.width, height: 1)
+        border2.backgroundColor = UIColor.init(named: "mainColor")?.cgColor
+        nickNameTxt.layer.addSublayer(border2)
+        
+        idTxt.textColor = .init(named: "mainColor")
+        pwTxt.textColor = .init(named: "mainColor")
+        nickNameTxt.textColor = .init(named: "mainColor")
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        let border = CALayer()
+        border.frame = CGRect(x: 0, y: idTxt.frame.size.height+5, width: idTxt.frame.width, height: 1)
+        border.backgroundColor = UIColor.init(named: "placeholderColor")?.cgColor
+        idTxt.layer.addSublayer(border)
+        
+        let border1 = CALayer()
+        border1.frame = CGRect(x: 0, y: pwTxt.frame.size.height+5, width: pwTxt.frame.width, height: 1)
+        border1.backgroundColor = UIColor.init(named: "placeholderColor")?.cgColor
+        pwTxt.layer.addSublayer(border1)
+        
+        let border2 = CALayer()
+        border2.frame = CGRect(x: 0, y: nickNameTxt.frame.size.height+5, width: nickNameTxt.frame.width, height: 1)
+        border2.backgroundColor = UIColor.init(named: "placeholderColor")?.cgColor
+        nickNameTxt.layer.addSublayer(border2)
+        
+        idTxt.textColor = .init(named: "placeholderColor")
+        pwTxt.textColor = .init(named: "placeholderColor")
+        nickNameTxt.textColor = .init(named: "placeholderColor")
     }
     
     private func setUpView() {
@@ -198,12 +243,12 @@ class SignUpViewController: UIViewController {
     @objc
     private func changeBtn() {
         if eyeBool {
-            eyeBtn.setImage(.init(systemName: "eye"), for: .normal)
+            eyeBtn.setImage(.init(systemName: "eye.slash"), for: .normal)
             pwTxt.isSecureTextEntry = false
             eyeBool.toggle()
         }
         else {
-            eyeBtn.setImage(.init(systemName: "eye.slash"), for: .normal)
+            eyeBtn.setImage(.init(systemName: "eye"), for: .normal)
             pwTxt.isSecureTextEntry = true
             eyeBool.toggle()
         }
