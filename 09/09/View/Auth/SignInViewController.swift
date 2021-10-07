@@ -9,7 +9,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class SignInViewController: UIViewController {
+class SignInViewController: UIViewController, UITextFieldDelegate {
     
     private let fontBold = "NotoSansCJKkr-Bold"
     private let fontRegular = "NotoSansCJKkr-Regular"
@@ -58,7 +58,7 @@ class SignInViewController: UIViewController {
     
     private lazy var eyeBtn = UIButton().then {
         $0.backgroundColor = .white
-        $0.setImage(UIImage(systemName: "eye"), for: .normal)
+        $0.setImage(UIImage(systemName: "eye.slash"), for: .normal)
         $0.tintColor = .init(named: "placeholderColor")
     }
     
@@ -105,12 +105,50 @@ class SignInViewController: UIViewController {
         self.eyeBtn.addTarget(self, action: #selector(changeEyeBtnImg), for: .touchUpInside)
         self.checkBtn.addTarget(self, action: #selector(changeCheckBtnImg), for: .touchUpInside)
         pwTxt.text! = ""
+        idTxt.tag = 1
+        pwTxt.tag = 2
+        idTxt.delegate = self
+        pwTxt.delegate = self
     }
     
     override func viewDidLayoutSubviews() {
         idCheckLabel.sizeToFit()
         setObj()
         setupView()
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
+        func textFieldDidBeginEditing(_ textField: UITextField) {
+        let border = CALayer()
+        border.frame = CGRect(x: 0, y: idTxt.frame.size.height+5, width: idTxt.frame.width, height: 1)
+        border.backgroundColor = UIColor.init(named: "mainColor")?.cgColor
+        idTxt.layer.addSublayer(border)
+        
+        let border1 = CALayer()
+        border1.frame = CGRect(x: 0, y: pwTxt.frame.size.height+5, width: pwTxt.frame.width, height: 1)
+        border1.backgroundColor = UIColor.init(named: "mainColor")?.cgColor
+        pwTxt.layer.addSublayer(border1)
+            
+            idTxt.textColor = .init(named: "mainColor")
+            pwTxt.textColor = .init(named: "mainColor")
+    }
+    
+        func textFieldDidEndEditing(_ textField: UITextField) {
+        let border = CALayer()
+        border.frame = CGRect(x: 0, y: idTxt.frame.size.height+5, width: idTxt.frame.width, height: 1)
+        border.backgroundColor = UIColor.init(named: "placeholderColor")?.cgColor
+        idTxt.layer.addSublayer(border)
+        
+        let border1 = CALayer()
+        border1.frame = CGRect(x: 0, y: pwTxt.frame.size.height+5, width: pwTxt.frame.width, height: 1)
+        border1.backgroundColor = UIColor.init(named: "placeholderColor")?.cgColor
+        pwTxt.layer.addSublayer(border1)
+            
+            idTxt.textColor = .init(named: "placeholderColor")
+            pwTxt.textColor = .init(named: "placeholderColor")
     }
     
     private func setupView() {
@@ -136,18 +174,15 @@ class SignInViewController: UIViewController {
             $0.top.equalTo(self.imgView.snp.bottom).offset(80)
             $0.centerX.equalTo(self.view)
             $0.width.equalTo(85)
-            $0.height.equalTo(42)
         }
         
         self.idTxt.snp.makeConstraints {
             $0.top.equalTo(self.loginLabel.snp.bottom).offset(50)
-            $0.height.equalTo(31)
             $0.leading.lessThanOrEqualToSuperview().offset(45)
             $0.trailing.greaterThanOrEqualToSuperview().offset(-45)
         }
         self.pwTxt.snp.makeConstraints {
             $0.top.equalTo(self.idTxt.snp.bottom).offset(70)
-            $0.height.equalTo(31)
             $0.leading.lessThanOrEqualToSuperview().offset(45)
             $0.trailing.greaterThanOrEqualToSuperview().offset(-45)
         }
@@ -166,8 +201,6 @@ class SignInViewController: UIViewController {
         self.idCheckLabel.snp.makeConstraints {
             $0.top.equalTo(self.pwTxt.snp.bottom).offset(20)
             $0.leading.equalTo(self.checkBtn.snp.trailing).offset(5)
-            $0.width.equalTo(50)
-            $0.height.equalTo(20)
         }
         self.loginBtn.snp.makeConstraints {
             $0.top.lessThanOrEqualTo(self.pwTxt.snp.bottom).offset(230)
@@ -190,31 +223,22 @@ class SignInViewController: UIViewController {
         let underLine = NSUnderlineStyle.thick.rawValue
         aa.addAttribute(NSMutableAttributedString.Key.underlineStyle, value: underLine, range: NSRange(location: 0, length: moveSignupBtn.currentTitle!.count))
         moveSignupBtn.setAttributedTitle(aa, for: .normal)
-        
-        let border = CALayer()
-        border.frame = CGRect(x: 0, y: idTxt.frame.size.height+5, width: idTxt.frame.width, height: 1)
-        border.backgroundColor = UIColor.init(named: "placeholderColor")?.cgColor
-        idTxt.layer.addSublayer(border)
-        
-        let border1 = CALayer()
-        border1.frame = CGRect(x: 0, y: pwTxt.frame.size.height+5, width: pwTxt.frame.width, height: 1)
-        border1.backgroundColor = UIColor.init(named: "placeholderColor")?.cgColor
-        pwTxt.layer.addSublayer(border1)
     }
     
     @objc
     private func changeEyeBtnImg() {
         if eyeBtnBool {
             pwTxt.isSecureTextEntry = false
-            eyeBtn.setImage(UIImage(systemName: "eye"), for: .normal)
+            eyeBtn.setImage(UIImage(systemName: "eye.slash"), for: .normal)
             eyeBtnBool.toggle()
         }
         else {
             pwTxt.isSecureTextEntry = true
-            eyeBtn.setImage(UIImage(systemName: "eye.slash"), for: .normal)
+            eyeBtn.setImage(UIImage(systemName: "eye"), for: .normal)
             eyeBtnBool.toggle()
         }
     }
+    
     @objc
     private func changeCheckBtnImg() {
         if checkBtnBool {
@@ -230,7 +254,5 @@ class SignInViewController: UIViewController {
         }
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-    }
 }
+
