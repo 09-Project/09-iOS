@@ -18,6 +18,7 @@
 		3873D6D1270B223B00CD983D /* NotoSansCJKkr-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3873D6CE270B223800CD983D /* NotoSansCJKkr-Regular.otf */; };
 		3873D6D2270B223B00CD983D /* NotoSansCJKkr-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3873D6CF270B223A00CD983D /* NotoSansCJKkr-Medium.otf */; };
 		3873D6D3270B223B00CD983D /* NotoSansCJKkr-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3873D6D0270B223B00CD983D /* NotoSansCJKkr-Bold.otf */; };
+		38B3AD2E270E68C800E59627 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38B3AD2D270E68C800E59627 /* MainViewController.swift */; };
 		38D3932526EB4185008BF247 /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38D3932426EB4185008BF247 /* Header.swift */; };
 		38D3932726EB4302008BF247 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38D3932626EB4302008BF247 /* LoginViewModel.swift */; };
 		38D3932926EB4643008BF247 /* ViewModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38D3932826EB4643008BF247 /* ViewModelType.swift */; };
@@ -41,6 +42,7 @@
 		3873D6CE270B223800CD983D /* NotoSansCJKkr-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansCJKkr-Regular.otf"; sourceTree = "<group>"; };
 		3873D6CF270B223A00CD983D /* NotoSansCJKkr-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansCJKkr-Medium.otf"; sourceTree = "<group>"; };
 		3873D6D0270B223B00CD983D /* NotoSansCJKkr-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansCJKkr-Bold.otf"; sourceTree = "<group>"; };
+		38B3AD2D270E68C800E59627 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		38D3932426EB4185008BF247 /* Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Header.swift; sourceTree = "<group>"; };
 		38D3932626EB4302008BF247 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		38D3932826EB4643008BF247 /* ViewModelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelType.swift; sourceTree = "<group>"; };
@@ -105,6 +107,14 @@
 			path = Auth;
 			sourceTree = "<group>";
 		};
+		38B3AD2C270E68B000E59627 /* main */ = {
+			isa = PBXGroup;
+			children = (
+				38B3AD2D270E68C800E59627 /* MainViewController.swift */,
+			);
+			path = main;
+			sourceTree = "<group>";
+		};
 		38D3931E26EB412F008BF247 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
@@ -117,6 +127,7 @@
 		38D3931F26EB413C008BF247 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				38B3AD2C270E68B000E59627 /* main */,
 				3831121D270828D000F56E40 /* Auth */,
 				38FE844026EACF48009587FC /* SplashViewController.swift */,
 			);
@@ -319,6 +330,7 @@
 				38D3932926EB4643008BF247 /* ViewModelType.swift in Sources */,
 				383112212708296900F56E40 /* SignUpViewController.swift in Sources */,
 				38D3932526EB4185008BF247 /* Header.swift in Sources */,
+				38B3AD2E270E68C800E59627 /* MainViewController.swift in Sources */,
 				38FE843D26EACF48009587FC /* AppDelegate.swift in Sources */,
 				38FE843F26EACF48009587FC /* SceneDelegate.swift in Sources */,
 			);
