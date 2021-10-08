@@ -8,13 +8,16 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import SideMenu
 
 class MainViewController: UIViewController {
+    
+    private let sideMenu = SideMenuNavigationController(rootViewController: SideMenuViewController())
     
     private let fontBold = "NotoSansCJKkr-Bold"
     private let fontRegular = "NotoSansCJKkr-Regular"
     private let fontMedium = "NotoSansCJKkr-Medium"
-    
+
     private lazy var searchField = UITextField().then {
         $0.backgroundColor = .init(named: "searchColor")
         $0.textAlignment = .left
@@ -69,14 +72,22 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        mainCollectionView.register(MainCollectionViewCell.self, forCellWithReuseIdentifier: "MainCollectionViewCell")
         view.backgroundColor = .white
         let img = UIImage(named: "symbol&logo_09")
         navigationItem.titleView = UIImageView(image: img)
+        sideMenu.leftSide = false
+        SideMenuManager.default.rightMenuNavigationController = sideMenu
+        SideMenuManager.default.addPanGestureToPresent(toView: view)
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIImage.init(systemName: "line.horizontal.3"), target: self, action: #selector(sideMenuDidTap))
         mainCollectionView.delegate = self
     }
     
     override func viewDidLayoutSubviews() {
+        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 73, height: 28))
+        imageView.contentMode = .scaleAspectFit
+        let image = UIImage(named: "symbol&logo_09")
+        imageView.image = image
+        navigationItem.titleView = imageView
         setupView()
     }
     
@@ -140,6 +151,11 @@ class MainViewController: UIViewController {
             $0.bottom.equalToSuperview().offset(0)
         }
     }
+    @objc
+    private func sideMenuDidTap() {
+        present(sideMenu, animated: true, completion: nil)
+    }
+    
     
 }
 
