@@ -19,6 +19,11 @@
 		3873D6D2270B223B00CD983D /* NotoSansCJKkr-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3873D6CF270B223A00CD983D /* NotoSansCJKkr-Medium.otf */; };
 		3873D6D3270B223B00CD983D /* NotoSansCJKkr-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3873D6D0270B223B00CD983D /* NotoSansCJKkr-Bold.otf */; };
 		387A880C270F0BD0004F3C16 /* pin.gif in Resources */ = {isa = PBXBuildFile; fileRef = 387A880B270F0BD0004F3C16 /* pin.gif */; };
+		387A880E2710063D004F3C16 /* SideMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 387A880D2710063D004F3C16 /* SideMenuViewController.swift */; };
+		388D99872710166D00EB8594 /* MyPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388D99862710166D00EB8594 /* MyPageViewController.swift */; };
+		388D99892710167D00EB8594 /* ChangePasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388D99882710167D00EB8594 /* ChangePasswordViewController.swift */; };
+		388D998B2710168F00EB8594 /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388D998A2710168F00EB8594 /* PostViewController.swift */; };
+		388D998F2710170B00EB8594 /* ChangeProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388D998E2710170B00EB8594 /* ChangeProfileViewController.swift */; };
 		38B3AD2E270E68C800E59627 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38B3AD2D270E68C800E59627 /* MainViewController.swift */; };
 		38B3AD34270EFA0200E59627 /* MainCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38B3AD33270EFA0200E59627 /* MainCollectionViewCell.swift */; };
 		38D3932526EB4185008BF247 /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38D3932426EB4185008BF247 /* Header.swift */; };
@@ -45,6 +50,11 @@
 		3873D6CF270B223A00CD983D /* NotoSansCJKkr-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansCJKkr-Medium.otf"; sourceTree = "<group>"; };
 		3873D6D0270B223B00CD983D /* NotoSansCJKkr-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansCJKkr-Bold.otf"; sourceTree = "<group>"; };
 		387A880B270F0BD0004F3C16 /* pin.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = pin.gif; sourceTree = "<group>"; };
+		387A880D2710063D004F3C16 /* SideMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuViewController.swift; sourceTree = "<group>"; };
+		388D99862710166D00EB8594 /* MyPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewController.swift; sourceTree = "<group>"; };
+		388D99882710167D00EB8594 /* ChangePasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewController.swift; sourceTree = "<group>"; };
+		388D998A2710168F00EB8594 /* PostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
+		388D998E2710170B00EB8594 /* ChangeProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeProfileViewController.swift; sourceTree = "<group>"; };
 		38B3AD2D270E68C800E59627 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		38B3AD33270EFA0200E59627 /* MainCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCollectionViewCell.swift; sourceTree = "<group>"; };
 		38D3932426EB4185008BF247 /* Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Header.swift; sourceTree = "<group>"; };
@@ -106,10 +116,19 @@
 		3831121D270828D000F56E40 /* Auth */ = {
 			isa = PBXGroup;
 			children = (
+				388D99882710167D00EB8594 /* ChangePasswordViewController.swift */,
 				3831121E270828F000F56E40 /* SignInViewController.swift */,
 				383112202708296900F56E40 /* SignUpViewController.swift */,
 			);
 			path = Auth;
+			sourceTree = "<group>";
+		};
+		388D998C271016B300EB8594 /* sideMenu */ = {
+			isa = PBXGroup;
+			children = (
+				387A880D2710063D004F3C16 /* SideMenuViewController.swift */,
+			);
+			path = sideMenu;
 			sourceTree = "<group>";
 		};
 		38B3AD2C270E68B000E59627 /* main */ = {
@@ -132,9 +151,13 @@
 		38D3931F26EB413C008BF247 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				388D998C271016B300EB8594 /* sideMenu */,
 				38B3AD2C270E68B000E59627 /* main */,
 				3831121D270828D000F56E40 /* Auth */,
 				38FE844026EACF48009587FC /* SplashViewController.swift */,
+				388D99862710166D00EB8594 /* MyPageViewController.swift */,
+				388D998A2710168F00EB8594 /* PostViewController.swift */,
+				388D998E2710170B00EB8594 /* ChangeProfileViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -333,10 +356,15 @@
 			files = (
 				38D3932726EB4302008BF247 /* LoginViewModel.swift in Sources */,
 				3831121F270828F000F56E40 /* SignInViewController.swift in Sources */,
+				388D998B2710168F00EB8594 /* PostViewController.swift in Sources */,
 				38FE844126EACF48009587FC /* SplashViewController.swift in Sources */,
 				38D3932926EB4643008BF247 /* ViewModelType.swift in Sources */,
+				388D998F2710170B00EB8594 /* ChangeProfileViewController.swift in Sources */,
+				387A880E2710063D004F3C16 /* SideMenuViewController.swift in Sources */,
 				383112212708296900F56E40 /* SignUpViewController.swift in Sources */,
+				388D99892710167D00EB8594 /* ChangePasswordViewController.swift in Sources */,
 				38D3932526EB4185008BF247 /* Header.swift in Sources */,
+				388D99872710166D00EB8594 /* MyPageViewController.swift in Sources */,
 				38B3AD2E270E68C800E59627 /* MainViewController.swift in Sources */,
 				38B3AD34270EFA0200E59627 /* MainCollectionViewCell.swift in Sources */,
 				38FE843D26EACF48009587FC /* AppDelegate.swift in Sources */,
