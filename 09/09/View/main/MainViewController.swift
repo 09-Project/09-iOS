@@ -78,7 +78,7 @@ class MainViewController: UIViewController {
         sideMenu.leftSide = false
         SideMenuManager.default.rightMenuNavigationController = sideMenu
         SideMenuManager.default.addPanGestureToPresent(toView: view)
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIImage.init(systemName: "line.horizontal.3"), target: self, action: #selector(sideMenuDidTap))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: .init(systemName: "line.horizontal.3"), style: .plain, target: self, action: #selector(sideMenuDidTap))
         mainCollectionView.delegate = self
     }
     
