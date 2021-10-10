@@ -15,6 +15,7 @@
 		3831121C270817C900F56E40 /* banner_09.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 38311218270817C900F56E40 /* banner_09.jpg */; };
 		3831121F270828F000F56E40 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3831121E270828F000F56E40 /* SignInViewController.swift */; };
 		383112212708296900F56E40 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 383112202708296900F56E40 /* SignUpViewController.swift */; };
+		3838E2B22713109F000A4782 /* 톱니바퀴.PNG.png in Resources */ = {isa = PBXBuildFile; fileRef = 3838E2B12713109F000A4782 /* 톱니바퀴.PNG.png */; };
 		3873D6D1270B223B00CD983D /* NotoSansCJKkr-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3873D6CE270B223800CD983D /* NotoSansCJKkr-Regular.otf */; };
 		3873D6D2270B223B00CD983D /* NotoSansCJKkr-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3873D6CF270B223A00CD983D /* NotoSansCJKkr-Medium.otf */; };
 		3873D6D3270B223B00CD983D /* NotoSansCJKkr-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3873D6D0270B223B00CD983D /* NotoSansCJKkr-Bold.otf */; };
@@ -46,6 +47,7 @@
 		38311218270817C900F56E40 /* banner_09.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = banner_09.jpg; sourceTree = "<group>"; };
 		3831121E270828F000F56E40 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
 		383112202708296900F56E40 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
+		3838E2B12713109F000A4782 /* 톱니바퀴.PNG.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "톱니바퀴.PNG.png"; sourceTree = "<group>"; };
 		3873D6CE270B223800CD983D /* NotoSansCJKkr-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansCJKkr-Regular.otf"; sourceTree = "<group>"; };
 		3873D6CF270B223A00CD983D /* NotoSansCJKkr-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansCJKkr-Medium.otf"; sourceTree = "<group>"; };
 		3873D6D0270B223B00CD983D /* NotoSansCJKkr-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansCJKkr-Bold.otf"; sourceTree = "<group>"; };
@@ -106,6 +108,7 @@
 				38311218270817C900F56E40 /* banner_09.jpg */,
 				38311217270817C900F56E40 /* logo_09.png */,
 				38311215270817C800F56E40 /* symbol_09.png */,
+				3838E2B12713109F000A4782 /* 톱니바퀴.PNG.png */,
 				387A880B270F0BD0004F3C16 /* pin.gif */,
 				3828D1EF270D420F005231E4 /* symbol&logo_09.png */,
 				38311216270817C800F56E40 /* symbol_black_09.png */,
@@ -298,6 +301,7 @@
 				3831121C270817C900F56E40 /* banner_09.jpg in Resources */,
 				3831121B270817C900F56E40 /* logo_09.png in Resources */,
 				38311219270817C900F56E40 /* symbol_09.png in Resources */,
+				3838E2B22713109F000A4782 /* 톱니바퀴.PNG.png in Resources */,
 				387A880C270F0BD0004F3C16 /* pin.gif in Resources */,
 				38FE844626EACF4B009587FC /* Assets.xcassets in Resources */,
 				3873D6D2270B223B00CD983D /* NotoSansCJKkr-Medium.otf in Resources */,
