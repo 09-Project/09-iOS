@@ -13,4 +13,6 @@ pod 'Then'
 pod 'Alamofire', '~> 5.4'
 pod 'R.swift.Library'
 pod 'SideMenu'
+pod 'Tabman', '~> 2.9'
 end
+
