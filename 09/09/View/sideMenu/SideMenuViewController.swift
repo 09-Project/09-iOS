@@ -98,15 +98,19 @@ class SideMenuViewController: UIViewController {
     @objc
     private func homeBtnDidTap() {
         let VC = MainViewController()
-        present(VC, animated: true, completion: nil)
+        self.navigationController?.pushViewController(VC, animated: false)
     }
     
     @objc
     private func myPageBtnDidTap() {
+        let VC = MyPageViewController()
+        self.navigationController?.pushViewController(VC, animated: false)
     }
     
     @objc
     private func postBtnDidTap() {
+        let VC = PostViewController()
+        self.navigationController?.pushViewController(VC, animated: false)
     }
 
 }
