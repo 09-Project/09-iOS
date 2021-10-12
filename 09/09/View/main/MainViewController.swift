@@ -80,6 +80,7 @@ class MainViewController: UIViewController {
         SideMenuManager.default.addPanGestureToPresent(toView: view)
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: .init(systemName: "line.horizontal.3"), style: .plain, target: self, action: #selector(sideMenuDidTap))
         mainCollectionView.delegate = self
+        mainCollectionView.dataSource = self
     }
     
     override func viewDidLayoutSubviews() {
@@ -159,30 +160,3 @@ class MainViewController: UIViewController {
     
 }
 
-extension MainViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        <#code#>
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        <#code#>
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-            return 16
-        }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-            return 16
-        }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-
-            let width = collectionView.frame.width / 2 - 1
-            let size = CGSize(width: width, height: width)
-        
-            return size
-        }
-
-    
-}
