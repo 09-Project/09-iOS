@@ -133,6 +133,8 @@ class MyPageViewController: UIViewController {
         navigationItem.title = "마이페이지"
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "로그아웃", style: .plain, target: self, action: #selector(rightBarBtnDidTap))
         navigationItem.rightBarButtonItem?.tintColor = .red
+        collectionView.delegate = self
+        collectionView.dataSource = self
     }
     
     @objc
@@ -259,8 +261,4 @@ class MyPageViewController: UIViewController {
         
     }
 
-}
-
-extension MyPageViewController: UICollectionViewDelegateFlowLayout {
-    
 }
