@@ -69,7 +69,7 @@ class ChangeProfileViewController: UIViewController {
     }
     
     override func viewDidLayoutSubviews() {
-        <#code#>
+        setup()
     }
     
     private func setup() {
