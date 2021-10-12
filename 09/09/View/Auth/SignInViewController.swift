@@ -38,7 +38,11 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         $0.backgroundColor = .white
         $0.font = UIFont(name: fontRegular, size: 14)
         $0.textColor = UIColor.init(named: "mainColor")
-        $0.attributedPlaceholder = NSAttributedString(string: "     ID", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
+        $0.attributedPlaceholder = NSAttributedString(string: "ID", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
+    }
+    
+    private lazy var idView = UIView().then {
+        $0.backgroundColor = .white
     }
     
     private lazy var pwTxt = UITextField().then {
@@ -47,7 +51,11 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         $0.backgroundColor = .white
         $0.textColor = UIColor.init(named: "mainColor")
         $0.font = UIFont(name: fontRegular, size: 14)
-        $0.attributedPlaceholder = NSAttributedString(string: "     PASSWORD", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
+        $0.attributedPlaceholder = NSAttributedString(string: "PASSWORD", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
+    }
+    
+    private lazy var pwView = UIView().then {
+        $0.backgroundColor = .white
     }
     
     private lazy var errorLabel = UILabel().then {
@@ -73,6 +81,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         $0.textColor = .black
         $0.backgroundColor = .white
     }
+    
     private lazy var loginBtn = UIButton().then {
         $0.backgroundColor = .init(named: "mainColor")
         $0.setTitle("LOGIN", for: .normal)
@@ -87,12 +96,14 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         $0.textColor = .black
         $0.font = UIFont(name: fontRegular, size: 12)
     }
+    
     private lazy var moveSignupBtn = UIButton().then {
         $0.backgroundColor = .white
         $0.setTitle("회원가입하기", for: .normal)
         $0.setTitleColor(.init(named: "mainColor"), for: .normal)
         $0.titleLabel!.font = UIFont(name: fontRegular, size: 12)
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -105,10 +116,9 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         self.eyeBtn.addTarget(self, action: #selector(changeEyeBtnImg), for: .touchUpInside)
         self.checkBtn.addTarget(self, action: #selector(changeCheckBtnImg), for: .touchUpInside)
         pwTxt.text! = ""
-        idTxt.tag = 1
-        pwTxt.tag = 2
         idTxt.delegate = self
         pwTxt.delegate = self
+        idTxt.text! = UserDefaults.standard.string(forKey: "id") ?? ""
     }
     
     override func viewDidLayoutSubviews() {
@@ -123,14 +133,14 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
     
         func textFieldDidBeginEditing(_ textField: UITextField) {
         let border = CALayer()
-        border.frame = CGRect(x: 0, y: idTxt.frame.size.height+5, width: idTxt.frame.width, height: 1)
+        border.frame = CGRect(x: 0, y: idView.frame.size.height, width: idView.frame.width, height: 1)
         border.backgroundColor = UIColor.init(named: "mainColor")?.cgColor
-        idTxt.layer.addSublayer(border)
+        idView.layer.addSublayer(border)
         
         let border1 = CALayer()
-        border1.frame = CGRect(x: 0, y: pwTxt.frame.size.height+5, width: pwTxt.frame.width, height: 1)
+        border1.frame = CGRect(x: 0, y: pwView.frame.size.height, width: pwView.frame.width, height: 1)
         border1.backgroundColor = UIColor.init(named: "mainColor")?.cgColor
-        pwTxt.layer.addSublayer(border1)
+        pwView.layer.addSublayer(border1)
             
             idTxt.textColor = .init(named: "mainColor")
             pwTxt.textColor = .init(named: "mainColor")
@@ -138,14 +148,14 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
     
         func textFieldDidEndEditing(_ textField: UITextField) {
         let border = CALayer()
-        border.frame = CGRect(x: 0, y: idTxt.frame.size.height+5, width: idTxt.frame.width, height: 1)
+        border.frame = CGRect(x: 0, y: idView.frame.size.height, width: idView.frame.width, height: 1)
         border.backgroundColor = UIColor.init(named: "placeholderColor")?.cgColor
-        idTxt.layer.addSublayer(border)
+        idView.layer.addSublayer(border)
         
         let border1 = CALayer()
-        border1.frame = CGRect(x: 0, y: pwTxt.frame.size.height+5, width: pwTxt.frame.width, height: 1)
+        border1.frame = CGRect(x: 0, y: pwView.frame.size.height, width: pwView.frame.width, height: 1)
         border1.backgroundColor = UIColor.init(named: "placeholderColor")?.cgColor
-        pwTxt.layer.addSublayer(border1)
+        pwView.layer.addSublayer(border1)
             
             idTxt.textColor = .init(named: "placeholderColor")
             pwTxt.textColor = .init(named: "placeholderColor")
@@ -155,7 +165,9 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         view.addSubview(imgView)
         view.addSubview(loginLabel)
         view.addSubview(idTxt)
+        view.addSubview(idView)
         view.addSubview(pwTxt)
+        view.addSubview(pwView)
         view.addSubview(eyeBtn)
         view.addSubview(checkBtn)
         view.addSubview(idCheckLabel)
@@ -181,6 +193,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
             $0.leading.lessThanOrEqualToSuperview().offset(45)
             $0.trailing.greaterThanOrEqualToSuperview().offset(-45)
         }
+        
         self.pwTxt.snp.makeConstraints {
             $0.top.equalTo(self.idTxt.snp.bottom).offset(70)
             $0.leading.lessThanOrEqualToSuperview().offset(45)
