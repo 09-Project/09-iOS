@@ -39,13 +39,21 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         $0.attributedPlaceholder = NSAttributedString(string: "     Nickname", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
     }
     
+    private lazy var nickView = UIView().then {
+        $0.backgroundColor = .white
+    }
+    
     private lazy var idTxt = UITextField().then {
         $0.borderStyle = .none
         $0.textColor = .init(named: "mainColor")
         $0.textAlignment = .left
         $0.font = .init(name: fontRegular, size: 14)
         $0.backgroundColor = .white
-        $0.attributedPlaceholder = NSAttributedString(string: "     ID", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
+        $0.attributedPlaceholder = NSAttributedString(string: "ID", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
+    }
+    
+    private lazy var idView = UIView().then {
+        $0.backgroundColor = .white
     }
     
     private lazy var pwTxt = UITextField().then {
@@ -54,7 +62,11 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         $0.textAlignment = .left
         $0.font = .init(name: fontRegular, size: 14)
         $0.textColor = .init(named: "mainColor")
-        $0.attributedPlaceholder = NSAttributedString(string: "     PASSWORD", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
+        $0.attributedPlaceholder = NSAttributedString(string: "PASSWORD", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
+    }
+    
+    private lazy var pwView = UIView().then {
+        $0.backgroundColor = .white
     }
     
     private lazy var nickErrorLabel =  UILabel().then {
@@ -121,19 +133,19 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         let border = CALayer()
-        border.frame = CGRect(x: 0, y: idTxt.frame.size.height+5, width: idTxt.frame.width, height: 1)
+        border.frame = CGRect(x: 0, y: idView.frame.size.height, width: idView.frame.width, height: 1)
         border.backgroundColor = UIColor.init(named: "mainColor")?.cgColor
-        idTxt.layer.addSublayer(border)
+        idView.layer.addSublayer(border)
         
         let border1 = CALayer()
-        border1.frame = CGRect(x: 0, y: pwTxt.frame.size.height+5, width: pwTxt.frame.width, height: 1)
+        border1.frame = CGRect(x: 0, y: pwView.frame.size.height, width: pwView.frame.width, height: 1)
         border1.backgroundColor = UIColor.init(named: "mainColor")?.cgColor
-        pwTxt.layer.addSublayer(border1)
+        pwView.layer.addSublayer(border1)
         
         let border2 = CALayer()
-        border2.frame = CGRect(x: 0, y: nickNameTxt.frame.size.height+5, width: nickNameTxt.frame.width, height: 1)
+        border2.frame = CGRect(x: 0, y: nickView.frame.size.height, width: nickView.frame.width, height: 1)
         border2.backgroundColor = UIColor.init(named: "mainColor")?.cgColor
-        nickNameTxt.layer.addSublayer(border2)
+        nickView.layer.addSublayer(border2)
         
         idTxt.textColor = .init(named: "mainColor")
         pwTxt.textColor = .init(named: "mainColor")
@@ -142,19 +154,19 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         let border = CALayer()
-        border.frame = CGRect(x: 0, y: idTxt.frame.size.height+5, width: idTxt.frame.width, height: 1)
+        border.frame = CGRect(x: 0, y: idView.frame.size.height, width: idView.frame.width, height: 1)
         border.backgroundColor = UIColor.init(named: "placeholderColor")?.cgColor
-        idTxt.layer.addSublayer(border)
+        idView.layer.addSublayer(border)
         
         let border1 = CALayer()
-        border1.frame = CGRect(x: 0, y: pwTxt.frame.size.height+5, width: pwTxt.frame.width, height: 1)
+        border1.frame = CGRect(x: 0, y: pwTxt.frame.size.height, width: pwTxt.frame.width, height: 1)
         border1.backgroundColor = UIColor.init(named: "placeholderColor")?.cgColor
         pwTxt.layer.addSublayer(border1)
         
         let border2 = CALayer()
-        border2.frame = CGRect(x: 0, y: nickNameTxt.frame.size.height+5, width: nickNameTxt.frame.width, height: 1)
+        border2.frame = CGRect(x: 0, y: nickNameTxt.frame.size.height, width: nickView.frame.width, height: 1)
         border2.backgroundColor = UIColor.init(named: "placeholderColor")?.cgColor
-        nickNameTxt.layer.addSublayer(border2)
+        nickView.layer.addSublayer(border2)
         
         idTxt.textColor = .init(named: "placeholderColor")
         pwTxt.textColor = .init(named: "placeholderColor")
@@ -263,19 +275,19 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         moveLoginBtn.setAttributedTitle(aa, for: .normal)
         
         let border = CALayer()
-        border.frame = CGRect(x: 0, y: idTxt.frame.size.height+5, width: idTxt.frame.width, height: 1)
+        border.frame = CGRect(x: 0, y: idView.frame.size.height, width: idView.frame.width, height: 1)
         border.backgroundColor = UIColor.init(named: "placeholderColor")?.cgColor
-        idTxt.layer.addSublayer(border)
+        idView.layer.addSublayer(border)
         
         let border1 = CALayer()
-        border1.frame = CGRect(x: 0, y: pwTxt.frame.size.height+5, width: pwTxt.frame.width, height: 1)
+        border1.frame = CGRect(x: 0, y: pwView.frame.size.height, width: pwView.frame.width, height: 1)
         border1.backgroundColor = UIColor.init(named: "placeholderColor")?.cgColor
-        pwTxt.layer.addSublayer(border1)
+        pwView.layer.addSublayer(border1)
         
         let border2 = CALayer()
-        border2.frame = CGRect(x: 0, y: nickNameTxt.frame.size.height+5, width: nickNameTxt.frame.width, height: 1)
+        border2.frame = CGRect(x: 0, y: nickView.frame.size.height, width: nickView.frame.width, height: 1)
         border2.backgroundColor = UIColor.init(named: "placeholderColor")?.cgColor
-        nickNameTxt.layer.addSublayer(border2)
+        nickView.layer.addSublayer(border2)
         
     }
     
