@@ -8,22 +8,135 @@
 import UIKit
 
 class ChangePasswordViewController: UIViewController {
-
+    
+    private let fontBold = "NotoSansCJKkr-Bold"
+    private let fontRegular = "NotoSansCJKkr-Regular"
+    private let fontMedium = "NotoSansCJKkr-Medium"
+    
+    private lazy var pwLabel = UILabel().then {
+        $0.backgroundColor = .white
+        $0.text = "기존 비밀번호"
+        $0.textColor = .black
+        $0.font = .init(name: fontMedium, size: 14)
+    }
+    
+    private lazy var pwTxtField = UITextField().then {
+        $0.backgroundColor = .white
+        $0.textColor = .init(named: "changePwColor")
+        $0.isSecureTextEntry = true
+        $0.font = .init(name: fontRegular, size: 14)
+        $0.attributedPlaceholder = NSAttributedString(string: "     기존비밀번호를 입력해주세요", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
+    }
+    
+    private lazy var newPwLabel = UILabel().then {
+        $0.backgroundColor = .white
+        $0.text = "새 비밀번호"
+        $0.textColor = .black
+        $0.font = .init(name: fontMedium, size: 14)
+    }
+    
+    private lazy var newPwTxtField = UITextField().then {
+        $0.backgroundColor = .white
+        $0.font = .init(name: fontRegular, size: 14)
+        $0.isSecureTextEntry = true
+        $0.textColor = .init(named: "changePwColor")
+        $0.attributedPlaceholder = NSAttributedString(string: "     새 비밀번호를 입력해주세요", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
+    }
+    
+    private lazy var checkPwLabel = UILabel().then {
+        $0.backgroundColor = .white
+        $0.font = .init(name: fontMedium, size: 14)
+        $0.text = "비밀번호 확인"
+        $0.textColor = .init(named: "changePwColor")
+    }
+    
+    private lazy var checkPwTxtField = UITextField().then {
+        $0.backgroundColor = .white
+        $0.font = .init(name: fontRegular, size: 14)
+        $0.isSecureTextEntry = true
+        $0.textColor = .init(named: "changePwColor")
+        $0.attributedPlaceholder = NSAttributedString(string: "     변경한 비밀번호를 다시 입력해주세요", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
+    }
+    
+    private lazy var errorLabel = UILabel().then {
+        $0.backgroundColor = .white
+        $0.textColor = .red
+        $0.text = "비밀번호가 일치하지 않습니다."
+    }
+    
+    private lazy var changeBtn = UIButton().then {
+        $0.backgroundColor = .init(named: "mainColor")
+        $0.setTitle("변경하기", for: .normal)
+        $0.titleLabel!.font = .init(name: fontBold, size: 15)
+        $0.setTitleColor(.white, for: .normal)
+        $0.layer.cornerRadius = 10
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        view.backgroundColor = .white
+        navigationItem.title = "비밀번호 변경"
         // Do any additional setup after loading the view.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    override func viewDidLayoutSubviews() {
+        setup()
     }
-    */
-
+    
+    private func setup() {
+        view.addSubview(pwLabel)
+        view.addSubview(pwTxtField)
+        view.addSubview(newPwLabel)
+        view.addSubview(newPwTxtField)
+        view.addSubview(checkPwLabel)
+        view.addSubview(checkPwTxtField)
+        view.addSubview(errorLabel)
+        view.addSubview(changeBtn)
+        
+        self.pwLabel.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(59)
+            $0.leading.equalToSuperview().offset(40)
+        }
+        
+        self.pwTxtField.snp.makeConstraints {
+            $0.top.equalTo(self.pwLabel.snp.bottom).offset(12)
+            $0.leading.trailing.equalToSuperview().offset(0)
+            $0.height.equalTo(52)
+        }
+        
+        self.newPwLabel.snp.makeConstraints {
+            $0.top.lessThanOrEqualTo(self.pwTxtField.snp.bottom).offset(103)
+            $0.leading.equalToSuperview().offset(40)
+        }
+        
+        self.newPwTxtField.snp.makeConstraints {
+            $0.top.equalTo(self.pwLabel.snp.bottom).offset(12)
+            $0.leading.trailing.equalToSuperview().offset(0)
+            $0.height.equalTo(52)
+        }
+        
+        self.checkPwLabel.snp.makeConstraints {
+            $0.top.lessThanOrEqualTo(self.newPwTxtField.snp.bottom).offset(103)
+            $0.leading.equalToSuperview().offset(40)
+        }
+        
+        self.checkPwTxtField.snp.makeConstraints {
+            $0.top.equalTo(self.checkPwLabel.snp.bottom).offset(12)
+            $0.leading.trailing.equalToSuperview().offset(0)
+            $0.height.equalTo(52)
+        }
+        
+        self.errorLabel.snp.makeConstraints {
+            $0.trailing.equalToSuperview().offset(-40)
+            $0.top.equalTo(self.checkPwTxtField.snp.top).offset(18)
+        }
+        
+        self.changeBtn.snp.makeConstraints {
+            $0.bottom.equalToSuperview().offset(-34)
+            $0.leading.equalToSuperview().offset(39)
+            $0.trailing.equalToSuperview().offset(-39)
+            $0.height.equalTo(45)
+        }
+    }
+    
 }
