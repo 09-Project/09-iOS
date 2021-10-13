@@ -118,7 +118,7 @@ class MyPageViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView.delegate = self
+//        collectionView.delegate = self
         view.backgroundColor = .white
         // Do any additional setup after loading the view.
     }
@@ -133,8 +133,8 @@ class MyPageViewController: UIViewController {
         navigationItem.title = "마이페이지"
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "로그아웃", style: .plain, target: self, action: #selector(rightBarBtnDidTap))
         navigationItem.rightBarButtonItem?.tintColor = .red
-        collectionView.delegate = self
-        collectionView.dataSource = self
+//        collectionView.delegate = self
+//        collectionView.dataSource = self
     }
     
     @objc
