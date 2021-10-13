@@ -36,7 +36,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         $0.textAlignment = .left
         $0.textColor = .init(named: "mainColor")
         $0.font = .init(name: fontRegular, size: 14)
-        $0.attributedPlaceholder = NSAttributedString(string: "     Nickname", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
+        $0.attributedPlaceholder = NSAttributedString(string: "Nickname", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
     }
     
     private lazy var nickView = UIView().then {
@@ -117,11 +117,18 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         idTxt.delegate = self
         pwTxt.delegate = self
         nickNameTxt.delegate = self
+        idTxt.tag = 1
+        pwTxt.tag = 2
+        nickNameTxt.tag = 3
         eyeBtn.addTarget(self, action: #selector(changeBtn), for: .touchUpInside)
+        moveLoginBtn.addTarget(self, action: #selector(moveSignInViewController), for: .touchUpInside)
+        idErrorLabel.isHidden = true
+        nickErrorLabel.isHidden = true
         // Do any additional setup after loading the view.
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        setBorder()
         idErrorLabel.isHidden = true
         nickErrorLabel.isHidden = true
     }
@@ -132,52 +139,67 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        let border = CALayer()
-        border.frame = CGRect(x: 0, y: idView.frame.size.height, width: idView.frame.width, height: 1)
-        border.backgroundColor = UIColor.init(named: "mainColor")?.cgColor
-        idView.layer.addSublayer(border)
+        switch textField.tag {
+        case 1:
+            let border = CALayer()
+            
+            border.frame = CGRect(x: 0, y: idView.frame.size.height, width: idView.frame.width, height: 1)
+            border.backgroundColor = UIColor.init(named: "mainColor")?.cgColor
+            idView.layer.addSublayer(border)
+            idTxt.textColor = .init(named: "mainColor")
+        case 2:
+            let border1 = CALayer()
+            border1.frame = CGRect(x: 0, y: pwView.frame.size.height, width: pwView.frame.width, height: 1)
+            border1.backgroundColor = UIColor.init(named: "mainColor")?.cgColor
+            pwView.layer.addSublayer(border1)
+            pwTxt.textColor = .init(named: "mainColor")
+        case 3:
+            let border2 = CALayer()
+            border2.frame = CGRect(x: 0, y: nickView.frame.size.height, width: nickView.frame.width, height: 1)
+            border2.backgroundColor = UIColor.init(named: "mainColor")?.cgColor
+            nickView.layer.addSublayer(border2)
+            nickNameTxt.textColor = .init(named: "mainColor")
+        default:
+            print(Error.self)
+            
+        }
         
-        let border1 = CALayer()
-        border1.frame = CGRect(x: 0, y: pwView.frame.size.height, width: pwView.frame.width, height: 1)
-        border1.backgroundColor = UIColor.init(named: "mainColor")?.cgColor
-        pwView.layer.addSublayer(border1)
-        
-        let border2 = CALayer()
-        border2.frame = CGRect(x: 0, y: nickView.frame.size.height, width: nickView.frame.width, height: 1)
-        border2.backgroundColor = UIColor.init(named: "mainColor")?.cgColor
-        nickView.layer.addSublayer(border2)
-        
-        idTxt.textColor = .init(named: "mainColor")
-        pwTxt.textColor = .init(named: "mainColor")
-        nickNameTxt.textColor = .init(named: "mainColor")
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        let border = CALayer()
-        border.frame = CGRect(x: 0, y: idView.frame.size.height, width: idView.frame.width, height: 1)
-        border.backgroundColor = UIColor.init(named: "placeholderColor")?.cgColor
-        idView.layer.addSublayer(border)
-        
-        let border1 = CALayer()
-        border1.frame = CGRect(x: 0, y: pwTxt.frame.size.height, width: pwTxt.frame.width, height: 1)
-        border1.backgroundColor = UIColor.init(named: "placeholderColor")?.cgColor
-        pwTxt.layer.addSublayer(border1)
-        
-        let border2 = CALayer()
-        border2.frame = CGRect(x: 0, y: nickNameTxt.frame.size.height, width: nickView.frame.width, height: 1)
-        border2.backgroundColor = UIColor.init(named: "placeholderColor")?.cgColor
-        nickView.layer.addSublayer(border2)
-        
-        idTxt.textColor = .init(named: "placeholderColor")
-        pwTxt.textColor = .init(named: "placeholderColor")
-        nickNameTxt.textColor = .init(named: "placeholderColor")
+        switch textField.tag {
+        case 1:
+            let border = CALayer()
+            border.frame = CGRect(x: 0, y: idView.frame.size.height, width: idView.frame.width, height: 1)
+            border.backgroundColor = UIColor.init(named: "placeholderColor")?.cgColor
+            idView.layer.addSublayer(border)
+            idTxt.textColor = .init(named: "placeholderColor")
+        case 2:
+            let border1 = CALayer()
+            border1.frame = CGRect(x: 0, y: pwView.frame.size.height, width: pwView.frame.width, height: 1)
+            border1.backgroundColor = UIColor.init(named: "placeholderColor")?.cgColor
+            pwView.layer.addSublayer(border1)
+            pwTxt.textColor = .init(named: "placeholderColor")
+        case 3:
+            let border2 = CALayer()
+            border2.frame = CGRect(x: 0, y: nickView.frame.size.height, width: nickView.frame.width, height: 1)
+            border2.backgroundColor = UIColor.init(named: "placeholderColor")?.cgColor
+            nickView.layer.addSublayer(border2)
+            nickNameTxt.textColor = .init(named: "placeholderColor")
+        default:
+            print(Error.self)
+            
+        }
     }
     
     private func setUpView() {
         view.addSubview(imgView)
         view.addSubview(joinusLabel)
+        view.addSubview(nickView)
         view.addSubview(nickNameTxt)
+        view.addSubview(idView)
         view.addSubview(idTxt)
+        view.addSubview(pwView)
         view.addSubview(pwTxt)
         view.addSubview(nickErrorLabel)
         view.addSubview(idErrorLabel)
@@ -198,22 +220,43 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
             $0.centerX.equalTo(self.view)
         }
         
-        self.nickNameTxt.snp.makeConstraints {
+        self.nickView.snp.makeConstraints {
             $0.top.equalTo(self.joinusLabel.snp.bottom).offset(69)
             $0.leading.lessThanOrEqualToSuperview().offset(45)
             $0.trailing.greaterThanOrEqualToSuperview().offset(-45)
+            $0.height.equalTo(28)
+        }
+        
+        self.nickNameTxt.snp.makeConstraints {
+            $0.top.equalTo(self.nickView.snp.top).offset(0)
+            $0.leading.equalTo(self.nickView.snp.leading).offset(18)
+            $0.trailing.equalTo(self.nickView.snp.trailing).offset(-18)
+        }
+        
+        self.idView.snp.makeConstraints {
+            $0.top.equalTo(self.nickView.snp.bottom).offset(76)
+            $0.leading.lessThanOrEqualToSuperview().offset(45)
+            $0.trailing.greaterThanOrEqualToSuperview().offset(-45)
+            $0.height.equalTo(28)
         }
         
         self.idTxt.snp.makeConstraints {
-            $0.top.equalTo(self.nickNameTxt.snp.bottom).offset(76)
+            $0.top.equalTo(self.idView.snp.top).offset(0)
+            $0.leading.equalTo(self.idView.snp.leading).offset(18)
+            $0.trailing.equalTo(self.idView.snp.trailing).offset(-18)
+        }
+        
+        self.pwView.snp.makeConstraints {
+            $0.top.equalTo(self.idView.snp.bottom).offset(76)
             $0.leading.lessThanOrEqualToSuperview().offset(45)
             $0.trailing.greaterThanOrEqualToSuperview().offset(-45)
+            $0.height.equalTo(28)
         }
         
         self.pwTxt.snp.makeConstraints {
-            $0.top.equalTo(self.idTxt.snp.bottom).offset(76)
-            $0.leading.lessThanOrEqualToSuperview().offset(45)
-            $0.trailing.greaterThanOrEqualToSuperview().offset(-45)
+            $0.top.equalTo(self.pwView.snp.top).offset(0)
+            $0.leading.equalTo(self.pwView.snp.leading).offset(18)
+            $0.trailing.equalTo(self.pwView.snp.trailing).offset(-18)
         }
         
         self.nickErrorLabel.snp.makeConstraints {
@@ -227,7 +270,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         }
         
         self.eyeBtn.snp.makeConstraints {
-            $0.top.equalTo(self.idTxt.snp.bottom).offset(83)
+            $0.top.equalTo(self.pwView.snp.top).offset(8)
             $0.trailing.equalToSuperview().offset(-55)
             $0.width.equalTo(14)
             $0.height.equalTo(10)
@@ -274,6 +317,9 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         aa.addAttribute(NSMutableAttributedString.Key.underlineStyle, value: underLine, range: NSRange(location: 0, length: moveLoginBtn.currentTitle!.count))
         moveLoginBtn.setAttributedTitle(aa, for: .normal)
         
+    }
+    
+    private func setBorder() {
         let border = CALayer()
         border.frame = CGRect(x: 0, y: idView.frame.size.height, width: idView.frame.width, height: 1)
         border.backgroundColor = UIColor.init(named: "placeholderColor")?.cgColor
@@ -288,7 +334,13 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         border2.frame = CGRect(x: 0, y: nickView.frame.size.height, width: nickView.frame.width, height: 1)
         border2.backgroundColor = UIColor.init(named: "placeholderColor")?.cgColor
         nickView.layer.addSublayer(border2)
-        
+    }
+    
+    @objc
+    private func moveSignInViewController() {
+        let VC = SignInViewController()
+        VC.modalPresentationStyle = .fullScreen
+        present(VC, animated: true, completion: nil)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
