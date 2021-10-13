@@ -18,7 +18,7 @@ class ChangePasswordViewController: UIViewController {
         $0.text = "기존 비밀번호"
         $0.textColor = .black
         $0.font = .init(name: fontMedium, size: 14)
-    }
+    }   // 기존 비밀번호 라벨
     
     private lazy var pwTxtField = UITextField().then {
         $0.backgroundColor = .white
@@ -26,43 +26,55 @@ class ChangePasswordViewController: UIViewController {
         $0.isSecureTextEntry = true
         $0.font = .init(name: fontRegular, size: 14)
         $0.attributedPlaceholder = NSAttributedString(string: "     기존비밀번호를 입력해주세요", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
-    }
+    }   // 기존 비밀번호 쓰는 텍스트필드
+    
+    private lazy var pwView = UIView().then {
+        $0.backgroundColor = .white
+    }   // 기존 비밀번호 뷰
     
     private lazy var newPwLabel = UILabel().then {
         $0.backgroundColor = .white
         $0.text = "새 비밀번호"
         $0.textColor = .black
         $0.font = .init(name: fontMedium, size: 14)
-    }
+    }   // 새로운 비밀번호 라벨
     
     private lazy var newPwTxtField = UITextField().then {
         $0.backgroundColor = .white
         $0.font = .init(name: fontRegular, size: 14)
         $0.isSecureTextEntry = true
         $0.textColor = .init(named: "changePwColor")
-        $0.attributedPlaceholder = NSAttributedString(string: "     새 비밀번호를 입력해주세요", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
-    }
+        $0.attributedPlaceholder = NSAttributedString(string: "새 비밀번호를 입력해주세요", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
+    }   // 새로운 비밀번호 쓰는 텍스트필드
+    
+    private lazy var newPwView = UIView().then {
+        $0.backgroundColor = .white
+    }   // 새로운 비밀번호 뷰
     
     private lazy var checkPwLabel = UILabel().then {
         $0.backgroundColor = .white
         $0.font = .init(name: fontMedium, size: 14)
         $0.text = "비밀번호 확인"
         $0.textColor = .init(named: "changePwColor")
-    }
+    }   // 비밀번호 확인 라벨
     
     private lazy var checkPwTxtField = UITextField().then {
         $0.backgroundColor = .white
         $0.font = .init(name: fontRegular, size: 14)
         $0.isSecureTextEntry = true
         $0.textColor = .init(named: "changePwColor")
-        $0.attributedPlaceholder = NSAttributedString(string: "     변경한 비밀번호를 다시 입력해주세요", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
-    }
+        $0.attributedPlaceholder = NSAttributedString(string: "변경한 비밀번호를 다시 입력해주세요", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
+    }   // 비밀번호 확인 텍스트필드
+    
+    private lazy var checkPwView = UIView().then {
+        $0.backgroundColor = .white
+    }   // 비밀번호 확인 뷰
     
     private lazy var errorLabel = UILabel().then {
         $0.backgroundColor = .white
         $0.textColor = .red
         $0.text = "비밀번호가 일치하지 않습니다."
-    }
+    }   // 에러 라벨
     
     private lazy var changeBtn = UIButton().then {
         $0.backgroundColor = .init(named: "mainColor")
@@ -70,7 +82,7 @@ class ChangePasswordViewController: UIViewController {
         $0.titleLabel!.font = .init(name: fontBold, size: 15)
         $0.setTitleColor(.white, for: .normal)
         $0.layer.cornerRadius = 10
-    }
+    }   // 변경하기 버튼
     
     override func viewDidLoad() {
         super.viewDidLoad()
