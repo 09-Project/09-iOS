@@ -12,7 +12,8 @@ import SideMenu
 
 class MainViewController: UIViewController {
     
-    private let sideMenu = SideMenuNavigationController(rootViewController: SideMenuViewController())
+    private let sideMenu = SideMenuNavigationController(
+        rootViewController: SideMenuViewController())
     
     private let fontBold = "NotoSansCJKkr-Bold"
     private let fontRegular = "NotoSansCJKkr-Regular"
@@ -73,12 +74,16 @@ class MainViewController: UIViewController {
         super.viewDidLoad()
 
         view.backgroundColor = .white
-        let img = UIImage(named: "symbol&logo_09")
+        let img = UIImage(named: "logo&symbolImg")
         navigationItem.titleView = UIImageView(image: img)
         sideMenu.leftSide = false
         SideMenuManager.default.rightMenuNavigationController = sideMenu
         SideMenuManager.default.addPanGestureToPresent(toView: view)
-        navigationItem.leftBarButtonItem = UIBarButtonItem(image: .init(systemName: "line.horizontal.3"), style: .plain, target: self, action: #selector(sideMenuDidTap))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            image: .init(systemName: "line.horizontal.3"),
+            style: .plain,
+            target: self,
+            action: #selector(sideMenuDidTap))
 //        mainCollectionView.delegate = self
 //        mainCollectionView.dataSource = self
     }
@@ -86,7 +91,7 @@ class MainViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 73, height: 28))
         imageView.contentMode = .scaleAspectFit
-        let image = UIImage(named: "symbol&logo_09")
+        let image = UIImage(named: "logo&symbolImg")
         imageView.image = image
         navigationItem.titleView = imageView
         setupView()
