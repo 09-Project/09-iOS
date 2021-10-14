@@ -26,7 +26,7 @@ class MyPageViewController: UIViewController {
     }
     
     private lazy var gearBtn = UIButton().then {
-        $0.setImage(.init(named: "톱니바퀴.PNG.png"), for: .normal)
+        $0.setImage(.init(named: "gearImg"), for: .normal)
         $0.tintColor = .init(named: "mainColor")
     }
     
@@ -131,7 +131,10 @@ class MyPageViewController: UIViewController {
     
     private func setNavigationItem(){
         navigationItem.title = "마이페이지"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "로그아웃", style: .plain, target: self, action: #selector(rightBarBtnDidTap))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "로그아웃",
+                                                            style: .plain,
+                                                            target: self,
+                                                            action: #selector(rightBarBtnDidTap))
         navigationItem.rightBarButtonItem?.tintColor = .red
 //        collectionView.delegate = self
 //        collectionView.dataSource = self
