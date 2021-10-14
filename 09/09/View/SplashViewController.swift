@@ -11,8 +11,8 @@ import Then
 
 class SplashViewController: UIViewController {
     
-    private let symbolImg = UIImage(named: "symbol_09")
-    private let logoImg = UIImage(named: "logo_09")
+    private let symbolImg = UIImage(named: "symbolImg")
+    private let logoImg = UIImage(named: "logoImg")
     
     private lazy var symbolImgView = UIImageView().then {
         $0.image = symbolImg
