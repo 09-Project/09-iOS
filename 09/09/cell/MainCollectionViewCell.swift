@@ -35,7 +35,7 @@ class MainCollectionViewCell: UICollectionViewCell {
     }
     
     lazy var pinImg = UIImageView().then {
-        $0.image = .init(named: "pin")
+        $0.image = .init(named: "pinImg")
         $0.contentMode = .scaleAspectFit
         $0.backgroundColor = .white
     }
