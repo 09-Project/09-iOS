@@ -6,8 +6,12 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 class SideMenuViewController: UIViewController {
+    
+    private let disposebag = DisposeBag()
     
     private lazy var pageLabel = UILabel().then {
         $0.backgroundColor = .white
@@ -51,10 +55,7 @@ class SideMenuViewController: UIViewController {
         view.layer.cornerRadius = 10
         view.layer.maskedCorners  = .layerMinXMinYCorner
         view.layer.masksToBounds = true
-        homeBtn.addTarget(self, action: #selector(homeBtnDidTap), for: .touchUpInside)
-        myPageBtn.addTarget(self, action: #selector(myPageBtnDidTap), for: .touchUpInside)
-        postBtn.addTarget(self, action: #selector(postBtnDidTap), for: .touchUpInside)
-
+        setButton()
     }
     
     override func viewDidLayoutSubviews() {
@@ -95,6 +96,18 @@ class SideMenuViewController: UIViewController {
         }
         
     }
+    
+    private func setButton() {
+        homeBtn.rx.tap.subscribe(onNext: {[unowned self] _ in self.homeBtnDidTap()
+        }).disposed(by: disposebag)
+        
+        myPageBtn.rx.tap.subscribe(onNext: {[unowned self] _ in self.myPageBtnDidTap()
+        }).disposed(by: disposebag)
+        
+        postBtn.rx.tap.subscribe(onNext: {[unowned self] _ in self.postBtnDidTap()
+        }).disposed(by: disposebag)
+    }
+    
     @objc
     private func homeBtnDidTap() {
         let VC = MainViewController()
