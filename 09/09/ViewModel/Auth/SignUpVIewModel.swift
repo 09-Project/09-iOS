@@ -41,7 +41,7 @@ class SignUpViewModel: ViewModelType {
                 case .wrongRq:
                     result.onNext("닉네임은 최대 10까지 가능합니다.")
                 case .conflict:
-                    result.onNext("닉네임 또는 이메일이 존재합니다.")
+                    result.onNext("닉네임 또는 아이디가 존재합니다.")
                 default:
                     result.onNext("회원가입 실패")
                 }
