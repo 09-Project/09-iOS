@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-class CheckPwViewModel: ViewModelType {
+class ChangePwViewModel: ViewModelType {
     
     private let disposebag = DisposeBag()
     
@@ -48,6 +48,6 @@ class CheckPwViewModel: ViewModelType {
         }).disposed(by: disposebag)
         
        return Output(isEnable: isEnable.asDriver(),
-               result: result.asSignal(onErrorJustReturn: "비밀번호 변경 실패"))
+               result: result.asSignal(onErrorJustReturn: "비밀번호가 일치하지 않습니다."))
     }
 }
