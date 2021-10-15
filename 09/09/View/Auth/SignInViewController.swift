@@ -136,57 +136,28 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
-            switch textField.tag {
-            case 1:
-                let border = CALayer()
-                border.frame = CGRect(x: 0,
-                                      y: idView.frame.size.height+5,
-                                      width: idView.frame.width,
-                                      height: 1)
-                border.backgroundColor = UIColor.init(named: "mainColor")?.cgColor
-                idView.layer.addSublayer(border)
-                idTxt.textColor = .init(named: "mainColor")
-
-            case 2:
-                let border1 = CALayer()
-                border1.frame = CGRect(x: 0,
-                                       y: pwView.frame.size.height+5,
-                                       width: pwView.frame.width,
-                                       height: 1)
-                border1.backgroundColor = UIColor.init(named: "mainColor")?.cgColor
-                pwView.layer.addSublayer(border1)
-                pwTxt.textColor = .init(named: "mainColor")
-            default:
-                print(Error.self)
+        switch textField.tag {
+        case 1:
+            underLine(view: idView, txt: idTxt, color: "mainColor")
+            
+        case 2:
+            underLine(view: pwView, txt: pwTxt, color: "mainColor")
+        default:
+            print(Error.self)
             
         }
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-            switch textField.tag {
-            case 1:
-                let border = CALayer()
-                
-                border.frame = CGRect(x: 0,
-                                      y: idView.frame.size.height+5,
-                                      width: idView.frame.width,
-                                      height: 1)
-                border.backgroundColor = UIColor.init(named: "placeholderColor")?.cgColor
-                idView.layer.addSublayer(border)
-                idTxt.textColor = .init(named: "placeholderColor")
-            case 2:
-                let border1 = CALayer()
-                border1.frame = CGRect(x: 0,
-                                       y: pwView.frame.size.height+5,
-                                       width: pwView.frame.width,
-                                       height: 1)
-                border1.backgroundColor = UIColor.init(named: "placeholderColor")?.cgColor
-                pwView.layer.addSublayer(border1)
-                pwTxt.textColor = .init(named: "placeholderColor")
-            default:
-                print(Error.self)
+        switch textField.tag {
+        case 1:
+            underLine(view: idView, txt: idTxt, color: "placeholderColor")
+        case 2:
+            underLine(view: pwView, txt: pwTxt, color: "placeholderColor")
+        default:
+            print(Error.self)
             
-            }
+        }
     }
     
     private func bindViewModel() {
@@ -202,7 +173,9 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         }).disposed(by: disposeBag)
         
         output.result.emit(
-            onNext: {[unowned self] _ in errorLabel.isHidden = false},
+            onNext: {[unowned self] text in errorLabel.text = text
+                errorLabel.isHidden = false
+            },
             onCompleted: {[unowned self] in let VC = MainViewController()
                 present(VC, animated: true, completion: nil)
             }).disposed(by: disposeBag)
@@ -298,24 +271,8 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         }
     }
     private func setBorder() {
-        let border = CALayer()
-        
-        border.frame = CGRect(x: 0,
-                              y: idView.frame.size.height+5,
-                              width: idView.frame.width,
-                              height: 1)
-        border.backgroundColor = UIColor.init(named: "placeholderColor")?.cgColor
-        idView.layer.addSublayer(border)
-        idTxt.textColor = .init(named: "placeholderColor")
-        
-        let border1 = CALayer()
-        border1.frame = CGRect(x: 0,
-                               y: pwView.frame.size.height+5,
-                               width: pwView.frame.width,
-                               height: 1)
-        border1.backgroundColor = UIColor.init(named: "placeholderColor")?.cgColor
-        pwView.layer.addSublayer(border1)
-        pwTxt.textColor = .init(named: "placeholderColor")
+        underLine(view: idView, txt: nil, color: "placeholderColor")
+        underLine(view: pwView, txt: nil, color: "placeholderColor")
     }
     
     @objc
@@ -346,26 +303,19 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
             checkBtnBool.toggle()
         }
     }
-        
-        @objc
-        private func moveSignUpViewController() {
-            let VC = SignUpViewController()
-            VC.modalPresentationStyle = .fullScreen
-            present(VC, animated: true, completion: nil)
-        }
-    private func setObj() {
-        let aa = NSMutableAttributedString(string: moveSignupBtn.currentTitle!)
-        let underLine = NSUnderlineStyle.thick.rawValue
-        aa.addAttribute(NSMutableAttributedString.Key.underlineStyle,
-                        value: underLine,
-                        range: NSRange(location: 0, length: moveSignupBtn.currentTitle!.count))
-        moveSignupBtn.setAttributedTitle(aa, for: .normal)
+    
+    @objc
+    private func moveSignUpViewController() {
+        let VC = SignUpViewController()
+        VC.modalPresentationStyle = .fullScreen
+        present(VC, animated: true, completion: nil)
     }
     
     
 }
 
 private extension SignInViewController {
+    
     private func setBtn() {
         self.eyeBtn.rx.tap.subscribe(onNext: {[unowned self] _ in changeEyeBtnImg()})
             .disposed(by: disposeBag)
@@ -381,5 +331,12 @@ private extension SignInViewController {
             sender.isEnabled = false
         }
     }
-    
+    private func setObj() {
+        let aa = NSMutableAttributedString(string: moveSignupBtn.currentTitle!)
+        let underLine = NSUnderlineStyle.thick.rawValue
+        aa.addAttribute(NSMutableAttributedString.Key.underlineStyle,
+                        value: underLine,
+                        range: NSRange(location: 0, length: moveSignupBtn.currentTitle!.count))
+        moveSignupBtn.setAttributedTitle(aa, for: .normal)
+    }
 }
