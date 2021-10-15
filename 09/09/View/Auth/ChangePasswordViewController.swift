@@ -6,12 +6,16 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 class ChangePasswordViewController: UIViewController {
     
     private let fontBold = "NotoSansCJKkr-Bold"
     private let fontRegular = "NotoSansCJKkr-Regular"
     private let fontMedium = "NotoSansCJKkr-Medium"
+    private let disposebag = DisposeBag()
+    private let viewModel = ChangePwViewModel()
     
     private lazy var pwLabel = UILabel().then {
         $0.backgroundColor = .white
@@ -88,11 +92,43 @@ class ChangePasswordViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         navigationItem.title = "비밀번호 변경"
+        bindViewModel()
         // Do any additional setup after loading the view.
     }
     
     override func viewDidLayoutSubviews() {
         setup()
+    }
+    
+    private func bindViewModel() {
+        let input = ChangePwViewModel.Input(
+            password: pwTxtField.rx.text.orEmpty.asDriver(),
+            new_password: newPwTxtField.rx.text.orEmpty.asDriver(),
+            doneTap: changeBtn.rx.tap.asSignal())
+        
+        let output = viewModel.transform(input)
+        
+        output.isEnable.drive(changeBtn.rx.isEnabled).disposed(by: disposebag)
+        output.isEnable.drive(onNext: {[unowned self] _ in
+            btn(changeBtn)
+        }).disposed(by: disposebag)
+        
+        output.result.emit(onNext: {[unowned self] text in
+                           errorLabel.isHidden = false
+            self.errorLabel.text = text},
+                           onCompleted: {[unowned self] in
+            let VC = MyPageViewController()
+            present(VC, animated: true, completion: nil)
+        }).disposed(by: disposebag)
+    }
+    
+    private func btn(_ btn: UIButton) {
+        if btn.isEnabled {
+            btn.isEnabled = true
+        }
+        else {
+            btn.isEnabled = false
+        }
     }
     
     private func setup() {
