@@ -16,7 +16,7 @@
 		3873D6D3270B223B00CD983D /* NotoSansCJKkr-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3873D6D0270B223B00CD983D /* NotoSansCJKkr-Bold.otf */; };
 		387A880E2710063D004F3C16 /* SideMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 387A880D2710063D004F3C16 /* SideMenuViewController.swift */; };
 		388039A627181AF4004D1E54 /* SignUpVIewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388039A527181AF4004D1E54 /* SignUpVIewModel.swift */; };
-		388039A827181DFE004D1E54 /* CheckPwViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388039A727181DFD004D1E54 /* CheckPwViewModel.swift */; };
+		388039A827181DFE004D1E54 /* ChangePwViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388039A727181DFD004D1E54 /* ChangePwViewModel.swift */; };
 		388D99872710166D00EB8594 /* MyPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388D99862710166D00EB8594 /* MyPageViewController.swift */; };
 		388D99892710167D00EB8594 /* ChangePasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388D99882710167D00EB8594 /* ChangePasswordViewController.swift */; };
 		388D998B2710168F00EB8594 /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388D998A2710168F00EB8594 /* PostViewController.swift */; };
@@ -47,7 +47,7 @@
 		3873D6D0270B223B00CD983D /* NotoSansCJKkr-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansCJKkr-Bold.otf"; sourceTree = "<group>"; };
 		387A880D2710063D004F3C16 /* SideMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuViewController.swift; sourceTree = "<group>"; };
 		388039A527181AF4004D1E54 /* SignUpVIewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpVIewModel.swift; sourceTree = "<group>"; };
-		388039A727181DFD004D1E54 /* CheckPwViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckPwViewModel.swift; sourceTree = "<group>"; };
+		388039A727181DFD004D1E54 /* ChangePwViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePwViewModel.swift; sourceTree = "<group>"; };
 		388D99862710166D00EB8594 /* MyPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewController.swift; sourceTree = "<group>"; };
 		388D99882710167D00EB8594 /* ChangePasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewController.swift; sourceTree = "<group>"; };
 		388D998A2710168F00EB8594 /* PostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
@@ -138,7 +138,7 @@
 			children = (
 				38B54C2B2717FE4E000B7667 /* SignInModel.swift */,
 				388039A527181AF4004D1E54 /* SignUpVIewModel.swift */,
-				388039A727181DFD004D1E54 /* CheckPwViewModel.swift */,
+				388039A727181DFD004D1E54 /* ChangePwViewModel.swift */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -379,7 +379,7 @@
 				38FE844126EACF48009587FC /* SplashViewController.swift in Sources */,
 				38D3932926EB4643008BF247 /* ViewModelType.swift in Sources */,
 				388D998F2710170B00EB8594 /* ChangeProfileViewController.swift in Sources */,
-				388039A827181DFE004D1E54 /* CheckPwViewModel.swift in Sources */,
+				388039A827181DFE004D1E54 /* ChangePwViewModel.swift in Sources */,
 				387A880E2710063D004F3C16 /* SideMenuViewController.swift in Sources */,
 				38E337592714580E009BAB42 /* Extension.swift in Sources */,
 				383112212708296900F56E40 /* SignUpViewController.swift in Sources */,
