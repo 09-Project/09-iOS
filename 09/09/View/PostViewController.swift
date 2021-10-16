@@ -12,6 +12,7 @@ class PostViewController: UIViewController {
     private let fontBold = "NotoSansCJKkr-Bold"
     private let fontRegular = "NotoSansCJKkr-Regular"
     private let fontMedium = "NotoSansCJKkr-Medium"
+    let identfier = "cell"
     
     private lazy var backBtn = UIButton().then {
         $0.backgroundColor = .none
@@ -73,20 +74,144 @@ class PostViewController: UIViewController {
         $0.textColor = .black
     }
     
-    private lazy var buyBtn = UIButton().then {
+    private lazy var buyLabel = UILabel().then {
         $0.backgroundColor = .init(named: "mainColor")
-        $0.setTitle("공동구매", for: .normal)
+        $0.text = "공동구매"
         $0.layer.cornerRadius = 3
-        $0.setTitleColor(.white, for: .normal)
-        $0.titleLabel!.font = .init(name: fontBold, size: 11)
+        $0.font = .init(name: fontBold, size: 11)
+    }
+    
+    private lazy var contentLabel = UILabel().then {
+        $0.backgroundColor = .white
+        $0.font = .init(name: fontRegular, size: 12)
+        $0.numberOfLines = 5
+        $0.textColor = .black
+    }
+    
+    private lazy var label = UILabel().then {
+        $0.backgroundColor = .white
+        $0.text = "다른 상품 보기"
+        $0.font = .init(name: fontBold, size: 14)
+    }
+    
+    private lazy var heartBtn = UIButton().then {
+        $0.backgroundColor = .white
+        $0.layer.maskedCorners  = .layerMinXMinYCorner
+        $0.layer.maskedCorners = .layerMinXMaxYCorner
+        $0.layer.cornerRadius = 5
+        $0.layer.borderWidth = 0.5
+        $0.layer.borderColor = UIColor.init(named: "borderColor")?.cgColor
+    }
+    
+    private lazy var chatBtn = UIButton().then {
+        $0.backgroundColor = .white
+        $0.layer.maskedCorners = .layerMaxXMinYCorner
+        $0.layer.maskedCorners = .layerMaxXMaxYCorner
+        $0.layer.cornerRadius  = 5
+        $0.layer.borderWidth = 0.5
+        $0.layer.borderColor = UIColor.init(named: "borderColor")?.cgColor
+    }
+    
+    private lazy var collectionView = UICollectionView().then {
+        $0.backgroundColor = .white
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         // Do any additional setup after loading the view.
+        self.collectionView.register(MainCollectionViewCell.self,
+                                     forCellWithReuseIdentifier: identfier)
     }
+    
+    override func viewDidLayoutSubviews() {
+        setup()
+    }
+    
     private func setup() {
+        [imgView, backBtn, profileImg, name, profileBtn, titleLabel, priceLabel, wonLabel,
+         pinImg, areaLabel, buyLabel, contentLabel, label, heartBtn, chatBtn, collectionView]
+            .forEach{view.addSubview($0)}
         
+        self.imgView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(0)
+            $0.leading.trailing.equalToSuperview().offset(0)
+            $0.height.equalTo(self.imgView.snp.width)
+        }
+        
+        self.backBtn.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(44)
+            $0.leading.equalToSuperview().offset(23)
+            $0.height.equalTo(14)
+            $0.width.equalTo(7)
+        }
+        
+        self.profileImg.snp.makeConstraints {
+            $0.top.equalTo(self.imgView.snp.bottom).offset(28)
+            $0.leading.equalToSuperview().offset(39)
+            $0.height.width.equalTo(32)
+        }
+        
+        self.name.snp.makeConstraints {
+            $0.centerY.equalTo(self.profileImg.snp.centerY)
+            $0.leading.equalTo(self.profileImg.snp.trailing).offset(6)
+        }
+        
+        self.profileBtn.snp.makeConstraints {
+            $0.centerY.equalTo(self.name.snp.centerY)
+            $0.leading.equalTo(self.name.snp.trailing).offset(5)
+            $0.width.equalTo(7)
+            $0.height.equalTo(14)
+        }
+        
+        self.titleLabel.snp.makeConstraints {
+            $0.top.equalTo(profileImg.snp.bottom).offset(16)
+            $0.leading.equalTo(39)
+        }
+        
+        self.priceLabel.snp.makeConstraints {
+            $0.top.equalTo(titleLabel.snp.bottom).offset(0)
+            $0.leading.equalToSuperview().offset(39)
+        }
+        
+        self.wonLabel.snp.makeConstraints {
+            $0.leading.equalTo(self.priceLabel.snp.trailing).offset(4)
+            $0.top.equalTo(titleLabel.snp.bottom).offset(12)
+        }
+        
+        self.pinImg.snp.makeConstraints {
+            $0.top.equalTo(self.priceLabel.snp.bottom).offset(9)
+            $0.leading.equalToSuperview().offset(39)
+            $0.width.equalTo(10)
+            $0.height.equalTo(14)
+        }
+        
+        self.areaLabel.snp.makeConstraints {
+            $0.top.equalTo(self.priceLabel.snp.bottom).offset(9)
+            $0.leading.equalTo(self.pinImg.snp.trailing).offset(4)
+        }
+        
+        self.label.snp.makeConstraints {
+            $0.top.equalTo(self.priceLabel.snp.bottom).offset(5)
+            $0.trailing.equalToSuperview().offset(-39)
+            $0.width.equalTo(56)
+            $0.height.equalTo(20)
+        }
+        
+        self.heartBtn.snp.makeConstraints {
+            $0.top.equalTo(self.label.snp.bottom).offset(19)
+            $0.leading.equalToSuperview().offset(39)
+        }
+        self.chatBtn.snp.makeConstraints {
+            $0.top.equalTo(self.label.snp.bottom).offset(19)
+            $0.leading.equalTo(self.heartBtn.snp.trailing).offset(0)
+            $0.trailing.equalToSuperview().offset(-39)
+        }
+        
+        self.contentLabel.snp.makeConstraints {
+            $0.top.equalTo(self.heartBtn.snp.bottom).offset(24)
+            $0.leading.equalToSuperview().offset(39)
+            $0.trailing.equalToSuperview().offset(-39)
+        }
     }
 }
