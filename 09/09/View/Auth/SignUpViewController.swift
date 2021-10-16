@@ -195,20 +195,8 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
     }
     
     private func setUpView() {
-        view.addSubview(imgView)
-        view.addSubview(joinusLabel)
-        view.addSubview(nickView)
-        view.addSubview(nickNameTxt)
-        view.addSubview(idView)
-        view.addSubview(idTxt)
-        view.addSubview(pwView)
-        view.addSubview(pwTxt)
-        view.addSubview(nickErrorLabel)
-        view.addSubview(idErrorLabel)
-        view.addSubview(eyeBtn)
-        view.addSubview(signupBtn)
-        view.addSubview(label)
-        view.addSubview(moveLoginBtn)
+        [imgView, joinusLabel, nickView, nickNameTxt, idView, idTxt, pwView, pwTxt, nickErrorLabel,
+         idErrorLabel, eyeBtn, signupBtn, label, moveLoginBtn].forEach { self.view.addSubview($0)}
         
         self.imgView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(52)
