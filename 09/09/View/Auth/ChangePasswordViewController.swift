@@ -108,8 +108,6 @@ class ChangePasswordViewController: UIViewController, UITextFieldDelegate {
         }).disposed(by: disposebag)
     }
     
-    
-    
     private func error() {
         if newPW.Txt.text == checkPW.Txt.text {
             errorLabel.isHidden = true
