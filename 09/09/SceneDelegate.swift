@@ -16,13 +16,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.windowScene = windowScene
-        let splashVC = SplashViewController()
-        let loginVC = SignInViewController()
-        let signupVC = SignUpViewController()
-        let mainVC = MainViewController()
-        let naviagtionVC = UINavigationController(rootViewController: mainVC)
-        let postVC = PostViewController()
-        window?.rootViewController = postVC
+        window?.rootViewController = UINavigationController(
+            rootViewController: ChangePasswordViewController())
         window?.makeKeyAndVisible()
     }
     
