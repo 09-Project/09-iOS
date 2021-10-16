@@ -9,7 +9,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class ChangePasswordViewController: UIViewController {
+class ChangePasswordViewController: UIViewController, UITextFieldDelegate {
     
     private let fontBold = "NotoSansCJKkr-Bold"
     private let fontRegular = "NotoSansCJKkr-Regular"
@@ -17,67 +17,40 @@ class ChangePasswordViewController: UIViewController {
     private let disposebag = DisposeBag()
     private let viewModel = ChangePwViewModel()
     
-    private lazy var pwLabel = UILabel().then {
-        $0.backgroundColor = .white
-        $0.text = "기존 비밀번호"
-        $0.textColor = .black
-        $0.font = .init(name: fontMedium, size: 14)
-    }   // 기존 비밀번호 라벨
     
-    private lazy var pwTxtField = UITextField().then {
-        $0.backgroundColor = .white
-        $0.textColor = .init(named: "changePwColor")
-        $0.isSecureTextEntry = true
-        $0.font = .init(name: fontRegular, size: 14)
-        $0.attributedPlaceholder = NSAttributedString(string: "     기존비밀번호를 입력해주세요", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
-    }   // 기존 비밀번호 쓰는 텍스트필드
+    private lazy var pw = customView().then {
+        $0.Label.text = "기존 비밀번호"
+        $0.label.isHidden = true
+        $0.Txt.attributedPlaceholder = NSAttributedString(string: "기존비밀번호를 입력해주세요",
+                                            attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
+    }
     
-    private lazy var pwView = UIView().then {
-        $0.backgroundColor = .white
-    }   // 기존 비밀번호 뷰
+    private lazy var newPW = customView().then {
+        $0.Label.text = "새 비밀번호"
+        $0.Txt.attributedPlaceholder = NSAttributedString(string: "새 비밀번호를 입력해주세요",
+                                            attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
+        $0.label.isHidden = true
+    }
     
-    private lazy var newPwLabel = UILabel().then {
-        $0.backgroundColor = .white
-        $0.text = "새 비밀번호"
-        $0.textColor = .black
-        $0.font = .init(name: fontMedium, size: 14)
-    }   // 새로운 비밀번호 라벨
+    private lazy var checkPW = customView().then {
+        $0.Label.text = "비밀번호 확인"
+        $0.Txt.attributedPlaceholder = NSAttributedString(string: "변경한 비밀번호를 다시 입력해주세요",
+                                            attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
+        $0.label.isHidden = true
+    }
     
-    private lazy var newPwTxtField = UITextField().then {
-        $0.backgroundColor = .white
-        $0.font = .init(name: fontRegular, size: 14)
-        $0.isSecureTextEntry = true
-        $0.textColor = .init(named: "changePwColor")
-        $0.attributedPlaceholder = NSAttributedString(string: "새 비밀번호를 입력해주세요", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
-    }   // 새로운 비밀번호 쓰는 텍스트필드
-    
-    private lazy var newPwView = UIView().then {
-        $0.backgroundColor = .white
-    }   // 새로운 비밀번호 뷰
-    
-    private lazy var checkPwLabel = UILabel().then {
-        $0.backgroundColor = .white
-        $0.font = .init(name: fontMedium, size: 14)
-        $0.text = "비밀번호 확인"
-        $0.textColor = .init(named: "changePwColor")
-    }   // 비밀번호 확인 라벨
-    
-    private lazy var checkPwTxtField = UITextField().then {
-        $0.backgroundColor = .white
-        $0.font = .init(name: fontRegular, size: 14)
-        $0.isSecureTextEntry = true
-        $0.textColor = .init(named: "changePwColor")
-        $0.attributedPlaceholder = NSAttributedString(string: "변경한 비밀번호를 다시 입력해주세요", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
-    }   // 비밀번호 확인 텍스트필드
-    
-    private lazy var checkPwView = UIView().then {
-        $0.backgroundColor = .white
-    }   // 비밀번호 확인 뷰
+    private lazy var stackView = UIStackView(arrangedSubviews: [pw, newPW, checkPW]).then {
+        $0.axis = .vertical
+        $0.spacing = 40
+        $0.alignment = .fill
+        $0.distribution = .fillEqually
+    }
     
     private lazy var errorLabel = UILabel().then {
         $0.backgroundColor = .white
         $0.textColor = .red
         $0.text = "비밀번호가 일치하지 않습니다."
+        $0.font = .init(name: fontRegular, size: 11)
     }   // 에러 라벨
     
     private lazy var changeBtn = UIButton().then {
@@ -85,7 +58,7 @@ class ChangePasswordViewController: UIViewController {
         $0.setTitle("변경하기", for: .normal)
         $0.titleLabel!.font = .init(name: fontBold, size: 15)
         $0.setTitleColor(.white, for: .normal)
-        $0.layer.cornerRadius = 10
+        $0.layer.cornerRadius = 5
     }   // 변경하기 버튼
     
     override func viewDidLoad() {
@@ -100,89 +73,71 @@ class ChangePasswordViewController: UIViewController {
         setup()
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
+    
+    override func viewDidAppear(_ animated: Bool) {
+        errorLabel.isHidden = true
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        error()
+    }
+    
     private func bindViewModel() {
         let input = ChangePwViewModel.Input(
-            password: pwTxtField.rx.text.orEmpty.asDriver(),
-            new_password: newPwTxtField.rx.text.orEmpty.asDriver(),
+            password: pw.Txt.rx.text.orEmpty.asDriver(),
+            new_password: newPW.Txt.rx.text.orEmpty.asDriver(),
+            check_password: checkPW.Txt.rx.text.orEmpty.asDriver(),
             doneTap: changeBtn.rx.tap.asSignal())
         
         let output = viewModel.transform(input)
         
         output.isEnable.drive(changeBtn.rx.isEnabled).disposed(by: disposebag)
-        output.isEnable.drive(onNext: {[unowned self] _ in
-            btn(changeBtn)
+        output.isEnable.drive(onNext: {[unowned self] bool in
+            changeBtn.isEnabled = bool
         }).disposed(by: disposebag)
         
         output.result.emit(onNext: {[unowned self] text in
-                           errorLabel.isHidden = false
-            self.errorLabel.text = text},
+            errorLabel.isHidden = false},
                            onCompleted: {[unowned self] in
             let VC = MyPageViewController()
             present(VC, animated: true, completion: nil)
         }).disposed(by: disposebag)
     }
     
-    private func btn(_ btn: UIButton) {
-        if btn.isEnabled {
-            btn.isEnabled = true
+    
+    
+    private func error() {
+        if newPW.Txt.text == checkPW.Txt.text {
+            errorLabel.isHidden = true
         }
+        
         else {
-            btn.isEnabled = false
+            errorLabel.isHidden = false
         }
     }
     
     private func setup() {
-        view.addSubview(pwLabel)
-        view.addSubview(pwTxtField)
-        view.addSubview(newPwLabel)
-        view.addSubview(newPwTxtField)
-        view.addSubview(checkPwLabel)
-        view.addSubview(checkPwTxtField)
-        view.addSubview(errorLabel)
-        view.addSubview(changeBtn)
+        [stackView, errorLabel, changeBtn].forEach { self.view.addSubview($0)}
         
-        self.pwLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(59)
-            $0.leading.equalToSuperview().offset(40)
-        }
-        
-        self.pwTxtField.snp.makeConstraints {
-            $0.top.equalTo(self.pwLabel.snp.bottom).offset(12)
+        self.stackView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(160)
             $0.leading.trailing.equalToSuperview().offset(0)
-            $0.height.equalTo(52)
-        }
-        
-        self.newPwLabel.snp.makeConstraints {
-            $0.top.lessThanOrEqualTo(self.pwTxtField.snp.bottom).offset(103)
-            $0.leading.equalToSuperview().offset(40)
-        }
-        
-        self.newPwTxtField.snp.makeConstraints {
-            $0.top.equalTo(self.pwLabel.snp.bottom).offset(12)
-            $0.leading.trailing.equalToSuperview().offset(0)
-            $0.height.equalTo(52)
-        }
-        
-        self.checkPwLabel.snp.makeConstraints {
-            $0.top.lessThanOrEqualTo(self.newPwTxtField.snp.bottom).offset(103)
-            $0.leading.equalToSuperview().offset(40)
-        }
-        
-        self.checkPwTxtField.snp.makeConstraints {
-            $0.top.equalTo(self.checkPwLabel.snp.bottom).offset(12)
-            $0.leading.trailing.equalToSuperview().offset(0)
-            $0.height.equalTo(52)
         }
         
         self.errorLabel.snp.makeConstraints {
-            $0.trailing.equalToSuperview().offset(-40)
-            $0.top.equalTo(self.checkPwTxtField.snp.top).offset(18)
+            $0.trailing.equalToSuperview().offset(-34)
+            $0.centerY.equalTo(self.checkPW.Txt.snp.centerY)
         }
         
         self.changeBtn.snp.makeConstraints {
-            $0.bottom.equalToSuperview().offset(-34)
-            $0.leading.equalToSuperview().offset(39)
-            $0.trailing.equalToSuperview().offset(-39)
+            $0.bottom.greaterThanOrEqualToSuperview().offset(-34)
+            $0.leading.equalToSuperview().offset(34)
+            $0.trailing.equalToSuperview().offset(-34)
+            $0.top.lessThanOrEqualTo(self.stackView.snp.bottom).offset(247)
             $0.height.equalTo(45)
         }
     }
