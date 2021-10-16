@@ -145,23 +145,10 @@ class MyPageViewController: UIViewController {
         
     }
     private func setupView() {
-        view.addSubview(profileImg)
-        view.addSubview(nameLabel)
-        view.addSubview(gearBtn)
-        view.addSubview(introduceLabel)
-        view.addSubview(productView)
-        view.addSubview(productNum)
-        view.addSubview(productLabel)
-        view.addSubview(prizeView)
-        view.addSubview(prizeNum)
-        view.addSubview(prizeLabel)
-        view.addSubview(receiveView)
-        view.addSubview(receiveNum)
-        view.addSubview(receiveLabel)
-        view.addSubview(transactionView)
-        view.addSubview(transactionNum)
-        view.addSubview(transactionLabel)
-        view.addSubview(collectionView)
+        [profileImg, nameLabel, gearBtn, introduceLabel, productView, productNum, productLabel,
+        prizeView, prizeNum, prizeLabel, receiveView, receiveNum, receiveLabel, transactionView,
+         transactionNum, transactionLabel, collectionView].forEach {self.view.addSubview($0)}
+        
         
         self.profileImg.snp.makeConstraints {
             $0.top.equalToSuperview().offset(26)
