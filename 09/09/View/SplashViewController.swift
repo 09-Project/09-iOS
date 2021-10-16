@@ -46,9 +46,7 @@ class SplashViewController: UIViewController {
     
     private func setUpView() {
         
-        view.addSubview(symbolImgView)
-        view.addSubview(logoImgView)
-        view.addSubview(label)
+        [symbolImgView, symbolImgView, label].forEach { self.view.addSubview($0)}
         
         self.symbolImgView.snp.makeConstraints {
             $0.top.lessThanOrEqualToSuperview().offset(283)
