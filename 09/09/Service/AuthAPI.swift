@@ -27,7 +27,7 @@ class AuthAPI {
                     return .notFound
                 default:
                     print(response.statusCode)
-                    return .falut
+                    return .fault
                 }
             }
     }
@@ -36,6 +36,7 @@ class AuthAPI {
     Observable<networkingResult> {
         request.resultData(.signUp(name, username, password))
             .map { response, data -> networkingResult in
+                print(response.statusCode)
                 switch response.statusCode {
                 case 201:
                     return .okay
@@ -45,7 +46,7 @@ class AuthAPI {
                     return .conflict
                 default:
                     print(response.statusCode)
-                    return .falut
+                    return .fault
                 }
             }
     }
@@ -53,6 +54,7 @@ class AuthAPI {
     func changePW(_ password: String, _ new_password: String) -> Observable<networkingResult> {
         request.resultData(.changepw(password, new_password))
             .map { response, data -> networkingResult in
+                print(response.statusCode)
                 switch response.statusCode {
                 case 201:
                     return .okay
@@ -64,10 +66,29 @@ class AuthAPI {
                     return .notFound
                 default:
                     print(response.statusCode)
-                    return .falut
+                    return .fault
                 }
                 
 
         }
+    }
+    
+    func refreshToken() -> Observable<networkingResult> {
+        request.resultData(.refreshToken)
+            .map { response, data -> networkingResult in
+                print(response.statusCode)
+                switch response.statusCode {
+                case 200:
+                    return .ok
+                case 400:
+                    return .wrongRq
+                case 401:
+                    return .tokenError
+                case 404:
+                    return .notFound
+                default:
+                    return .fault
+                }
+            }
     }
 }
