@@ -16,6 +16,7 @@ class ChangePwViewModel: ViewModelType {
     struct Input {
         let password: Driver<String>
         let new_password: Driver<String>
+        let check_password: Driver<String>
         let doneTap: Signal<Void>
     }
     
@@ -27,11 +28,11 @@ class ChangePwViewModel: ViewModelType {
     func transform(_ input: Input) -> Output {
         let api = AuthAPI()
         let result = PublishSubject<String>()
-        let info = Driver.combineLatest(input.password, input.new_password)
-        let isEnable = info.map { !$0.0.isEmpty && !$0.1.isEmpty}
+        let info = Driver.combineLatest(input.password, input.new_password, input.check_password)
+        let isEnable = info.map { !$0.0.isEmpty && !$0.1.isEmpty && !$0.2.isEmpty}
         
         input.doneTap.withLatestFrom(info).asObservable().subscribe(onNext: {[weak self]
-            pw, newpw in
+            pw, newpw, check in
             guard let self = self else {return}
             api.changePW(pw, newpw).subscribe(onNext: { response in
                 switch response {
