@@ -122,20 +122,20 @@
 			path = Auth;
 			sourceTree = "<group>";
 		};
-		388D998C271016B300EB8594 /* sideMenu */ = {
+		388D998C271016B300EB8594 /* SideMenu */ = {
 			isa = PBXGroup;
 			children = (
 				387A880D2710063D004F3C16 /* SideMenuViewController.swift */,
 			);
-			path = sideMenu;
+			path = SideMenu;
 			sourceTree = "<group>";
 		};
-		38B3AD2C270E68B000E59627 /* main */ = {
+		38B3AD2C270E68B000E59627 /* Main */ = {
 			isa = PBXGroup;
 			children = (
 				38B3AD2D270E68C800E59627 /* MainViewController.swift */,
 			);
-			path = main;
+			path = Main;
 			sourceTree = "<group>";
 		};
 		38B54C2A2717FE41000B7667 /* Auth */ = {
@@ -178,8 +178,8 @@
 		38D3931F26EB413C008BF247 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				388D998C271016B300EB8594 /* sideMenu */,
-				38B3AD2C270E68B000E59627 /* main */,
+				388D998C271016B300EB8594 /* SideMenu */,
+				38B3AD2C270E68B000E59627 /* Main */,
 				3831121D270828D000F56E40 /* Auth */,
 				38FE844026EACF48009587FC /* SplashViewController.swift */,
 				382307C3271A9CD500D12100 /* BtnView.swift */,
