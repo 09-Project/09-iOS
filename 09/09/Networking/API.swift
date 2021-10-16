@@ -96,14 +96,14 @@ enum API {
     func header() -> HTTPHeaders? {
         switch self {
         case .signIn, .signUp:
-            return nil
+            return ["Content-Type" : "application/json"]
         case .refreshToken:
-            guard let token = Token.refreshToken else {return [:]}
-                    return ["Authorization" : token]
+            guard let token = Token.refreshToken else {return ["Content-Type" : "application/json"]}
+            return ["Authorization" : token, "Content-Type" : "application/json"]
             
         default:
-            guard let token = Token.token else {return [:]}
-            return ["Authorization" : "Bearer" + token]
+            guard let token = Token.accessToken else {return ["Content-Type" : "application/json"]}
+            return ["Authorization" : "Bearer" + token, "Content-Type" : "application/json"]
         }
     }
     
