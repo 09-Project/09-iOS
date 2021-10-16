@@ -182,18 +182,8 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
     }
     
     private func setupView() {
-        view.addSubview(imgView)
-        view.addSubview(loginLabel)
-        view.addSubview(idView)
-        view.addSubview(idTxt)
-        view.addSubview(pwView)
-        view.addSubview(pwTxt)
-        view.addSubview(eyeBtn)
-        view.addSubview(checkBtn)
-        view.addSubview(idCheckLabel)
-        view.addSubview(loginBtn)
-        view.addSubview(label)
-        view.addSubview(moveSignupBtn)
+        [imgView, loginLabel, idView, idTxt, pwView, pwTxt, eyeBtn, checkBtn, idCheckLabel,
+         loginBtn, label, moveSignupBtn].forEach { self.view.addSubview($0)}
         
         self.imgView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(52)
