@@ -40,6 +40,8 @@ class ChangePwViewModel: ViewModelType {
                     result.onCompleted()
                 case .wrongRq:
                     print("기존비밀번호와 일치하지 않습니다.")
+                case .tokenError:
+                    print("토큰이 만료되었습니다.")
                 case .notFound:
                     print("회원이 존재하지 않습니다.")
                 default:
