@@ -75,4 +75,29 @@ extension UIViewController {
         view.layer.addSublayer(border)
         txt?.textColor = .init(named: color)
     }
+    
+    func line(view: UIView) {
+        lazy var lineView1 = UIView().then {
+        $0.backgroundColor = .init(named: "placeholderColor")
+    }
+        lazy var lineView2 = UIView().then {
+        $0.backgroundColor = .init(named: "placeholderColor")
+    }
+        
+        view.addSubview(lineView1)
+        view.addSubview(lineView2)
+        
+        lineView1.snp.makeConstraints {
+            $0.bottom.equalTo(view.snp.top).offset(0)
+            $0.height.equalTo(0.5)
+            $0.leading.trailing.equalToSuperview().offset(0)
+        }
+        
+        lineView2.snp.makeConstraints {
+            $0.bottom.equalTo(view.snp.bottom).offset(0)
+            $0.height.equalTo(0.5)
+            $0.leading.trailing.equalToSuperview().offset(0)
+        }
+        
+    }
 }
