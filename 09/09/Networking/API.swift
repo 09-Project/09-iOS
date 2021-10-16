@@ -12,7 +12,7 @@ enum API {
     // Auth
     case signUp(_ name: String, _ username: String, _ password: String)
     case signIn(_ username: String, _ password: String)
-    case refreshToken(_ refresh_token: String)
+    case refreshToken
     case changepw(_ password: String, _ new_password: String)
     
     // Like
@@ -33,7 +33,7 @@ enum API {
     case other
     case putProducts(_ postID: Int, _ title: String, _ content: String, _ price: Int,
                      _ transactionRegion: String, _ openChatLink: String, _ image: String)
-    case postProducts(_ title: String, _ content: String, _ price: Int, _transactionRegion: String,
+    case postProducts(_ title: String, _ content: String, _ price: Int, _ transactionRegion: String,
                       _ openChatLink: String, _ image: String)
     case end(_ postID: Int)
     
@@ -98,12 +98,8 @@ enum API {
         case .signIn, .signUp:
             return nil
         case .refreshToken:
-            let renwalToken: String = "tokenValue"
-            UserDefaults.standard.set(renwalToken, forKey: "refreshToken")
-            UserDefaults.standard.synchronize()
-            guard let token = UserDefaults.standard.string(forKey: "refreshToken")
-            else {return nil}
-                    return ["Authorization" : "Bearer" + token]
+            guard let token = Token.refreshToken else {return [:]}
+                    return ["Authorization" : token]
             
         default:
             guard let token = Token.token else {return [:]}
