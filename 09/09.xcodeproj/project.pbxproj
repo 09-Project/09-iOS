@@ -9,6 +9,12 @@
 /* Begin PBXBuildFile section */
 		1C31373B1E22763C1F298A92 /* Pods_09.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33ACA38D3686901B49145C33 /* Pods_09.framework */; };
 		381AA972271724C0002F7DE5 /* ServiceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 381AA971271724C0002F7DE5 /* ServiceType.swift */; };
+		382307B92719B49500D12100 /* customView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382307B82719B49500D12100 /* customView.swift */; };
+		382307BB271A85FE00D12100 /* PostAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382307BA271A85FE00D12100 /* PostAPI.swift */; };
+		382307BD271A8D8000D12100 /* UserAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382307BC271A8D8000D12100 /* UserAPI.swift */; };
+		382307C0271A8FC800D12100 /* LikeAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382307BF271A8FC800D12100 /* LikeAPI.swift */; };
+		382307C2271A964800D12100 /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382307C1271A964800D12100 /* PostViewController.swift */; };
+		382307C4271A9CD500D12100 /* BtnView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382307C3271A9CD500D12100 /* BtnView.swift */; };
 		3831121F270828F000F56E40 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3831121E270828F000F56E40 /* SignInViewController.swift */; };
 		383112212708296900F56E40 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 383112202708296900F56E40 /* SignUpViewController.swift */; };
 		3873D6D1270B223B00CD983D /* NotoSansCJKkr-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3873D6CE270B223800CD983D /* NotoSansCJKkr-Regular.otf */; };
@@ -19,7 +25,7 @@
 		388039A827181DFE004D1E54 /* ChangePwViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388039A727181DFD004D1E54 /* ChangePwViewModel.swift */; };
 		388D99872710166D00EB8594 /* MyPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388D99862710166D00EB8594 /* MyPageViewController.swift */; };
 		388D99892710167D00EB8594 /* ChangePasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388D99882710167D00EB8594 /* ChangePasswordViewController.swift */; };
-		388D998B2710168F00EB8594 /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388D998A2710168F00EB8594 /* PostViewController.swift */; };
+		388D998B2710168F00EB8594 /* AddPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388D998A2710168F00EB8594 /* AddPostViewController.swift */; };
 		388D998F2710170B00EB8594 /* ChangeProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388D998E2710170B00EB8594 /* ChangeProfileViewController.swift */; };
 		38B3AD2E270E68C800E59627 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38B3AD2D270E68C800E59627 /* MainViewController.swift */; };
 		38B3AD34270EFA0200E59627 /* MainCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38B3AD33270EFA0200E59627 /* MainCollectionViewCell.swift */; };
@@ -40,6 +46,12 @@
 		2EFBF1C2E20FAA9900E33E6D /* Pods-09.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-09.release.xcconfig"; path = "Target Support Files/Pods-09/Pods-09.release.xcconfig"; sourceTree = "<group>"; };
 		33ACA38D3686901B49145C33 /* Pods_09.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_09.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		381AA971271724C0002F7DE5 /* ServiceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceType.swift; sourceTree = "<group>"; };
+		382307B82719B49500D12100 /* customView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = customView.swift; sourceTree = "<group>"; };
+		382307BA271A85FE00D12100 /* PostAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostAPI.swift; sourceTree = "<group>"; };
+		382307BC271A8D8000D12100 /* UserAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAPI.swift; sourceTree = "<group>"; };
+		382307BF271A8FC800D12100 /* LikeAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeAPI.swift; sourceTree = "<group>"; };
+		382307C1271A964800D12100 /* PostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PostViewController.swift; path = 09/View/PostViewController.swift; sourceTree = SOURCE_ROOT; };
+		382307C3271A9CD500D12100 /* BtnView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BtnView.swift; path = 09/View/BtnView.swift; sourceTree = SOURCE_ROOT; };
 		3831121E270828F000F56E40 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
 		383112202708296900F56E40 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		3873D6CE270B223800CD983D /* NotoSansCJKkr-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansCJKkr-Regular.otf"; sourceTree = "<group>"; };
@@ -50,7 +62,7 @@
 		388039A727181DFD004D1E54 /* ChangePwViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePwViewModel.swift; sourceTree = "<group>"; };
 		388D99862710166D00EB8594 /* MyPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewController.swift; sourceTree = "<group>"; };
 		388D99882710167D00EB8594 /* ChangePasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewController.swift; sourceTree = "<group>"; };
-		388D998A2710168F00EB8594 /* PostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
+		388D998A2710168F00EB8594 /* AddPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPostViewController.swift; sourceTree = "<group>"; };
 		388D998E2710170B00EB8594 /* ChangeProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeProfileViewController.swift; sourceTree = "<group>"; };
 		38B3AD2D270E68C800E59627 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		38B3AD33270EFA0200E59627 /* MainCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -147,6 +159,9 @@
 			isa = PBXGroup;
 			children = (
 				38B54C2F2717FF67000B7667 /* AuthAPI.swift */,
+				382307BA271A85FE00D12100 /* PostAPI.swift */,
+				382307BC271A8D8000D12100 /* UserAPI.swift */,
+				382307BF271A8FC800D12100 /* LikeAPI.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -167,9 +182,12 @@
 				38B3AD2C270E68B000E59627 /* main */,
 				3831121D270828D000F56E40 /* Auth */,
 				38FE844026EACF48009587FC /* SplashViewController.swift */,
+				382307C3271A9CD500D12100 /* BtnView.swift */,
 				388D99862710166D00EB8594 /* MyPageViewController.swift */,
-				388D998A2710168F00EB8594 /* PostViewController.swift */,
+				382307C1271A964800D12100 /* PostViewController.swift */,
+				388D998A2710168F00EB8594 /* AddPostViewController.swift */,
 				388D998E2710170B00EB8594 /* ChangeProfileViewController.swift */,
+				382307B82719B49500D12100 /* customView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -375,7 +393,7 @@
 				38B54C292717F433000B7667 /* TokenModel.swift in Sources */,
 				381AA972271724C0002F7DE5 /* ServiceType.swift in Sources */,
 				3831121F270828F000F56E40 /* SignInViewController.swift in Sources */,
-				388D998B2710168F00EB8594 /* PostViewController.swift in Sources */,
+				388D998B2710168F00EB8594 /* AddPostViewController.swift in Sources */,
 				38FE844126EACF48009587FC /* SplashViewController.swift in Sources */,
 				38D3932926EB4643008BF247 /* ViewModelType.swift in Sources */,
 				388D998F2710170B00EB8594 /* ChangeProfileViewController.swift in Sources */,
@@ -383,15 +401,21 @@
 				387A880E2710063D004F3C16 /* SideMenuViewController.swift in Sources */,
 				38E337592714580E009BAB42 /* Extension.swift in Sources */,
 				383112212708296900F56E40 /* SignUpViewController.swift in Sources */,
+				382307B92719B49500D12100 /* customView.swift in Sources */,
 				388D99892710167D00EB8594 /* ChangePasswordViewController.swift in Sources */,
 				38D3932526EB4185008BF247 /* API.swift in Sources */,
 				388D99872710166D00EB8594 /* MyPageViewController.swift in Sources */,
 				38B3AD2E270E68C800E59627 /* MainViewController.swift in Sources */,
+				382307C2271A964800D12100 /* PostViewController.swift in Sources */,
 				38B54C302717FF67000B7667 /* AuthAPI.swift in Sources */,
+				382307BD271A8D8000D12100 /* UserAPI.swift in Sources */,
 				38B3AD34270EFA0200E59627 /* MainCollectionViewCell.swift in Sources */,
 				38B54C2C2717FE4E000B7667 /* SignInModel.swift in Sources */,
+				382307BB271A85FE00D12100 /* PostAPI.swift in Sources */,
 				38FE843D26EACF48009587FC /* AppDelegate.swift in Sources */,
 				388039A627181AF4004D1E54 /* SignUpVIewModel.swift in Sources */,
+				382307C0271A8FC800D12100 /* LikeAPI.swift in Sources */,
+				382307C4271A9CD500D12100 /* BtnView.swift in Sources */,
 				38FE843F26EACF48009587FC /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
