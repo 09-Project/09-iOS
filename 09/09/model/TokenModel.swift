@@ -14,7 +14,7 @@ struct TokenModel: Codable {
 }
 
 struct Token {
-    static var token: String? {
+    static var accessToken: String? {
         get {
             return UserDefaults.standard.string(forKey: "token")
         }
