@@ -13,6 +13,7 @@ class MyPageViewController: UIViewController {
     private let fontBold = "NotoSansCJKkr-Bold"
     private let fontRegular = "NotoSansCJKkr-Regular"
     private let fontMedium = "NotoSansCJKkr-Medium"
+    let identfier = "cell"
     
     private lazy var profileImg = UIImageView().then {
         $0.layer.cornerRadius = 10
@@ -118,9 +119,11 @@ class MyPageViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-//        collectionView.delegate = self
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.register(MainCollectionViewCell.self,
+                                forCellWithReuseIdentifier: identfier)
         view.backgroundColor = .white
-        // Do any additional setup after loading the view.
     }
     
     override func viewDidLayoutSubviews() {
@@ -136,8 +139,6 @@ class MyPageViewController: UIViewController {
                                                             target: self,
                                                             action: #selector(rightBarBtnDidTap))
         navigationItem.rightBarButtonItem?.tintColor = .red
-//        collectionView.delegate = self
-//        collectionView.dataSource = self
     }
     
     @objc
