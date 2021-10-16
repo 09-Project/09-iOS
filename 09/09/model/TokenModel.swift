@@ -22,4 +22,13 @@ struct Token {
             return UserDefaults.standard.set(newValue, forKey: "token")
         }
     }
+    
+    static var refreshToken: String?{
+        get {
+            return UserDefaults.standard.string(forKey: "refreshToken")
+        }
+        set {
+            return UserDefaults.standard.set(newValue, forKey: "refreshToken")
+        }
+    }
 }
