@@ -20,6 +20,8 @@ class AuthAPI {
                 print(response.statusCode)
                 switch response.statusCode {
                 case 200:
+                    guard let data = try? JSONDecoder().decode(TokenModel.self, from: data) else
+                    {return .fault}
                     return .ok
                 case 401:
                     return .tokenError
@@ -79,6 +81,8 @@ class AuthAPI {
                 print(response.statusCode)
                 switch response.statusCode {
                 case 200:
+                    guard let data = try? JSONDecoder().decode(TokenModel.self, from: data) else
+                    {return .fault}
                     return .ok
                 case 400:
                     return .wrongRq
