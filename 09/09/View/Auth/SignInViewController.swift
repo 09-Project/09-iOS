@@ -173,7 +173,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         }).disposed(by: disposeBag)
         
         output.result.emit(
-            onNext: {[unowned self] text in errorLabel.text = text
+            onNext: {[unowned self] _ in
                 errorLabel.isHidden = false
             },
             onCompleted: {[unowned self] in let VC = MainViewController()
