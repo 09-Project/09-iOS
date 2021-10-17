@@ -112,6 +112,10 @@ class PostViewController: UIViewController {
         $0.layer.borderColor = UIColor.init(named: "borderColor")?.cgColor
     }
     
+    private lazy var lineView = UIView().then {
+        $0.backgroundColor = .init(named: "D3D3D3Color")
+    }
+    
     private lazy var collectionView = UICollectionView().then {
         $0.backgroundColor = .white
     }
@@ -191,7 +195,7 @@ class PostViewController: UIViewController {
             $0.leading.equalTo(self.pinImg.snp.trailing).offset(4)
         }
         
-        self.label.snp.makeConstraints {
+        self.buyLabel.snp.makeConstraints {
             $0.top.equalTo(self.priceLabel.snp.bottom).offset(5)
             $0.trailing.equalToSuperview().offset(-39)
             $0.width.equalTo(56)
@@ -202,6 +206,7 @@ class PostViewController: UIViewController {
             $0.top.equalTo(self.label.snp.bottom).offset(19)
             $0.leading.equalToSuperview().offset(39)
         }
+        
         self.chatBtn.snp.makeConstraints {
             $0.top.equalTo(self.label.snp.bottom).offset(19)
             $0.leading.equalTo(self.heartBtn.snp.trailing).offset(0)
@@ -212,6 +217,24 @@ class PostViewController: UIViewController {
             $0.top.equalTo(self.heartBtn.snp.bottom).offset(24)
             $0.leading.equalToSuperview().offset(39)
             $0.trailing.equalToSuperview().offset(-39)
+        }
+        
+        self.lineView.snp.makeConstraints {
+            $0.top.equalTo(self.contentLabel.snp.bottom).offset(49)
+            $0.height.equalTo(2)
+            $0.leading.trailing.equalToSuperview().offset(0)
+        }
+        
+        self.label.snp.makeConstraints {
+            $0.top.equalTo(lineView.snp.bottom).offset(18)
+            $0.leading.equalToSuperview().offset(39)
+        }
+        
+        self.collectionView.snp.makeConstraints {
+            $0.top.equalTo(self.label.snp.bottom).offset(16)
+            $0.leading.equalToSuperview().offset(39)
+            $0.trailing.equalToSuperview().offset(-39)
+            $0.bottom.equalToSuperview().offset(-39)
         }
     }
 }
