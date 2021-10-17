@@ -22,6 +22,8 @@ class AuthAPI {
                 case 200:
                     guard let data = try? JSONDecoder().decode(TokenModel.self, from: data) else
                     {return .fault}
+                    Token.accessToken = data.accessToken
+                    Token.refreshToken = data.refreshToken
                     return .ok
                 case 401:
                     return .tokenError
@@ -83,6 +85,8 @@ class AuthAPI {
                 case 200:
                     guard let data = try? JSONDecoder().decode(TokenModel.self, from: data) else
                     {return .fault}
+                    Token.accessToken = data.accessToken
+                    Token.refreshToken = data.refreshToken
                     return .ok
                 case 400:
                     return .wrongRq
