@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 import Tabman
 
 class MyPageViewController: UIViewController {
