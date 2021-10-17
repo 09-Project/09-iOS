@@ -11,12 +11,15 @@ import RxCocoa
 import SnapKit
 import Then
 
-class AddPostViewController: UIViewController {
+class AddPostViewController: UIViewController, UITextViewDelegate {
     
     private let fontBold = "NotoSansCJKkr-Bold"
     private let fontRegular = "NotoSansCJKkr-Regular"
     private let fontMedium = "NotoSansCJKkr-Medium"
     private let disposebag = DisposeBag()
+    
+    private let picker = UIImagePickerController()
+    
     
     private lazy var titleView = UIView().then {
         $0.backgroundColor = .white
@@ -32,10 +35,10 @@ class AddPostViewController: UIViewController {
         $0.backgroundColor = .white
     }
     
-    private lazy var content = UITextField().then {
+    private lazy var content = UITextView().then {
         $0.backgroundColor = .white
-        $0.attributedPlaceholder = NSAttributedString(string: "게시물 내용을 입력해주세요", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
         $0.font = .init(name: fontRegular, size: 13)
+        $0.textColor = .init(named: "placeholdeColor")
     }
     
     private lazy var photoLabel = UILabel().then {
@@ -43,12 +46,21 @@ class AddPostViewController: UIViewController {
         $0.font = .init(name: fontMedium, size: 13)
         $0.textColor = .black
     }
-
+    
     private lazy var photo = UIImageView().then {
         $0.layer.cornerRadius = 5
         $0.contentMode = .scaleAspectFit
         $0.backgroundColor = .init(named: "searchColor")
     }
+    
+    private lazy var imageBtn = UIButton().then {
+        $0.backgroundColor = .none
+        $0.layer.cornerRadius = 5
+        $0.setTitle( "image", for: .normal)
+        $0.titleLabel?.font = .init(name: fontMedium, size: 10)
+        $0.setTitleColor(.init(named: "borderColor"), for: .normal)
+    }
+    
     
     private lazy var label = UILabel().then {
         $0.backgroundColor = .white
@@ -118,7 +130,36 @@ class AddPostViewController: UIViewController {
                                                             style: .plain,
                                                             target: self,
                                                             action: #selector(okBtn))
+        imageBtn.rx.tap.subscribe(onNext: {
+            self.imageViewTap()
+        }).disposed(by: disposebag)
+        
+        content.delegate = self
+        picker.delegate = self
+        textViewDidEndEditing(content)
+        textViewDidBeginEditing(content)
         // Do any additional setup after loading the view.
+    }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.text == "게시물 내용을 입력하세요" {
+            textView.text = ""
+        }
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text == "" {
+            textView.text = "게시물 내용을 입력하세요"
+        }
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        placeholderSetting()
+        imageBtn.isHidden = false
     }
     
     override func viewDidLayoutSubviews() {
@@ -130,15 +171,22 @@ class AddPostViewController: UIViewController {
         
     }
     
+    
+    private func placeholderSetting() {
+        content.delegate = self
+        content.text = "게시물 내용을 입력하세요"
+        content.textColor = .init(named: "placeholderColor")
+    }
+    
     private func setup() {
         line(view: titleView)
         line(view: contentView)
         
-        [titleView, titleTxt, contentView, content, photoLabel, photo, label, buyLabel, buyBtn,
-         giveLabel, giveBtn, stackView].forEach{ self.view.addSubview($0) }
+        [titleView, titleTxt, contentView, content, photoLabel, photo, imageBtn ,label, buyLabel,
+         buyBtn, giveLabel, giveBtn, stackView].forEach{ self.view.addSubview($0) }
         
         titleView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(100)
+            $0.top.lessThanOrEqualToSuperview().offset(100)
             $0.height.equalTo(52)
             $0.leading.trailing.equalToSuperview().offset(0)
         }
@@ -155,8 +203,10 @@ class AddPostViewController: UIViewController {
         }
         
         content.snp.makeConstraints {
-            $0.top.equalTo(self.contentView.snp.top).offset(16)
+            $0.top.equalTo(self.contentView.snp.top).offset(10)
             $0.leading.equalToSuperview().offset(34)
+            $0.trailing.equalToSuperview().offset(-34)
+            $0.bottom.equalTo(self.contentView.snp.bottom).offset(-1)
         }
         
         photoLabel.snp.makeConstraints {
@@ -168,6 +218,12 @@ class AddPostViewController: UIViewController {
             $0.top.equalTo(self.photoLabel.snp.bottom).offset(10)
             $0.width.height.equalTo(80)
             $0.leading.equalToSuperview().offset(34)
+        }
+        
+        imageBtn.snp.makeConstraints {
+            $0.top.equalTo(self.photo.snp.top).offset(0)
+            $0.width.height.equalTo(80)
+            $0.leading.equalTo(self.photo.snp.leading).offset(0)
         }
         
         label.snp.makeConstraints {
@@ -202,5 +258,29 @@ class AddPostViewController: UIViewController {
             $0.leading.trailing.bottom.equalToSuperview().offset(0)
         }
     }
+    private func imageViewTap() {
+        let alert = UIAlertController(title: "사진을 선택하세요", message: "갤러리의 사진을 선택하세요",
+                                      preferredStyle: .alert)
+        let libary = UIAlertAction(title: "예",
+                                   style: .default, handler: { ACTION in self.openLibary()})
+        let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+        alert.addAction(libary)
+        alert.addAction(cancel)
+        self.present(alert, animated: true, completion: nil)}
+}
 
+extension AddPostViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func openLibary() {
+        picker.sourceType = .photoLibrary
+        present(picker, animated: false, completion: nil)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController,
+                               didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            imageBtn.isHidden = true
+            photo.image = image
+            picker.dismiss(animated: true, completion: nil)
+        }
+    }
 }
