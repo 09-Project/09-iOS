@@ -9,7 +9,7 @@ import Foundation
 
 struct TokenModel: Codable {
     let accessToken: String
-    let refrsehToken: String
+    let refreshToken: String
     
 }
 
