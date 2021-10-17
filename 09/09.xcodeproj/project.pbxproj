@@ -14,7 +14,6 @@
 		382307BD271A8D8000D12100 /* UserAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382307BC271A8D8000D12100 /* UserAPI.swift */; };
 		382307C0271A8FC800D12100 /* LikeAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382307BF271A8FC800D12100 /* LikeAPI.swift */; };
 		382307C2271A964800D12100 /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382307C1271A964800D12100 /* PostViewController.swift */; };
-		382307C4271A9CD500D12100 /* BtnView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382307C3271A9CD500D12100 /* BtnView.swift */; };
 		3831121F270828F000F56E40 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3831121E270828F000F56E40 /* SignInViewController.swift */; };
 		383112212708296900F56E40 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 383112202708296900F56E40 /* SignUpViewController.swift */; };
 		3873D6D1270B223B00CD983D /* NotoSansCJKkr-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3873D6CE270B223800CD983D /* NotoSansCJKkr-Regular.otf */; };
@@ -50,8 +49,7 @@
 		382307BA271A85FE00D12100 /* PostAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostAPI.swift; sourceTree = "<group>"; };
 		382307BC271A8D8000D12100 /* UserAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAPI.swift; sourceTree = "<group>"; };
 		382307BF271A8FC800D12100 /* LikeAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeAPI.swift; sourceTree = "<group>"; };
-		382307C1271A964800D12100 /* PostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PostViewController.swift; path = 09/View/PostViewController.swift; sourceTree = SOURCE_ROOT; };
-		382307C3271A9CD500D12100 /* BtnView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BtnView.swift; path = 09/View/BtnView.swift; sourceTree = SOURCE_ROOT; };
+		382307C1271A964800D12100 /* PostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PostViewController.swift; path = 09/View/User/PostViewController.swift; sourceTree = SOURCE_ROOT; };
 		3831121E270828F000F56E40 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
 		383112202708296900F56E40 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		3873D6CE270B223800CD983D /* NotoSansCJKkr-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansCJKkr-Regular.otf"; sourceTree = "<group>"; };
@@ -100,6 +98,33 @@
 				33ACA38D3686901B49145C33 /* Pods_09.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		382307C5271BF4E100D12100 /* VIewCustom */ = {
+			isa = PBXGroup;
+			children = (
+				382307B82719B49500D12100 /* customView.swift */,
+			);
+			path = VIewCustom;
+			sourceTree = "<group>";
+		};
+		382307C6271BF4FE00D12100 /* User */ = {
+			isa = PBXGroup;
+			children = (
+				388D998A2710168F00EB8594 /* AddPostViewController.swift */,
+				382307C1271A964800D12100 /* PostViewController.swift */,
+				388D998E2710170B00EB8594 /* ChangeProfileViewController.swift */,
+				388D99862710166D00EB8594 /* MyPageViewController.swift */,
+			);
+			path = User;
+			sourceTree = "<group>";
+		};
+		382307C7271BF51800D12100 /* Splash */ = {
+			isa = PBXGroup;
+			children = (
+				38FE844026EACF48009587FC /* SplashViewController.swift */,
+			);
+			path = Splash;
 			sourceTree = "<group>";
 		};
 		382A78EB270B10AD00EBE7AA /* font */ = {
@@ -178,16 +203,12 @@
 		38D3931F26EB413C008BF247 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				382307C7271BF51800D12100 /* Splash */,
+				382307C6271BF4FE00D12100 /* User */,
+				382307C5271BF4E100D12100 /* VIewCustom */,
 				388D998C271016B300EB8594 /* SideMenu */,
 				38B3AD2C270E68B000E59627 /* Main */,
 				3831121D270828D000F56E40 /* Auth */,
-				38FE844026EACF48009587FC /* SplashViewController.swift */,
-				382307C3271A9CD500D12100 /* BtnView.swift */,
-				388D99862710166D00EB8594 /* MyPageViewController.swift */,
-				382307C1271A964800D12100 /* PostViewController.swift */,
-				388D998A2710168F00EB8594 /* AddPostViewController.swift */,
-				388D998E2710170B00EB8594 /* ChangeProfileViewController.swift */,
-				382307B82719B49500D12100 /* customView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -415,7 +436,6 @@
 				38FE843D26EACF48009587FC /* AppDelegate.swift in Sources */,
 				388039A627181AF4004D1E54 /* SignUpVIewModel.swift in Sources */,
 				382307C0271A8FC800D12100 /* LikeAPI.swift in Sources */,
-				382307C4271A9CD500D12100 /* BtnView.swift in Sources */,
 				38FE843F26EACF48009587FC /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
