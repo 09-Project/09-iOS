@@ -68,7 +68,8 @@ class customView: UIView {
         lineView1.snp.makeConstraints {
             $0.bottom.equalTo(self.View.snp.top).offset(0)
             $0.height.equalTo(0.5)
-            $0.leading.trailing.equalToSuperview().offset(0)
+            $0.leading.equalToSuperview().offset(-1)
+            $0.trailing.equalToSuperview().offset(1)
         }
         
         View.snp.makeConstraints {
@@ -80,7 +81,8 @@ class customView: UIView {
         lineView2.snp.makeConstraints {
             $0.bottom.equalTo(self.View.snp.bottom).offset(0)
             $0.height.equalTo(0.5)
-            $0.leading.trailing.equalToSuperview().offset(0)
+            $0.leading.equalToSuperview().offset(-1)
+            $0.trailing.equalToSuperview().offset(1)
         }
         
         Txt.snp.makeConstraints {
