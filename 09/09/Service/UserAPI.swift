@@ -13,62 +13,46 @@ class UserAPI {
     let baseURL = "http://3.36.26.221:8080"
     let request = ServiceType()
     
-    func getInformation() -> Observable<networkingResult> {
+    func getInformation() -> Observable<(InformationModel?, networkingResult)> {
         request.resultData(.getInformation)
-            .map{response, data -> networkingResult in
+            .map{response, data -> (InformationModel?, networkingResult) in
                 print(response.statusCode)
                 switch response.statusCode {
                 case 200:
-                    return .ok
+                    guard let data = try? JSONDecoder().decode(InformationModel.self, from: data)
+                    else {return (nil, .fault)}
+                    return (data, .ok)
                 case 400:
-                    return .wrongRq
+                    return (nil, .wrongRq)
                 case 401:
-                    return .tokenError
+                    return (nil, .tokenError)
                 case 404:
-                    return .notFound
+                    return (nil, .notFound)
                 default:
                     print(response.statusCode)
-                    return .fault
+                    return (nil, .fault)
                 }
             }
     }
     
-    func profile(_ memberID: Int) -> Observable<networkingResult> {
+    func profile(_ memberID: Int) -> Observable<(ProfileModel?,networkingResult)> {
         request.resultData(.profile(memberID))
-            .map {response, data -> networkingResult in
+            .map {response, data -> (ProfileModel?, networkingResult) in
                 print(response.statusCode)
                 switch response.statusCode {
                 case 200:
-                    return .ok
+                    guard let data = try? JSONDecoder().decode(ProfileModel?.self, from: data)
+                    else { return (nil, .fault) }
+                    return (data, .ok)
                 case 400:
-                    return .wrongRq
+                    return (nil, .wrongRq)
                 case 401:
-                    return .tokenError
+                    return (nil, .tokenError)
                 case 404:
-                    return .notFound
+                    return (nil, .notFound)
                 default:
                     print(response.statusCode)
-                    return .fault
-                }
-            }
-    }
-    
-    func myPage() -> Observable<networkingResult> {
-        request.resultData(.myPage)
-            .map{ response, data -> networkingResult in
-                print(response.statusCode)
-                switch response.statusCode {
-                case 200:
-                    return .ok
-                case 400:
-                    return .wrongRq
-                case 401:
-                    return .tokenError
-                case 404:
-                    return .notFound
-                default:
-                    print(response.statusCode)
-                    return .fault
+                    return (nil, .fault)
                 }
             }
     }
