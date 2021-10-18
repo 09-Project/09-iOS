@@ -126,13 +126,13 @@ extension UIViewController {
         lineView1.snp.makeConstraints {
             $0.bottom.equalTo(view.snp.top).offset(0)
             $0.height.equalTo(0.5)
-            $0.leading.trailing.equalToSuperview().offset(0)
+            $0.width.equalToSuperview()
         }
         
         lineView2.snp.makeConstraints {
             $0.bottom.equalTo(view.snp.bottom).offset(0)
             $0.height.equalTo(0.5)
-            $0.leading.trailing.equalToSuperview().offset(0)
+            $0.width.equalToSuperview()
         }
         
     }
