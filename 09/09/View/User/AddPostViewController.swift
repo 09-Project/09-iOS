@@ -11,12 +11,14 @@ import RxCocoa
 import SnapKit
 import Then
 
-class AddPostViewController: UIViewController, UITextViewDelegate {
+class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDelegate {
     
     private let fontBold = "NotoSansCJKkr-Bold"
     private let fontRegular = "NotoSansCJKkr-Regular"
     private let fontMedium = "NotoSansCJKkr-Medium"
     private let disposebag = DisposeBag()
+    private var buyBtnBool = true
+    private var giveBtnBool = true
     
     private let picker = UIImagePickerController()
     private lazy var scrollView = UIScrollView()
@@ -132,19 +134,35 @@ class AddPostViewController: UIViewController, UITextViewDelegate {
         super.viewDidLoad()
         view.backgroundColor = .white
         navigationItem.title = "게시물 작성"
+        navigationController?.navigationBar.tintColor = .white
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료",
                                                             style: .plain,
                                                             target: self,
                                                             action: #selector(okBtn))
+        navigationItem.rightBarButtonItem?.tintColor = .black
         imageBtn.rx.tap.subscribe(onNext: {
             self.imageViewTap()
+        }).disposed(by: disposebag)
+        buyBtn.rx.tap.subscribe(onNext: {
+            self.buyBtnDidTap()
+        }).disposed(by: disposebag)
+        giveBtn.rx.tap.subscribe(onNext: {
+            self.giveBtnDidTap()
         }).disposed(by: disposebag)
         
         content.delegate = self
         picker.delegate = self
         textViewDidEndEditing(content)
         textViewDidBeginEditing(content)
-        // Do any additional setup after loading the view.
+    }
+   
+    override func viewDidAppear(_ animated: Bool) {
+        placeholderSetting()
+        imageBtn.isHidden = false
+    }
+    
+    override func viewDidLayoutSubviews() {
+        setup()
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
@@ -170,15 +188,7 @@ class AddPostViewController: UIViewController, UITextViewDelegate {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        placeholderSetting()
-        imageBtn.isHidden = false
-    }
-    
-    override func viewDidLayoutSubviews() {
-        setup()
-    }
+
     
     @objc
     private func okBtn() {
@@ -197,18 +207,18 @@ class AddPostViewController: UIViewController, UITextViewDelegate {
         line(view: contentView)
         
         self.view.addSubview(scrollView)
-        self.view.addSubview(View)
+        self.scrollView.addSubview(View)
         
         [titleView, titleTxt, contentView, content, photoLabel, photo, imageBtn, label,
          buyLabel, buyBtn, giveLabel, giveBtn, stackView].forEach{ self.View.addSubview($0)}
         
         
         scrollView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.edges.equalTo(self.view.safeAreaInsets)
         }
         
         View.snp.makeConstraints {
-            $0.leading.top.trailing.bottom.equalToSuperview().offset(0)
+            $0.edges.equalToSuperview()
         }
         
         titleView.snp.makeConstraints {
@@ -287,6 +297,7 @@ class AddPostViewController: UIViewController, UITextViewDelegate {
         }
         
     }
+    
     private func imageViewTap() {
         let alert = UIAlertController(title: "사진을 선택하세요", message: "갤러리의 사진을 선택하세요",
                                       preferredStyle: .alert)
@@ -296,6 +307,41 @@ class AddPostViewController: UIViewController, UITextViewDelegate {
         alert.addAction(libary)
         alert.addAction(cancel)
         self.present(alert, animated: true, completion: nil)}
+    
+    private func buyBtnDidTap() {
+        if buyBtnBool {
+            buyBtn.setImage(.init(systemName: "largecircle.fill.circle"), for: .normal)
+            buyBtn.tintColor = .init(named: "mainColor")
+            giveBtn.setImage(.init(systemName: "circle"), for: .normal)
+            giveBtn.tintColor = .init(named: "circleColor")
+            price.isHidden = false
+            giveBtnBool = true
+            buyBtnBool.toggle()
+        }
+        else {
+            buyBtn.setImage(.init(systemName: "circle"), for: .normal)
+            buyBtn.tintColor = .init(named: "circleColor")
+            buyBtnBool.toggle()
+        }
+    }
+    
+    private func giveBtnDidTap() {
+        if giveBtnBool {
+            giveBtn.setImage(.init(systemName: "largecircle.fill.circle"), for: .normal)
+            giveBtn.tintColor = .init(named: "mainColor")
+            buyBtn.setImage(.init(systemName: "circle"), for: .normal)
+            buyBtn.tintColor = .init(named: "circleColor")
+            buyBtnBool = true
+            price.isHidden = true
+            giveBtnBool.toggle()
+        }
+        else {
+            giveBtn.setImage(.init(systemName: "circle"), for: .normal)
+            giveBtn.tintColor = .init(named: "circleColor")
+            price.isHidden = false
+            giveBtnBool.toggle()
+        }
+    }
 }
 
 extension AddPostViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
