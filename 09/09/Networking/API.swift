@@ -23,19 +23,19 @@ enum API {
     case getInformation
     case profile(_ memberID: Int)
     case changeInformation(_ name: String, _ introduction: String, _ profileURL: String)
-    case myPage
     
     // Post
     case deleteProducts(_ postID: Int)
     case seeProducts(_ postID: Int)
-    case products
-    case search
+    case products(_ page: Int, _ size: Int)
+    case search(_ keywords: String, _ page: Int, _ size: Int)
     case other
     case putProducts(_ postID: Int, _ title: String, _ content: String, _ price: Int,
                      _ transactionRegion: String, _ openChatLink: String, _ image: String)
     case postProducts(_ title: String, _ content: String, _ price: Int, _ transactionRegion: String,
                       _ openChatLink: String, _ image: String)
     case end(_ postID: Int)
+    case seeLikePost
     
     func path() -> String {
         switch self {
@@ -53,8 +53,6 @@ enum API {
             return "/memeber/{\(id)}"
         case .changeInformation:
             return "/member/information"
-        case .myPage:
-            return "/member/me"
         case .deleteProducts(let id):
             return "/post/{\(id)}"
         case .seeProducts(let id):
@@ -75,6 +73,8 @@ enum API {
             return "/like/{\(id)}"
         case .deleteLike(let id):
             return "/like/{\(id)}"
+        case .seeLikePost:
+            return "/member/like"
         }
     }
     
@@ -82,7 +82,7 @@ enum API {
         switch self {
         case .likeObj, .signUp, .signIn, .postProducts:
             return .post
-        case .profile, .getInformation, .myPage, .seeProducts, .products, .other, .search:
+        case .profile, .seeLikePost,.getInformation, .seeProducts, .products, .other, .search:
             return .get
         case .putProducts, .changepw, .changeInformation:
             return .patch
