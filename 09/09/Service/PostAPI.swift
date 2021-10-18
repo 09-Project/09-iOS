@@ -9,6 +9,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 import Alamofire
+import SideMenu
 
 class PostAPI {
     let baseURL = "http://3.36.26.221:8080"
@@ -34,66 +35,80 @@ class PostAPI {
             }
     }
     
-    func seeProducts(_ post_id: Int) -> Observable<networkingResult> {
+    func seeProducts(_ post_id: Int) -> Observable<([SeePostModel]?, networkingResult)> {
         request.resultData(.seeProducts(post_id))
-            .map{response, data -> networkingResult in
+            .map{response, data -> ([SeePostModel]?, networkingResult) in
                 print(response.statusCode)
                 switch response.statusCode {
                 case 200:
-                    return .ok
+                    guard let data = try? JSONDecoder().decode([SeePostModel].self, from: data)
+                    else {return (nil, .fault)}
+                    
+                    return (data, .ok)
                 case 404:
-                    return .notFound
+                    return (nil, .notFound)
                 default:
                     print(response.statusCode)
-                    return .fault
+                    return (nil, .fault)
                 }
             }
     }
     
-    func products() -> Observable<networkingResult> {
-        request.resultData(.products)
-            .map{response, data -> networkingResult in
+    func products(page: Int, size: Int) -> Observable<([PostModel]?,networkingResult)> {
+        request.resultData(.products(page, size))
+            .map{response, data -> ([PostModel]?, networkingResult) in
                 print(response.statusCode)
                 switch response.statusCode {
                 case 200:
-                    return .ok
+                    guard let data = try? JSONDecoder().decode([PostModel]?.self, from: data) else
+                    { return (nil, .fault)}
+                    
+                    return (data, .ok)
                 case 404:
-                    return .notFound
+                    return (nil, .notFound)
                 default:
                     print(response.statusCode)
-                    return .fault
+                    return (nil, .fault)
                 }
             }
     }
     
-    func search() -> Observable<networkingResult> {
-        request.resultData(.search)
-            .map { response, data -> networkingResult in
+    func search(keywords: String, page: Int, size: Int) -> Observable<([PostModel]?,
+    networkingResult)> {
+        request.resultData(.search(keywords, page, size))
+            .map { response, data -> ([PostModel]?, networkingResult) in
                 print(response.statusCode)
                 switch response.statusCode {
                 case 200:
-                    return .ok
+                    guard let data = try? JSONDecoder().decode([PostModel].self, from: data) else {
+                        return (nil, .fault)
+                    }
+                    
+                    return (data, .ok)
                 case 404:
-                    return .notFound
+                    return (nil, .notFound)
                 default:
                     print(response.statusCode)
-                    return .fault
+                    return (nil, .fault)
                 }
             }
     }
     
-    func other() -> Observable<networkingResult> {
+    func other() -> Observable<([OtherModel]?, networkingResult)> {
         request.resultData(.other)
-            .map { response, data -> networkingResult in
+            .map { response, data -> ([OtherModel]?, networkingResult) in
                 print(response.statusCode)
                 switch response.statusCode {
                 case 200:
-                    return .ok
+                    guard let data = try? JSONDecoder().decode([OtherModel].self, from: data) else {
+                        return (nil, .fault)
+                    }
+                    return (data, .ok)
                 case 404:
-                    return .notFound
+                    return (nil, .notFound)
                 default:
                     print(response.statusCode)
-                    return .fault
+                    return (nil, .fault)
                 }
             }
     }
@@ -161,4 +176,27 @@ class PostAPI {
                     return .fault
                 }
             }
-    }}
+    }
+    
+    func seeLikePost() -> Observable<([PostModel]?, networkingResult)> {
+        request.resultData(.seeLikePost)
+            .map{ response, data -> ([PostModel]?, networkingResult) in
+                print(response.statusCode)
+                switch response.statusCode {
+                case 200:
+                    guard let data = try? JSONDecoder().decode([PostModel]?.self, from: data)
+                    else {return (nil, .fault)}
+                    return (data, .ok)
+                case 400:
+                    return (nil, .wrongRq)
+                case 401:
+                    return (nil, .tokenError)
+                case 404:
+                    return (nil, .notFound)
+                default:
+                    print(response.statusCode)
+                    return (nil, .fault)
+                }
+            }
+    }
+}
