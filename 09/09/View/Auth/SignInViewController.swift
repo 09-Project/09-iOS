@@ -186,7 +186,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
          loginBtn, label, moveSignupBtn].forEach { self.view.addSubview($0)}
         
         self.imgView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(52)
+            $0.top.equalTo(self.view.safeAreaInsets).inset(52)
             $0.centerX.equalTo(self.view)
             $0.height.equalTo(28)
             $0.width.equalTo(73)
