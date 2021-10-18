@@ -19,6 +19,11 @@ class AddPostViewController: UIViewController, UITextViewDelegate {
     private let disposebag = DisposeBag()
     
     private let picker = UIImagePickerController()
+    private lazy var scrollView = UIScrollView()
+    
+    private lazy var View = UIView().then {
+        $0.backgroundColor = .white
+    }
     
     
     private lazy var titleView = UIView().then {
@@ -29,6 +34,7 @@ class AddPostViewController: UIViewController, UITextViewDelegate {
         $0.backgroundColor = .white
         $0.attributedPlaceholder = NSAttributedString(string: "제목을 입력해주세요", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
         $0.font = .init(name: fontRegular, size: 13)
+        $0.textColor = .init(named: "placeholderColor")
     }
     
     private lazy var contentView = UIView().then {
@@ -147,6 +153,14 @@ class AddPostViewController: UIViewController, UITextViewDelegate {
         }
     }
     
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange,
+                  replacementText text: String) -> Bool {
+        let currentText = content.text ?? ""
+        guard let stringRange = Range(range, in: currentText) else { return false }
+        let changedText = currentText.replacingCharacters(in: stringRange, with: text)
+        return changedText.count <= 40
+    }
+    
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text == "" {
             textView.text = "게시물 내용을 입력하세요"
@@ -182,11 +196,23 @@ class AddPostViewController: UIViewController, UITextViewDelegate {
         line(view: titleView)
         line(view: contentView)
         
-        [titleView, titleTxt, contentView, content, photoLabel, photo, imageBtn ,label, buyLabel,
-         buyBtn, giveLabel, giveBtn, stackView].forEach{ self.view.addSubview($0) }
+        self.view.addSubview(scrollView)
+        self.view.addSubview(View)
+        
+        [titleView, titleTxt, contentView, content, photoLabel, photo, imageBtn, label,
+         buyLabel, buyBtn, giveLabel, giveBtn, stackView].forEach{ self.View.addSubview($0)}
+        
+        
+        scrollView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+        
+        View.snp.makeConstraints {
+            $0.leading.top.trailing.bottom.equalToSuperview().offset(0)
+        }
         
         titleView.snp.makeConstraints {
-            $0.top.lessThanOrEqualToSuperview().offset(100)
+            $0.top.equalToSuperview().offset(0)
             $0.height.equalTo(52)
             $0.leading.trailing.equalToSuperview().offset(0)
         }
@@ -255,8 +281,11 @@ class AddPostViewController: UIViewController, UITextViewDelegate {
         
         stackView.snp.makeConstraints {
             $0.top.equalTo(self.buyLabel.snp.bottom).offset(43)
-            $0.leading.trailing.bottom.equalToSuperview().offset(0)
+            $0.leading.trailing.equalToSuperview().offset(0)
+            $0.height.equalTo(400)
+            $0.bottom.equalToSuperview()
         }
+        
     }
     private func imageViewTap() {
         let alert = UIAlertController(title: "사진을 선택하세요", message: "갤러리의 사진을 선택하세요",
