@@ -14,6 +14,11 @@
 		382307BD271A8D8000D12100 /* UserAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382307BC271A8D8000D12100 /* UserAPI.swift */; };
 		382307C0271A8FC800D12100 /* LikeAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382307BF271A8FC800D12100 /* LikeAPI.swift */; };
 		382307C2271A964800D12100 /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382307C1271A964800D12100 /* PostViewController.swift */; };
+		3825A86A271DA36E0015CF63 /* ProfileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3825A869271DA36E0015CF63 /* ProfileModel.swift */; };
+		3825A86C271DA5720015CF63 /* PostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3825A86B271DA5720015CF63 /* PostModel.swift */; };
+		3825A86E271DA6E70015CF63 /* InformationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3825A86D271DA6E70015CF63 /* InformationModel.swift */; };
+		3825A870271DAD460015CF63 /* SeePostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3825A86F271DAD460015CF63 /* SeePostModel.swift */; };
+		3825A872271DAF0E0015CF63 /* OtherModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3825A871271DAF0E0015CF63 /* OtherModel.swift */; };
 		3831121F270828F000F56E40 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3831121E270828F000F56E40 /* SignInViewController.swift */; };
 		383112212708296900F56E40 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 383112202708296900F56E40 /* SignUpViewController.swift */; };
 		3873D6D1270B223B00CD983D /* NotoSansCJKkr-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3873D6CE270B223800CD983D /* NotoSansCJKkr-Regular.otf */; };
@@ -50,6 +55,11 @@
 		382307BC271A8D8000D12100 /* UserAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAPI.swift; sourceTree = "<group>"; };
 		382307BF271A8FC800D12100 /* LikeAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeAPI.swift; sourceTree = "<group>"; };
 		382307C1271A964800D12100 /* PostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PostViewController.swift; path = 09/View/User/PostViewController.swift; sourceTree = SOURCE_ROOT; };
+		3825A869271DA36E0015CF63 /* ProfileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileModel.swift; sourceTree = "<group>"; };
+		3825A86B271DA5720015CF63 /* PostModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostModel.swift; sourceTree = "<group>"; };
+		3825A86D271DA6E70015CF63 /* InformationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformationModel.swift; sourceTree = "<group>"; };
+		3825A86F271DAD460015CF63 /* SeePostModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeePostModel.swift; sourceTree = "<group>"; };
+		3825A871271DAF0E0015CF63 /* OtherModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherModel.swift; sourceTree = "<group>"; };
 		3831121E270828F000F56E40 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
 		383112202708296900F56E40 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		3873D6CE270B223800CD983D /* NotoSansCJKkr-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansCJKkr-Regular.otf"; sourceTree = "<group>"; };
@@ -127,6 +137,18 @@
 			path = Splash;
 			sourceTree = "<group>";
 		};
+		3825A868271DA3460015CF63 /* User */ = {
+			isa = PBXGroup;
+			children = (
+				3825A869271DA36E0015CF63 /* ProfileModel.swift */,
+				3825A86B271DA5720015CF63 /* PostModel.swift */,
+				3825A86D271DA6E70015CF63 /* InformationModel.swift */,
+				3825A86F271DAD460015CF63 /* SeePostModel.swift */,
+				3825A871271DAF0E0015CF63 /* OtherModel.swift */,
+			);
+			path = User;
+			sourceTree = "<group>";
+		};
 		382A78EB270B10AD00EBE7AA /* font */ = {
 			isa = PBXGroup;
 			children = (
@@ -166,6 +188,7 @@
 		38B54C2A2717FE41000B7667 /* Auth */ = {
 			isa = PBXGroup;
 			children = (
+				38B54C282717F433000B7667 /* TokenModel.swift */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -225,8 +248,8 @@
 		38D3932126EB414D008BF247 /* model */ = {
 			isa = PBXGroup;
 			children = (
+				3825A868271DA3460015CF63 /* User */,
 				38B54C2A2717FE41000B7667 /* Auth */,
-				38B54C282717F433000B7667 /* TokenModel.swift */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -420,6 +443,7 @@
 				388D998F2710170B00EB8594 /* ChangeProfileViewController.swift in Sources */,
 				388039A827181DFE004D1E54 /* ChangePwViewModel.swift in Sources */,
 				387A880E2710063D004F3C16 /* SideMenuViewController.swift in Sources */,
+				3825A86A271DA36E0015CF63 /* ProfileModel.swift in Sources */,
 				38E337592714580E009BAB42 /* Extension.swift in Sources */,
 				383112212708296900F56E40 /* SignUpViewController.swift in Sources */,
 				382307B92719B49500D12100 /* customView.swift in Sources */,
@@ -427,15 +451,19 @@
 				38D3932526EB4185008BF247 /* API.swift in Sources */,
 				388D99872710166D00EB8594 /* MyPageViewController.swift in Sources */,
 				38B3AD2E270E68C800E59627 /* MainViewController.swift in Sources */,
+				3825A86E271DA6E70015CF63 /* InformationModel.swift in Sources */,
 				382307C2271A964800D12100 /* PostViewController.swift in Sources */,
+				3825A870271DAD460015CF63 /* SeePostModel.swift in Sources */,
 				38B54C302717FF67000B7667 /* AuthAPI.swift in Sources */,
 				382307BD271A8D8000D12100 /* UserAPI.swift in Sources */,
 				38B3AD34270EFA0200E59627 /* MainCollectionViewCell.swift in Sources */,
+				3825A872271DAF0E0015CF63 /* OtherModel.swift in Sources */,
 				38B54C2C2717FE4E000B7667 /* SignInModel.swift in Sources */,
 				382307BB271A85FE00D12100 /* PostAPI.swift in Sources */,
 				38FE843D26EACF48009587FC /* AppDelegate.swift in Sources */,
 				388039A627181AF4004D1E54 /* SignUpVIewModel.swift in Sources */,
 				382307C0271A8FC800D12100 /* LikeAPI.swift in Sources */,
+				3825A86C271DA5720015CF63 /* PostModel.swift in Sources */,
 				38FE843F26EACF48009587FC /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
