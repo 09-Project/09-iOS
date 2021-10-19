@@ -152,8 +152,12 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         
         content.delegate = self
         picker.delegate = self
+        price.Txt.delegate = self
+        area.Txt.delegate = self
+        openChat.Txt.delegate = self
         textViewDidEndEditing(content)
         textViewDidBeginEditing(content)
+        setEndEvent()
     }
    
     override func viewDidAppear(_ animated: Bool) {
@@ -163,6 +167,24 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     
     override func viewDidLayoutSubviews() {
         setup()
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if(textField == price.Txt || textField == area.Txt || textField == openChat.Txt){
+        scrollView.setContentOffset(CGPoint(x: 0, y: 350), animated: true)
+        }
+        else  {
+            
+        }
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
@@ -185,10 +207,6 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         }
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-    }
-
     
     @objc
     private func okBtn() {
@@ -343,6 +361,19 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
             giveBtnBool.toggle()
         }
     }
+    
+    private func setEndEvent() {
+        let singleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(MyTapMethod))
+        singleTapGestureRecognizer.numberOfTapsRequired = 1
+        singleTapGestureRecognizer.isEnabled = true
+        singleTapGestureRecognizer.cancelsTouchesInView = false
+        scrollView.addGestureRecognizer(singleTapGestureRecognizer)
+    }
+    
+    @objc
+    func MyTapMethod(sender: UITapGestureRecognizer) {
+            self.view.endEditing(true)
+        }
 }
 
 extension AddPostViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
