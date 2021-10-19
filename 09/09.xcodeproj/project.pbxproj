@@ -19,6 +19,7 @@
 		3825A86E271DA6E70015CF63 /* InformationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3825A86D271DA6E70015CF63 /* InformationModel.swift */; };
 		3825A870271DAD460015CF63 /* SeePostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3825A86F271DAD460015CF63 /* SeePostModel.swift */; };
 		3825A872271DAF0E0015CF63 /* OtherModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3825A871271DAF0E0015CF63 /* OtherModel.swift */; };
+		3825A875271DB5C30015CF63 /* MyPageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3825A874271DB5C30015CF63 /* MyPageViewModel.swift */; };
 		3831121F270828F000F56E40 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3831121E270828F000F56E40 /* SignInViewController.swift */; };
 		383112212708296900F56E40 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 383112202708296900F56E40 /* SignUpViewController.swift */; };
 		3873D6D1270B223B00CD983D /* NotoSansCJKkr-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3873D6CE270B223800CD983D /* NotoSansCJKkr-Regular.otf */; };
@@ -60,6 +61,7 @@
 		3825A86D271DA6E70015CF63 /* InformationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformationModel.swift; sourceTree = "<group>"; };
 		3825A86F271DAD460015CF63 /* SeePostModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeePostModel.swift; sourceTree = "<group>"; };
 		3825A871271DAF0E0015CF63 /* OtherModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherModel.swift; sourceTree = "<group>"; };
+		3825A874271DB5C30015CF63 /* MyPageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewModel.swift; sourceTree = "<group>"; };
 		3831121E270828F000F56E40 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
 		383112202708296900F56E40 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		3873D6CE270B223800CD983D /* NotoSansCJKkr-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansCJKkr-Regular.otf"; sourceTree = "<group>"; };
@@ -149,6 +151,14 @@
 			path = User;
 			sourceTree = "<group>";
 		};
+		3825A873271DB5310015CF63 /* Post */ = {
+			isa = PBXGroup;
+			children = (
+				3825A874271DB5C30015CF63 /* MyPageViewModel.swift */,
+			);
+			path = Post;
+			sourceTree = "<group>";
+		};
 		382A78EB270B10AD00EBE7AA /* font */ = {
 			isa = PBXGroup;
 			children = (
@@ -217,6 +227,7 @@
 		38D3931E26EB412F008BF247 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				3825A873271DB5310015CF63 /* Post */,
 				38B54C2D2717FE81000B7667 /* Auth */,
 				38D3932826EB4643008BF247 /* ViewModelType.swift */,
 			);
@@ -465,6 +476,7 @@
 				382307C0271A8FC800D12100 /* LikeAPI.swift in Sources */,
 				3825A86C271DA5720015CF63 /* PostModel.swift in Sources */,
 				38FE843F26EACF48009587FC /* SceneDelegate.swift in Sources */,
+				3825A875271DB5C30015CF63 /* MyPageViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
