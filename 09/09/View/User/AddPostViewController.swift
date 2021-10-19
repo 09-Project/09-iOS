@@ -218,18 +218,19 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         }
         
         View.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.top.leading.bottom.equalToSuperview()
+            $0.trailing.equalTo(self.view)
         }
         
         titleView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(0)
+            $0.top.equalTo(self.view.safeAreaInsets).offset(1)
             $0.height.equalTo(52)
-            $0.leading.trailing.equalToSuperview().offset(0)
+            $0.leading.trailing.equalTo(self.View).inset(0)
         }
         
         titleTxt.snp.makeConstraints {
             $0.top.equalTo(self.titleView.snp.top).offset(16)
-            $0.leading.equalToSuperview().offset(34)
+            $0.leading.equalTo(titleView.snp.leading).offset(34)
         }
         
         contentView.snp.makeConstraints {
@@ -240,8 +241,8 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         
         content.snp.makeConstraints {
             $0.top.equalTo(self.contentView.snp.top).offset(10)
-            $0.leading.equalToSuperview().offset(34)
-            $0.trailing.equalToSuperview().offset(-34)
+            $0.leading.equalTo(self.contentView.snp.leading).offset(34)
+            $0.trailing.equalTo(self.contentView.snp.trailing).offset(-34)
             $0.bottom.equalTo(self.contentView.snp.bottom).offset(-1)
         }
         
