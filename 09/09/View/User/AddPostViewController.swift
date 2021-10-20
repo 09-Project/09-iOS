@@ -231,7 +231,6 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         
     }
     
-    
     private func placeholderSetting() {
         content.delegate = self
         content.text = "게시물 내용을 입력하세요"
@@ -344,9 +343,9 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     private func imageViewTap() {
         let alert = UIAlertController(title: "사진을 선택하세요", message: "갤러리의 사진을 선택하세요",
                                       preferredStyle: .alert)
-        let libary = UIAlertAction(title: "예",
+        let libary = UIAlertAction(title: "네",
                                    style: .default, handler: { ACTION in self.openLibary()})
-        let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+        let cancel = UIAlertAction(title: "취소", style: .destructive, handler: nil)
         alert.addAction(libary)
         alert.addAction(cancel)
         self.present(alert, animated: true, completion: nil)}
