@@ -10,6 +10,7 @@ import RxSwift
 import RxCocoa
 import SnapKit
 import Then
+import Alamofire
 
 class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDelegate {
     
@@ -37,6 +38,12 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         $0.attributedPlaceholder = NSAttributedString(string: "제목을 입력해주세요", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
         $0.font = .init(name: fontRegular, size: 13)
         $0.textColor = .init(named: "placeholderColor")
+    }
+    
+    private lazy var numLabel = UILabel().then {
+        $0.backgroundColor = .white
+        $0.font = .init(name: fontRegular, size: 11)
+        $0.sizeToFit()
     }
     
     private lazy var contentView = UIView().then {
@@ -158,8 +165,19 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         textViewDidEndEditing(content)
         textViewDidBeginEditing(content)
         setEndEvent()
+        content.rx.text.subscribe(onNext: {[unowned self] str in
+            if (content.text == "게시물 내용을 입력하세요") {
+                numLabel.font = .init(name: fontRegular, size: 11)
+                numLabel.text = "(0/200)"
+            }
+            else {
+                let num: Int? = str?.count
+                numLabel.font = .init(name: fontRegular, size: 11)
+                self.numLabel.text = "(\(num!)/200)"
+            }
+        }).disposed(by: disposebag)
     }
-   
+    
     override func viewDidAppear(_ animated: Bool) {
         placeholderSetting()
         imageBtn.isHidden = false
@@ -171,7 +189,7 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         if(textField == price.Txt || textField == area.Txt || textField == openChat.Txt){
-        scrollView.setContentOffset(CGPoint(x: 0, y: 350), animated: true)
+            scrollView.setContentOffset(CGPoint(x: 0, y: 350), animated: true)
         }
         else  {
             
@@ -198,7 +216,7 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         let currentText = content.text ?? ""
         guard let stringRange = Range(range, in: currentText) else { return false }
         let changedText = currentText.replacingCharacters(in: stringRange, with: text)
-        return changedText.count <= 40
+        return changedText.count <= 200
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
@@ -220,6 +238,7 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         content.textColor = .init(named: "placeholderColor")
     }
     
+    
     private func setup() {
         line(view: titleView)
         line(view: contentView)
@@ -227,9 +246,8 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         self.view.addSubview(scrollView)
         self.scrollView.addSubview(View)
         
-        [titleView, titleTxt, contentView, content, photoLabel, photo, imageBtn, label,
-         buyLabel, buyBtn, giveLabel, giveBtn, stackView].forEach{ self.View.addSubview($0)}
-        
+        [titleView, titleTxt, contentView, content, numLabel, photoLabel,
+         photo, imageBtn, label, buyLabel, buyBtn, giveLabel, giveBtn, stackView].forEach{ self.View.addSubview($0)}
         
         scrollView.snp.makeConstraints {
             $0.edges.equalTo(self.view.safeAreaInsets)
@@ -251,6 +269,12 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
             $0.leading.equalTo(titleView.snp.leading).offset(34)
         }
         
+        numLabel.snp.makeConstraints {
+            $0.leading.lessThanOrEqualTo(View.snp.leading).inset(345)
+            $0.bottom.equalTo(contentView.snp.bottom).inset(14)
+            $0.trailing.equalTo(contentView.snp.trailing).inset(39)
+        }
+        
         contentView.snp.makeConstraints {
             $0.top.equalTo(self.titleView.snp.bottom).offset(0)
             $0.leading.trailing.equalToSuperview().offset(0)
@@ -261,7 +285,7 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
             $0.top.equalTo(self.contentView.snp.top).offset(10)
             $0.leading.equalTo(self.contentView.snp.leading).offset(34)
             $0.trailing.equalTo(self.contentView.snp.trailing).offset(-34)
-            $0.bottom.equalTo(self.contentView.snp.bottom).offset(-1)
+            $0.bottom.equalTo(self.contentView.snp.bottom).offset(-40)
         }
         
         photoLabel.snp.makeConstraints {
@@ -372,8 +396,8 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     
     @objc
     func MyTapMethod(sender: UITapGestureRecognizer) {
-            self.view.endEditing(true)
-        }
+        self.view.endEditing(true)
+    }
 }
 
 extension AddPostViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
