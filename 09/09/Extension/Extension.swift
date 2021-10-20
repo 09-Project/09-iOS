@@ -95,7 +95,7 @@ extension UIViewController {
     func alert(title: String, action: ((UIAlertAction)->Void)?) {
         let alert = UIAlertController(title: title, message: nil, preferredStyle: .alert)
         let ok = UIAlertAction(title: "네", style: .default, handler: action)
-        let cancel = UIAlertAction(title: "아니요", style: .cancel, handler: nil)
+        let cancel = UIAlertAction(title: "아니요", style: .destructive, handler: nil)
         
         alert.addAction(ok)
         alert.addAction(cancel)
