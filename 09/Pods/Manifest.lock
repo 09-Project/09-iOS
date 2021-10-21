@@ -1,12 +1,10 @@
 PODS:
   - Alamofire (5.4.3)
+  - Moya (15.0.0):
+    - Moya/Core (= 15.0.0)
+  - Moya/Core (15.0.0):
+    - Alamofire (~> 5.0)
   - Pageboy (3.6.2)
-  - R.swift.Library (5.4.0)
-  - RxAlamofire (6.1.1):
-    - RxAlamofire/Core (= 6.1.1)
-  - RxAlamofire/Core (6.1.1):
-    - Alamofire (~> 5.4)
-    - RxSwift (~> 6.0)
   - RxCocoa (6.2.0):
     - RxRelay (= 6.2.0)
     - RxSwift (= 6.2.0)
@@ -21,8 +19,7 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire (~> 5.4)
-  - R.swift.Library
-  - RxAlamofire
+  - Moya (~> 15.0)
   - RxCocoa (= 6.2.0)
   - RxSwift (= 6.2.0)
   - SideMenu
@@ -33,9 +30,8 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - Alamofire
+    - Moya
     - Pageboy
-    - R.swift.Library
-    - RxAlamofire
     - RxCocoa
     - RxRelay
     - RxSwift
@@ -46,9 +42,8 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   Alamofire: e447a2774a40c996748296fa2c55112fdbbc42f9
+  Moya: 138f0573e53411fb3dc17016add0b748dfbd78ee
   Pageboy: cf121b9dd48c63f3f281b2a9ec93d02e0f23879b
-  R.swift.Library: ec2a58e16269e14a9a74b0f2a6237641cbff4555
-  RxAlamofire: beb75a1c452d0de225651db4903f5d29d034a620
   RxCocoa: 4baf94bb35f2c0ab31bc0cb9f1900155f646ba42
   RxRelay: e72dbfd157807478401ef1982e1c61c945c94b2f
   RxSwift: d356ab7bee873611322f134c5f9ef379fa183d8f
@@ -57,6 +52,6 @@ SPEC CHECKSUMS:
   Tabman: 792ac76fd1ec95af175c93db880a3c47cabedc91
   Then: acfe0be7e98221c6204e12f8161459606d5d822d
 
-PODFILE CHECKSUM: fc4a1636df58e30a3c7ed497338de16027f743ea
+PODFILE CHECKSUM: 53db253790c36c6d0557fe6164d310c424871b1e
 
 COCOAPODS: 1.11.2

@@ -11,9 +11,8 @@ pod 'RxCocoa', '6.2.0'
 pod 'SnapKit', '~> 5.0.0'
 pod 'Then'
 pod 'Alamofire', '~> 5.4'
-pod 'R.swift.Library'
 pod 'SideMenu'
 pod 'Tabman', '~> 2.9'
-pod 'RxAlamofire'
+pod 'Moya', '~> 15.0'
 end
 

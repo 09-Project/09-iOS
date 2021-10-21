@@ -22,6 +22,7 @@
 		3825A875271DB5C30015CF63 /* MyPageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3825A874271DB5C30015CF63 /* MyPageViewModel.swift */; };
 		3831121F270828F000F56E40 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3831121E270828F000F56E40 /* SignInViewController.swift */; };
 		383112212708296900F56E40 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 383112202708296900F56E40 /* SignUpViewController.swift */; };
+		3839AB0727215865001A3E36 /* MainFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3839AB0627215865001A3E36 /* MainFont.swift */; };
 		3873D6D1270B223B00CD983D /* NotoSansCJKkr-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3873D6CE270B223800CD983D /* NotoSansCJKkr-Regular.otf */; };
 		3873D6D2270B223B00CD983D /* NotoSansCJKkr-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3873D6CF270B223A00CD983D /* NotoSansCJKkr-Medium.otf */; };
 		3873D6D3270B223B00CD983D /* NotoSansCJKkr-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3873D6D0270B223B00CD983D /* NotoSansCJKkr-Bold.otf */; };
@@ -64,6 +65,7 @@
 		3825A874271DB5C30015CF63 /* MyPageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewModel.swift; sourceTree = "<group>"; };
 		3831121E270828F000F56E40 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
 		383112202708296900F56E40 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
+		3839AB0627215865001A3E36 /* MainFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainFont.swift; sourceTree = "<group>"; };
 		3873D6CE270B223800CD983D /* NotoSansCJKkr-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansCJKkr-Regular.otf"; sourceTree = "<group>"; };
 		3873D6CF270B223A00CD983D /* NotoSansCJKkr-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansCJKkr-Medium.otf"; sourceTree = "<group>"; };
 		3873D6D0270B223B00CD983D /* NotoSansCJKkr-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansCJKkr-Bold.otf"; sourceTree = "<group>"; };
@@ -177,6 +179,14 @@
 				383112202708296900F56E40 /* SignUpViewController.swift */,
 			);
 			path = Auth;
+			sourceTree = "<group>";
+		};
+		3839AB0527215844001A3E36 /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+				3839AB0627215865001A3E36 /* MainFont.swift */,
+			);
+			path = "New Group";
 			sourceTree = "<group>";
 		};
 		388D998C271016B300EB8594 /* SideMenu */ = {
@@ -302,6 +312,7 @@
 		38FE843B26EACF48009587FC /* 09 */ = {
 			isa = PBXGroup;
 			children = (
+				3839AB0527215844001A3E36 /* New Group */,
 				38B54C2E2717FF53000B7667 /* Service */,
 				38E33757271457F5009BAB42 /* Extension */,
 				38D3932326EB4176008BF247 /* cell */,
@@ -473,6 +484,7 @@
 				382307BB271A85FE00D12100 /* PostAPI.swift in Sources */,
 				38FE843D26EACF48009587FC /* AppDelegate.swift in Sources */,
 				388039A627181AF4004D1E54 /* SignUpVIewModel.swift in Sources */,
+				3839AB0727215865001A3E36 /* MainFont.swift in Sources */,
 				382307C0271A8FC800D12100 /* LikeAPI.swift in Sources */,
 				3825A86C271DA5720015CF63 /* PostModel.swift in Sources */,
 				38FE843F26EACF48009587FC /* SceneDelegate.swift in Sources */,

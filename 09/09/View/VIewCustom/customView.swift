@@ -9,14 +9,9 @@ import UIKit
 
 class customView: UIView {
     
-    private let fontBold = "NotoSansCJKkr-Bold"
-    private let fontRegular = "NotoSansCJKkr-Regular"
-    private let fontMedium = "NotoSansCJKkr-Medium"
-    
-    
     lazy var Label = UILabel().then {
         $0.backgroundColor = .white
-        $0.font = .init(name: fontMedium, size: 13)
+        $0.font = .init(name: Font.fontMedium.rawValue, size: 13)
         $0.textColor = .black
     }
     
@@ -35,7 +30,7 @@ class customView: UIView {
     lazy var Txt = UITextField().then {
         $0.borderStyle = .none
         $0.backgroundColor = .none
-        $0.font = .init(name: fontRegular, size: 13)
+        $0.font = .init(name: Font.fontRegular.rawValue, size: 13)
         $0.textColor = .init(named: "placeholderColor")
         $0.textAlignment = .left
     }
@@ -43,7 +38,7 @@ class customView: UIView {
     lazy var label = UILabel().then {
         $0.backgroundColor = .white
         $0.text = "원"
-        $0.font = .init(name: fontRegular, size: 13)
+        $0.font = .init(name: Font.fontRegular.rawValue, size: 13)
     }
     
     
