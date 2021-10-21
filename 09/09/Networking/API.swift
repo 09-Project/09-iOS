@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Alamofire
+import Moya
 
 enum API {
     // Auth
@@ -37,7 +37,13 @@ enum API {
     case end(_ postID: Int)
     case seeLikePost
     
-    func path() -> String {
+}
+extension API: TargetType {
+    var baseURL: URL {
+        URL(string: "http://3.36.26.221:8080")!
+    }
+    
+    var path: String {
         switch self {
         case .signIn:
             return "/member/auth/login"
@@ -78,7 +84,7 @@ enum API {
         }
     }
     
-    func method() -> HTTPMethod {
+    var method: Moya.Method {
         switch self {
         case .likeObj, .signUp, .signIn, .postProducts:
             return .post
@@ -93,7 +99,7 @@ enum API {
         }
     }
     
-    func header() -> HTTPHeaders? {
+    var headers: [String: String]? {
         switch self {
         case .signIn, .signUp:
             return ["Content-Type" : "application/json"]
@@ -107,28 +113,41 @@ enum API {
         }
     }
     
-    var param: Parameters? {
+    var task: Moya.Task {
         switch self {
         case .postProducts(let title, let content, let price, let transactionRegion,
                            let openChatLink, let image):
-            return ["title": title, "content": content, "price": price,
-                    "transactionRegion": transactionRegion, "openChatLink": openChatLink,
-                    "image": image]
+            var multipartFormData = [MultipartFormData]()
+            multipartFormData.append(MultipartFormData(provider: .data(image.data(using: .utf8)!), name: "image", fileName: "image.jpg", mimeType: "image/png"))
+            multipartFormData.append(MultipartFormData(provider: .data(title.data(using: .utf8)!), name: "title", mimeType: "text/plain"))
+            multipartFormData.append(MultipartFormData(provider: .data(content.data(using: .utf8)!), name: "content", mimeType: "text/plain"))
+            multipartFormData.append(MultipartFormData(provider: .data(price.description.data(using: .utf8)!), name: "price", mimeType: "text/plain"))
+            multipartFormData.append(MultipartFormData(provider: .data(transactionRegion.data(using: .utf8)!), name: "transactionRegion", mimeType: "text/plain"))
+            multipartFormData.append(MultipartFormData(provider: .data(openChatLink.data(using: .utf8)!), name: "openChatLink", mimeType: "text/plain"))
+            return .uploadMultipart(multipartFormData)
+            
         case .signIn(let username, let password):
-            return ["username": username, "password": password]
+            return .requestParameters(parameters: ["username": username, "password": password], encoding: JSONEncoding.prettyPrinted)
         case .signUp(let name, let username, let password):
-            return ["name": name, "username": username, "password": password]
+            return .requestParameters(parameters: ["name": name, "username": username, "password": password], encoding: JSONEncoding.prettyPrinted)
         case .changepw(let password, let new_password):
-            return ["password": password, "new_password": new_password]
+            return .requestParameters(parameters: ["password": password, "new_password": new_password], encoding: JSONEncoding.prettyPrinted)
         case .changeInformation(let name, let introduction, let profileURL):
-            return ["name": name, "introduction": introduction, "profileUrl": profileURL]
+            return .requestParameters(parameters: ["name": name, "introduction": introduction, "profileUrl": profileURL], encoding: JSONEncoding.prettyPrinted)
         case .putProducts(let postID, let title, let content, let price, let transactionRegion,
-                            let openChatLink, let image):
-            return ["title": title, "content": content, "price": price,
-                    "transactionRegion": transactionRegion, "openChatLink": openChatLink,
-                    "image": image]
+                          let openChatLink, let image):
+            var multipartFormData = [MultipartFormData]()
+            multipartFormData.append(MultipartFormData(provider: .data(postID.description.data(using: .utf8)!), name: "postID", mimeType: "text/plain"))
+            multipartFormData.append(MultipartFormData(provider: .data(image.data(using: .utf8)!), name: "image", fileName: "image.jpg", mimeType: "image/png"))
+            multipartFormData.append(MultipartFormData(provider: .data(title.data(using: .utf8)!), name: "title", mimeType: "text/plain"))
+            multipartFormData.append(MultipartFormData(provider: .data(content.data(using: .utf8)!), name: "content", mimeType: "text/plain"))
+            multipartFormData.append(MultipartFormData(provider: .data(price.description.data(using: .utf8)!), name: "price", mimeType: "text/plain"))
+            multipartFormData.append(MultipartFormData(provider: .data(transactionRegion.data(using: .utf8)!), name: "transactionRegion", mimeType: "text/plain"))
+            multipartFormData.append(MultipartFormData(provider: .data(openChatLink.data(using: .utf8)!), name: "openChatLink", mimeType: "text/plain"))
+            return .uploadMultipart(multipartFormData)
         default:
-            return nil
+            return .requestPlain
+            
         }
     }
 }
