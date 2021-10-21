@@ -6,20 +6,6 @@
 //
 
 import Foundation
-import Alamofire
-import RxAlamofire
-import RxSwift
-
-class ServiceType {
-    let baseURL = "http://3.36.26.221:8080"
-    
-    typealias httpResults = Observable<(HTTPURLResponse, Data)>
-    
-    func resultData(_ api: API) -> httpResults {
-        return RxAlamofire.requestData(api.method(), baseURL + api.path(), parameters: api.param,
-                                    encoding: JSONEncoding.prettyPrinted, headers: api.header())
-    }
-}
 
 enum networkingResult: Int {
     case ok = 200
