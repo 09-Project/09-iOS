@@ -11,9 +11,6 @@ import RxCocoa
 
 class ChangePasswordViewController: UIViewController, UITextFieldDelegate {
     
-    private let fontBold = "NotoSansCJKkr-Bold"
-    private let fontRegular = "NotoSansCJKkr-Regular"
-    private let fontMedium = "NotoSansCJKkr-Medium"
     private let disposebag = DisposeBag()
     private let viewModel = ChangePwViewModel()
     
@@ -50,13 +47,13 @@ class ChangePasswordViewController: UIViewController, UITextFieldDelegate {
         $0.backgroundColor = .white
         $0.textColor = .red
         $0.text = "비밀번호가 일치하지 않습니다."
-        $0.font = .init(name: fontRegular, size: 11)
+        $0.font = .init(name: Font.fontRegular.rawValue, size: 11)
     }   // 에러 라벨
     
     private lazy var changeBtn = UIButton().then {
         $0.backgroundColor = .init(named: "mainColor")
         $0.setTitle("변경하기", for: .normal)
-        $0.titleLabel!.font = .init(name: fontBold, size: 15)
+        $0.titleLabel!.font = .init(name: Font.fontBold.rawValue, size: 15)
         $0.setTitleColor(.white, for: .normal)
         $0.layer.cornerRadius = 5
     }   // 변경하기 버튼

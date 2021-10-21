@@ -14,9 +14,6 @@ import Alamofire
 
 class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDelegate {
     
-    private let fontBold = "NotoSansCJKkr-Bold"
-    private let fontRegular = "NotoSansCJKkr-Regular"
-    private let fontMedium = "NotoSansCJKkr-Medium"
     private let disposebag = DisposeBag()
     private var buyBtnBool = true
     private var giveBtnBool = true
@@ -36,13 +33,13 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     private lazy var titleTxt = UITextField().then {
         $0.backgroundColor = .white
         $0.attributedPlaceholder = NSAttributedString(string: "제목을 입력해주세요", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
-        $0.font = .init(name: fontRegular, size: 13)
+        $0.font = .init(name: Font.fontRegular.rawValue, size: 13)
         $0.textColor = .init(named: "placeholderColor")
     }
     
     private lazy var numLabel = UILabel().then {
         $0.backgroundColor = .white
-        $0.font = .init(name: fontRegular, size: 11)
+        $0.font = .init(name: Font.fontRegular.rawValue, size: 11)
         $0.sizeToFit()
     }
     
@@ -52,13 +49,13 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     
     private lazy var content = UITextView().then {
         $0.backgroundColor = .white
-        $0.font = .init(name: fontRegular, size: 13)
+        $0.font = .init(name: Font.fontRegular.rawValue, size: 13)
         $0.textColor = .init(named: "placeholdeColor")
     }
     
     private lazy var photoLabel = UILabel().then {
         $0.text = "사진"
-        $0.font = .init(name: fontMedium, size: 13)
+        $0.font = .init(name: Font.fontMedium.rawValue, size: 13)
         $0.textColor = .black
     }
     
@@ -72,7 +69,7 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         $0.backgroundColor = .none
         $0.layer.cornerRadius = 5
         $0.setTitle( "image", for: .normal)
-        $0.titleLabel?.font = .init(name: fontMedium, size: 10)
+        $0.titleLabel?.font = .init(name: Font.fontMedium.rawValue, size: 10)
         $0.setTitleColor(.init(named: "borderColor"), for: .normal)
     }
     
@@ -80,7 +77,7 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     private lazy var label = UILabel().then {
         $0.backgroundColor = .white
         $0.text = "*이미지는 상품등록 시\n 정사각형으로\n 잘려서 등록됩니다."
-        $0.font = .init(name: fontRegular, size: 11)
+        $0.font = .init(name: Font.fontRegular.rawValue , size: 11)
         $0.textColor = .black
         $0.numberOfLines = 3
     }
@@ -88,7 +85,7 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     private lazy var buyLabel = UILabel().then {
         $0.backgroundColor = .white
         $0.text = "공동구매"
-        $0.font = .init(name: fontMedium, size: 13)
+        $0.font = .init(name: Font.fontMedium.rawValue, size: 13)
         $0.textColor = .black
     }
     
@@ -101,7 +98,7 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     private lazy var giveLabel = UILabel().then {
         $0.backgroundColor = .white
         $0.text = "무료나눔"
-        $0.font = .init(name: fontMedium, size: 13)
+        $0.font = .init(name: Font.fontMedium.rawValue, size: 13)
         $0.textColor = .black
     }
     
@@ -167,12 +164,12 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         setEndEvent()
         content.rx.text.subscribe(onNext: {[unowned self] str in
             if (content.text == "게시물 내용을 입력하세요") {
-                numLabel.font = .init(name: fontRegular, size: 11)
+                numLabel.font = .init(name: Font.fontBold.rawValue, size: 11)
                 numLabel.text = "(0/200)"
             }
             else {
                 let num: Int? = str?.count
-                numLabel.font = .init(name: fontRegular, size: 11)
+                numLabel.font = .init(name: Font.fontRegular.rawValue, size: 11)
                 self.numLabel.text = "(\(num!)/200)"
             }
         }).disposed(by: disposebag)
@@ -377,6 +374,7 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
             price.isHidden = true
             giveBtnBool.toggle()
         }
+        
         else {
             giveBtn.setImage(.init(systemName: "circle"), for: .normal)
             giveBtn.tintColor = .init(named: "circleColor")

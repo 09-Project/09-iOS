@@ -11,9 +11,6 @@ import RxCocoa
 
 class PostViewController: UIViewController {
     
-    private let fontBold = "NotoSansCJKkr-Bold"
-    private let fontRegular = "NotoSansCJKkr-Regular"
-    private let fontMedium = "NotoSansCJKkr-Medium"
     let identfier = "cell"
     
     private lazy var backBtn = UIButton().then {
@@ -35,7 +32,7 @@ class PostViewController: UIViewController {
     
     private lazy var name = UILabel().then {
         $0.backgroundColor = .white
-        $0.font = .init(name: fontRegular, size: 14)
+        $0.font = .init(name: Font.fontRegular.rawValue, size: 14)
         $0.textColor = .black
     }
     
@@ -47,13 +44,13 @@ class PostViewController: UIViewController {
     
     private lazy var titleLabel = UILabel().then {
         $0.backgroundColor = .white
-        $0.font = .init(name: fontRegular, size: 16)
+        $0.font = .init(name: Font.fontRegular.rawValue, size: 16)
         $0.textColor = .black
     }
     
     private lazy var priceLabel = UILabel().then {
         $0.backgroundColor = .white
-        $0.font = .init(name: fontBold, size: 22)
+        $0.font = .init(name: Font.fontBold.rawValue, size: 22)
         $0.textColor = .black
     }
     
@@ -61,7 +58,7 @@ class PostViewController: UIViewController {
         $0.backgroundColor = .white
         $0.text = "원"
         $0.textColor = .black
-        $0.font = .init(name: fontRegular, size: 10)
+        $0.font = .init(name: Font.fontRegular.rawValue, size: 10)
     }
     
     private lazy var pinImg = UIImageView().then {
@@ -72,7 +69,7 @@ class PostViewController: UIViewController {
     
     private lazy var areaLabel = UILabel().then {
         $0.backgroundColor = .white
-        $0.font = .init(name: fontRegular, size: 12)
+        $0.font = .init(name: Font.fontRegular.rawValue, size: 12)
         $0.textColor = .black
     }
     
@@ -80,12 +77,12 @@ class PostViewController: UIViewController {
         $0.backgroundColor = .init(named: "mainColor")
         $0.text = "공동구매"
         $0.layer.cornerRadius = 3
-        $0.font = .init(name: fontBold, size: 11)
+        $0.font = .init(name: Font.fontBold.rawValue, size: 11)
     }
     
     private lazy var contentLabel = UILabel().then {
         $0.backgroundColor = .white
-        $0.font = .init(name: fontRegular, size: 12)
+        $0.font = .init(name: Font.fontRegular.rawValue, size: 12)
         $0.numberOfLines = 5
         $0.textColor = .black
     }
@@ -93,7 +90,7 @@ class PostViewController: UIViewController {
     private lazy var label = UILabel().then {
         $0.backgroundColor = .white
         $0.text = "다른 상품 보기"
-        $0.font = .init(name: fontBold, size: 14)
+        $0.font = .init(name: Font.fontBold.rawValue, size: 14)
     }
     
     private lazy var heartBtn = UIButton().then {

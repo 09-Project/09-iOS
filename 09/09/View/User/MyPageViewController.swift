@@ -12,9 +12,6 @@ import Tabman
 
 class MyPageViewController: UIViewController {
     
-    private let fontBold = "NotoSansCJKkr-Bold"
-    private let fontRegular = "NotoSansCJKkr-Regular"
-    private let fontMedium = "NotoSansCJKkr-Medium"
     let identfier = "cell"
     
     private lazy var profileImg = UIImageView().then {
@@ -25,7 +22,7 @@ class MyPageViewController: UIViewController {
     private lazy var nameLabel = UILabel().then {
         $0.backgroundColor = .white
         $0.textColor = .black
-        $0.font = .init(name: fontBold, size: 16)
+        $0.font = .init(name: Font.fontBold.rawValue, size: 16)
     }
     
     private lazy var gearBtn = UIButton().then {
@@ -35,7 +32,7 @@ class MyPageViewController: UIViewController {
     
     private lazy var introduceLabel = UILabel().then {
         $0.backgroundColor = .white
-        $0.font = .init(name: fontRegular, size: 13)
+        $0.font = .init(name: Font.fontRegular.rawValue, size: 13)
         $0.textColor = .init(named: "myIncludeTxtColor")
     }
     
@@ -47,14 +44,14 @@ class MyPageViewController: UIViewController {
     
     private lazy var productNum = UILabel().then {
         $0.backgroundColor = .none
-        $0.font = .init(name: fontBold, size: 18)
+        $0.font = .init(name: Font.fontBold.rawValue, size: 18)
     }
     
     private lazy var productLabel = UILabel().then {
         $0.backgroundColor = .none
         $0.text = "상품"
         $0.textColor = .init(named: "mainColor")
-        $0.font = .init(name: fontMedium, size: 13)
+        $0.font = .init(name: Font.fontMedium.rawValue, size: 13)
     }
     
     //찜한 상품
@@ -65,13 +62,13 @@ class MyPageViewController: UIViewController {
     
     private lazy var prizeNum = UILabel().then {
         $0.backgroundColor = .none
-        $0.font = .init(name: fontBold, size: 18)
+        $0.font = .init(name: Font.fontBold.rawValue, size: 18)
         $0.textColor = .black
     }
     
     private lazy var prizeLabel = UILabel().then {
         $0.backgroundColor = .none
-        $0.font = .init(name: fontMedium, size: 13)
+        $0.font = .init(name: Font.fontMedium.rawValue, size: 13)
         $0.textColor = .init(named: "mainColor")
         $0.text = "찜한 상품"
     }
@@ -84,14 +81,14 @@ class MyPageViewController: UIViewController {
     
     private lazy var receiveNum = UILabel().then {
         $0.backgroundColor = .none
-        $0.font = .init(name: fontBold, size: 18)
+        $0.font = .init(name: Font.fontBold.rawValue, size: 18)
         $0.textColor = .black
     }
     
     private lazy var receiveLabel = UILabel().then {
         $0.backgroundColor = .none
         $0.text = "받은 찜"
-        $0.font = .init(name: fontMedium, size: 13)
+        $0.font = .init(name: Font.fontMedium.rawValue, size: 13)
         $0.textColor = .init(named: "mainColor")
     }
     
@@ -103,14 +100,14 @@ class MyPageViewController: UIViewController {
     
     private lazy var transactionNum = UILabel().then {
         $0.backgroundColor = .none
-        $0.font = .init(name: fontBold, size: 18)
+        $0.font = .init(name: Font.fontBold.rawValue, size: 18)
         $0.textColor = .black
     }
     
     private lazy var transactionLabel = UILabel().then {
         $0.backgroundColor = .none
         $0.text = "거래 내역"
-        $0.font = .init(name: fontMedium, size: 13)
+        $0.font = .init(name: Font.fontMedium.rawValue, size: 13)
         $0.textColor = .init(named: "mainColor")
     }
     

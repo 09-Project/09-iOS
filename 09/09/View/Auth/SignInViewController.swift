@@ -11,9 +11,6 @@ import RxCocoa
 
 class SignInViewController: UIViewController, UITextFieldDelegate {
     
-    private let fontBold = "NotoSansCJKkr-Bold"
-    private let fontRegular = "NotoSansCJKkr-Regular"
-    private let fontMedium = "NotoSansCJKkr-Medium"
     private var eyeBtnBool: Bool = false
     private var checkBtnBool: Bool = false
     private var disposeBag = DisposeBag()
@@ -28,7 +25,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
     
     private lazy var loginLabel = UILabel().then {
         $0.text = "LOG IN"
-        $0.font = UIFont(name: fontBold, size: 24)
+        $0.font = UIFont(name: Font.fontBold.rawValue, size: 24)
         $0.textColor = .black
         $0.backgroundColor = .white
     }   // 로그인 라벨
@@ -37,9 +34,9 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         $0.borderStyle = .none
         $0.textAlignment = .left
         $0.backgroundColor = .white
-        $0.font = UIFont(name: fontRegular, size: 14)
+        $0.font = UIFont(name: Font.fontRegular.rawValue, size: 14)
         $0.textColor = UIColor.init(named: "mainColor")
-        $0.attributedPlaceholder = NSAttributedString(string: "ID", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
+        $0.attributedPlaceholder = NSAttributedString(string: "ID", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: )])
     }   // 아이디
     
     private lazy var idView = UIView().then {
@@ -51,7 +48,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         $0.textAlignment = .left
         $0.backgroundColor = .white
         $0.textColor = UIColor.init(named: "mainColor")
-        $0.font = UIFont(name: fontRegular, size: 14)
+        $0.font = UIFont(name: Font.fontRegular.rawValue, size: 14)
         $0.attributedPlaceholder = NSAttributedString(string: "PASSWORD", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
     }   // 비밀번호
     
@@ -62,7 +59,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
     private lazy var errorLabel = UILabel().then {
         $0.backgroundColor = .white
         $0.text = "아이디 또는 비밀번호가 일치하지 않습니다."
-        $0.font = .init(name: fontRegular, size: 10)
+        $0.font = .init(name: Font.fontRegular.rawValue, size: 10)
         $0.textColor = .init(named: "mainColor")
     }   // 에러 라벨
     
@@ -78,7 +75,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
     }   // 아이디 저장 버튼
     
     private lazy var idCheckLabel = UILabel().then {
-        $0.font = UIFont(name: fontMedium, size: 10)
+        $0.font = UIFont(name: Font.fontMedium.rawValue, size: 10)
         $0.text = "아이디 저장"
         $0.textColor = .black
         $0.backgroundColor = .white
@@ -88,7 +85,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         $0.backgroundColor = .init(named: "mainColor")
         $0.setTitle("LOGIN", for: .normal)
         $0.setTitleColor(.white, for: .normal)
-        $0.titleLabel?.font = UIFont(name: fontMedium, size: 14)
+        $0.titleLabel?.font = UIFont(name: Font.fontMedium.rawValue, size: 14)
         $0.layer.cornerRadius = 10
     }   // 로그인 버튼
     
@@ -96,14 +93,14 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         $0.backgroundColor = .white
         $0.text = "계정이 없으신가요?"
         $0.textColor = .black
-        $0.font = UIFont(name: fontRegular, size: 12)
+        $0.font = UIFont(name: Font.fontRegular.rawValue, size: 12)
     }   // 회원가입 안내 라벨
     
     private lazy var moveSignupBtn = UIButton().then {
         $0.backgroundColor = .white
         $0.setTitle("회원가입하기", for: .normal)
         $0.setTitleColor(.init(named: "mainColor"), for: .normal)
-        $0.titleLabel!.font = UIFont(name: fontRegular, size: 12)
+        $0.titleLabel!.font = UIFont(name: Font.fontRegular.rawValue, size: 12)
     }   // 회원가입 이동 버튼
     
     override func viewDidLoad() {
@@ -117,6 +114,10 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         pwTxt.delegate = self
         idTxt.tag = 1
         pwTxt.tag = 2
+        moveSignupBtn.rx.tap.subscribe(onNext: { [unowned self] _ in
+           let vc = SignUpViewController()
+            present(vc, animated: true, completion: nil)
+        }).disposed(by: disposeBag)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -294,12 +295,6 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    @objc
-    private func moveSignUpViewController() {
-        let VC = SignUpViewController()
-        VC.modalPresentationStyle = .fullScreen
-        present(VC, animated: true, completion: nil)
-    }
     
     
 }

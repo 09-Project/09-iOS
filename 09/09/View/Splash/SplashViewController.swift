@@ -28,7 +28,7 @@ class SplashViewController: UIViewController {
     
     private lazy var label = UILabel().then {
         $0.text = "\"공동구매부터 무료나눔까지\""
-        $0.font = UIFont(name: "NotoSansCJKkr-Regular", size: 16) ?? UIFont.systemFont(ofSize: 16)
+        $0.font = UIFont(name: Font.fontRegular.rawValue, size: 16) ?? UIFont.systemFont(ofSize: 16)
         $0.backgroundColor = UIColor.white
         $0.textColor = .black
         $0.textAlignment = .center
@@ -75,9 +75,9 @@ class SplashViewController: UIViewController {
         
         attributedStr.addAttribute(.foregroundColor, value: UIColor.init(named: "mainColor"), range: (label.text! as NSString).range(of: "무료나눔"))
         
-        attributedStr.addAttribute(.font, value: UIFont(name: "NotoSansCJKkr-Bold", size: 16), range: (label.text! as NSString).range(of: "공동구매"))
+        attributedStr.addAttribute(.font, value: UIFont(name: Font.fontBold.rawValue, size: 16), range: (label.text! as NSString).range(of: "공동구매"))
         
-        attributedStr.addAttribute(.font, value: UIFont(name: "NotoSansCJKkr-Bold", size: 16), range: (label.text! as NSString).range(of: "무료나눔"))
+        attributedStr.addAttribute(.font, value: UIFont(name: Font.fontBold.rawValue, size: 16), range: (label.text! as NSString).range(of: "무료나눔"))
         
         label.attributedText = attributedStr
     }

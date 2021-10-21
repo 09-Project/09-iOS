@@ -11,9 +11,6 @@ import RxCocoa
 
 class SignUpViewController: UIViewController, UITextFieldDelegate {
     
-    private let fontBold = "NotoSansCJKkr-Bold"
-    private let fontRegular = "NotoSansCJKkr-Regular"
-    private let fontMedium = "NotoSansCJKkr-Medium"
     private var eyeBool = false
     private let disposebag = DisposeBag()
     private let viewModel = SignUpViewModel()
@@ -28,7 +25,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         $0.backgroundColor = .white
         $0.textColor = .black
         $0.text = "JOIN US"
-        $0.font = UIFont.init(name: fontBold, size: 24)
+        $0.font = UIFont.init(name: Font.fontBold.rawValue, size: 24)
     }
     
     private lazy var nickNameTxt = UITextField().then {
@@ -36,7 +33,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         $0.backgroundColor = .white
         $0.textAlignment = .left
         $0.textColor = .init(named: "mainColor")
-        $0.font = .init(name: fontRegular, size: 14)
+        $0.font = .init(name: Font.fontRegular.rawValue, size: 14)
         $0.attributedPlaceholder = NSAttributedString(string: "Nickname", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
     }
     
@@ -48,7 +45,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         $0.borderStyle = .none
         $0.textColor = .init(named: "mainColor")
         $0.textAlignment = .left
-        $0.font = .init(name: fontRegular, size: 14)
+        $0.font = .init(name: Font.fontRegular.rawValue, size: 14)
         $0.backgroundColor = .white
         $0.attributedPlaceholder = NSAttributedString(string: "ID", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
     }
@@ -61,7 +58,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         $0.borderStyle = .none
         $0.backgroundColor = .white
         $0.textAlignment = .left
-        $0.font = .init(name: fontRegular, size: 14)
+        $0.font = .init(name: Font.fontRegular.rawValue, size: 14)
         $0.textColor = .init(named: "mainColor")
         $0.attributedPlaceholder = NSAttributedString(string: "PASSWORD", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
     }
@@ -74,14 +71,14 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         $0.backgroundColor = .white
         $0.text = "중복된 닉네임입니다."
         $0.textColor = .init(named: "mainColor")
-        $0.font = .init(name: fontRegular, size: 10)
+        $0.font = .init(name: Font.fontRegular.rawValue, size: 10)
     }
     
     private lazy var idErrorLabel = UILabel().then {
         $0.backgroundColor = .white
         $0.text = "중복된 아이디입니다."
         $0.textColor = .init(named: "mainColor")
-        $0.font = .init(name: fontRegular, size: 10)
+        $0.font = .init(name: Font.fontRegular.rawValue, size: 10)
     }
     
     private lazy var eyeBtn = UIButton().then {
@@ -95,20 +92,20 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         $0.setTitle("JOIN US", for: .normal)
         $0.layer.cornerRadius = 10
         $0.setTitleColor(.white, for: .normal)
-        $0.titleLabel!.font = .init(name: fontMedium, size: 14)
+        $0.titleLabel!.font = .init(name: Font.fontMedium.rawValue, size: 14)
     }
     
     private lazy var label = UILabel().then {
         $0.backgroundColor = .white
         $0.text = "이미 계정이 있으신가요?"
-        $0.font = .init(name: fontRegular, size: 12)
+        $0.font = .init(name: Font.fontRegular.rawValue, size: 12)
         $0.textColor = .black
     }
     
     private lazy var moveLoginBtn = UIButton().then {
         $0.backgroundColor = .white
         $0.setTitle("로그인하기", for: .normal)
-        $0.titleLabel!.font = .init(name: fontRegular, size: 12)
+        $0.titleLabel!.font = .init(name: Font.fontRegular.rawValue, size: 12)
         $0.setTitleColor(.init(named: "mainColor"), for: .normal)
     }
     

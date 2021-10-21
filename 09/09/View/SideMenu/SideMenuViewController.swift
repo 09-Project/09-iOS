@@ -16,7 +16,7 @@ class SideMenuViewController: UIViewController {
     private lazy var pageLabel = UILabel().then {
         $0.backgroundColor = .white
         $0.text = "페이지선택"
-        $0.font = .init(name: "NotoSansCJKkr-Bold", size: 18)
+        $0.font = .init(name: Font.fontBold.rawValue, size: 18)
     }
     
     private lazy var lineView = UIView().then {
@@ -28,7 +28,7 @@ class SideMenuViewController: UIViewController {
         $0.semanticContentAttribute = .forceLeftToRight
         $0.setTitle("\t 홈", for: .normal)
         $0.tintColor = .black
-        $0.titleLabel!.font = .init(name: "NotoSansCJKkr-Regular", size: 12)
+        $0.titleLabel!.font = .init(name: Font.fontRegular.rawValue, size: 12)
 
     }
     
@@ -37,7 +37,7 @@ class SideMenuViewController: UIViewController {
         $0.semanticContentAttribute = .forceLeftToRight
         $0.setTitle("\t 마이페이지", for: .normal)
         $0.tintColor = .black
-        $0.titleLabel!.font = .init(name: "NotoSansCJKkr-Regular", size: 12)
+        $0.titleLabel!.font = .init(name: Font.fontRegular.rawValue, size: 12)
     }
 
     private lazy var postBtn = UIButton().then {
@@ -45,7 +45,7 @@ class SideMenuViewController: UIViewController {
         $0.semanticContentAttribute = .forceLeftToRight
         $0.setTitle("\t 게시물 작성", for: .normal)
         $0.tintColor = .black
-        $0.titleLabel!.font = .init(name: "NotoSansCJKkr-Regular", size: 12)
+        $0.titleLabel!.font = .init(name: Font.fontRegular.rawValue, size: 12)
 
     }
     
