@@ -14,5 +14,6 @@ pod 'Alamofire', '~> 5.4'
 pod 'SideMenu'
 pod 'Tabman', '~> 2.9'
 pod 'Moya', '~> 15.0'
+pod 'Moya/RxSwift', '~> 15.0'
 end
 

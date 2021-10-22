@@ -4,6 +4,9 @@ PODS:
     - Moya/Core (= 15.0.0)
   - Moya/Core (15.0.0):
     - Alamofire (~> 5.0)
+  - Moya/RxSwift (15.0.0):
+    - Moya/Core
+    - RxSwift (~> 6.0)
   - Pageboy (3.6.2)
   - RxCocoa (6.2.0):
     - RxRelay (= 6.2.0)
@@ -20,6 +23,7 @@ PODS:
 DEPENDENCIES:
   - Alamofire (~> 5.4)
   - Moya (~> 15.0)
+  - Moya/RxSwift (~> 15.0)
   - RxCocoa (= 6.2.0)
   - RxSwift (= 6.2.0)
   - SideMenu
@@ -52,6 +56,6 @@ SPEC CHECKSUMS:
   Tabman: 792ac76fd1ec95af175c93db880a3c47cabedc91
   Then: acfe0be7e98221c6204e12f8161459606d5d822d
 
-PODFILE CHECKSUM: 53db253790c36c6d0557fe6164d310c424871b1e
+PODFILE CHECKSUM: b2388ede80c85a13fd5251b9a306bd0ba00e8f2e
 
 COCOAPODS: 1.11.2
