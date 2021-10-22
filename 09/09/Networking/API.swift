@@ -38,6 +38,7 @@ enum API {
     case seeLikePost
     
 }
+
 extension API: TargetType {
     var baseURL: URL {
         URL(string: "http://3.36.26.221:8080")!
@@ -128,12 +129,16 @@ extension API: TargetType {
             
         case .signIn(let username, let password):
             return .requestParameters(parameters: ["username": username, "password": password], encoding: JSONEncoding.prettyPrinted)
+            
         case .signUp(let name, let username, let password):
             return .requestParameters(parameters: ["name": name, "username": username, "password": password], encoding: JSONEncoding.prettyPrinted)
+            
         case .changepw(let password, let new_password):
             return .requestParameters(parameters: ["password": password, "new_password": new_password], encoding: JSONEncoding.prettyPrinted)
+            
         case .changeInformation(let name, let introduction, let profileURL):
             return .requestParameters(parameters: ["name": name, "introduction": introduction, "profileUrl": profileURL], encoding: JSONEncoding.prettyPrinted)
+            
         case .putProducts(let postID, let title, let content, let price, let transactionRegion,
                           let openChatLink, let image):
             var multipartFormData = [MultipartFormData]()
