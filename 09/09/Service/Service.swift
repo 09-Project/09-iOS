@@ -9,65 +9,133 @@ import Foundation
 import RxSwift
 import RxCocoa
 import Moya
-import UIKit
-import Tabman
 
 final class Service {
     
     let provider = MoyaProvider<API>()
     
-    func signIn(_ username: String, _ password: String) -> Observable<networkingResult> {
+    func signIn(_ username: String, _ password: String) -> Single<networkingResult> {
         return provider.rx.request(.signIn(username, password))
             .filterSuccessfulStatusCodes()
-            .asObservable()
             .map(TokenModel.self)
             .map{ response -> networkingResult in
-                if (Token.accessToken == response.accessToken && Token.refreshToken == response.refreshToken)
-                {
-                    return .ok
-                }
-                else { return .fault}
-            }.catchError{ [unowned self] in return .just(setNetWorkError($0))}
-        
+                Token.accessToken = response.accessToken
+                Token.refreshToken = response.refreshToken
+                return .ok
+            }
     }
     
     func signUp(_ name: String, _ username: String, _ password: String) ->
-    Observable<networkingResult> {
+    Single<networkingResult> {
         return provider.rx.request(.signUp(name, username, password))
             .filterSuccessfulStatusCodes()
-            .asObservable().map{ _ -> networkingResult in return .okay}
-            .catchError{ [unowned self] in return .just(setNetWorkError($0)) }
+            .map{ _ -> networkingResult in return .okay}
     }
     
-    func changePW(_ password: String, _ new_password: String) -> Observable<networkingResult> {
+    func changePW(_ password: String, _ new_password: String) -> Single<networkingResult> {
         return provider.rx.request(.changepw(password, new_password))
             .filterSuccessfulStatusCodes()
-            .asObservable().map { _ -> networkingResult in return .okay}
-            .catchError{ [unowned self] in return .just(setNetWorkError($0))}
+            .map{ _ -> networkingResult in  return .deleteOk}
     }
     
-    func refreshToken() -> Observable<networkingResult> {
-        provider.rx.request(.refreshToken)
+    func refreshToken() -> Single<networkingResult> {
+        return provider.rx.request(.refreshToken)
             .filterSuccessfulStatusCodes()
-            .asObservable()
             .map(TokenModel.self)
             .map { response -> networkingResult in
-                if(Token.accessToken == response.accessToken && Token.refreshToken == response.refreshToken)
-                {
-                    return .ok
-                }
-                else {
-                    return .fault
-                }
+                Token.accessToken = response.accessToken
+                Token.refreshToken = response.refreshToken
+                return .ok
             }
-            .catchError{ [unowned self] in return .just(setNetWorkError($0))}
     }
     
-    
-    
-    func setNetWorkError(_ error: Error) -> networkingResult {
-        print(error)
-        guard let stauts = (error as? MoyaError)?.response?.statusCode else {return .fault}
-        return (networkingResult(rawValue: stauts) ?? .fault)
+    func delete(_ post_id: Int) -> Single<networkingResult> {
+        return provider.rx.request(.deleteProducts(post_id))
+            .filterSuccessfulStatusCodes()
+            .map{ _ -> networkingResult in return .deleteOk}
     }
+    
+    func seeProducts(_ post_id: Int) -> Single<(PostList?, networkingResult)> {
+        return provider.rx.request(.seeProducts(post_id))
+            .filterSuccessfulStatusCodes()
+            .map(PostList.self)
+            .map{return ($0, .ok)}
+    }
+    
+    func products(page: Int, size: Int) -> Single<(PostList?, networkingResult)> {
+        return provider.rx.request(.products(page, size))
+            .filterSuccessfulStatusCodes()
+            .map(PostList.self)
+            .map{return ($0, .ok)}
+    }
+    func search(keywords: String, page: Int, size: Int) -> Single<(PostList?,
+                                                                   networkingResult)> {
+        return provider.rx.request(.search(keywords, page, size))
+            .filterSuccessfulStatusCodes()
+            .map(PostList.self)
+            .map{return ($0, .ok)}
+    }
+    
+    func other() -> Single<(OtherList?, networkingResult)> {
+        return provider.rx.request(.other)
+            .filterSuccessfulStatusCodes()
+            .map(OtherList.self)
+            .map{return ($0, .ok)}
+    }
+    
+    func pathProducts(post_id: Int, title: String, content: String,price: Int,
+                      transactionRegion: String, openChatLink: String, image: String) -> Single<networkingResult> {
+        return provider.rx.request(.putProducts(post_id, title, content, price, transactionRegion,
+                                                openChatLink, image))
+            .filterSuccessfulStatusCodes()
+            .map{_ -> networkingResult in return .deleteOk}
+    }
+    
+    func post(title: String, content: String, price: Int, transactionRegion: String,
+              openChatLink: String, image: String) -> Single<networkingResult> {
+        return provider.rx.request(.postProducts(title, content, price, transactionRegion, openChatLink, image))
+            .filterSuccessfulStatusCodes()
+            .map{_ -> networkingResult in return .okay}
+        
+    }
+    
+    func end(_ post_id: Int) -> Single<networkingResult> {
+        return provider.rx.request(.end(post_id))
+            .filterSuccessfulStatusCodes()
+            .map{_ -> networkingResult in return .okay}
+    }
+    
+    func seeLikePost() -> Single<(PostList?, networkingResult)> {
+        return provider.rx.request(.seeLikePost)
+            .filterSuccessfulStatusCodes()
+            .map(PostList.self)
+            .map{($0,.ok)}
+    }
+    
+    func getInformation() -> Single<(InformationModel?, networkingResult)> {
+        return provider.rx.request(.getInformation)
+            .filterSuccessfulStatusCodes()
+            .map(InformationModel.self)
+            .map{($0, .ok)}
+    }
+    
+    func profile(_ memberID: Int) -> Single<(ProfileModel?, networkingResult)> {
+        return provider.rx.request(.profile(memberID))
+            .filterSuccessfulStatusCodes()
+            .map(ProfileModel.self)
+            .map{($0, .ok)}
+    }
+        
+    func like(_ postID: Int) -> Single<networkingResult> {
+        return provider.rx.request(.likeObj(postID))
+            .filterSuccessfulStatusCodes()
+            .map{_ -> networkingResult in return .okay}
+    }
+    
+    func deleteLike(_ postId: Int) -> Single<networkingResult> {
+        return provider.rx.request(.deleteLike(postId))
+            .filterSuccessfulStatusCodes()
+            .map{ _ -> networkingResult in return .deleteOk}
+    }
+    
 }
