@@ -22,23 +22,23 @@ class SignUpViewModel: ViewModelType {
     
     struct Output {
         let isEnable: Driver<Bool>
-        let result: Signal<String>
+        let result: Signal<Bool>
     }
     
     func transform(_ input: Input) -> Output {
         let api = Service()
         let info = Driver.combineLatest(input.name, input.username, input.password)
         let isEnable = info.map {!$0.0.isEmpty && !$0.1.isEmpty && !$0.2.isEmpty}
-        let result = PublishSubject<String>()
+        let result = PublishSubject<Bool>()
         
-        input.doneTap.withLatestFrom(info).asObservable().subscribe(onNext: {[weak self]
-            name, userN, pw in
-            guard let self = self else {return}
-            api.signUp(name, userN, pw).subscribe({_ in
+        input.doneTap.asObservable()
+            .withLatestFrom(info)
+            .flatMap{ name, userN, userP in
+                api.signUp(name, userN, userP)
+            }.subscribe(onNext: {_ in
                 result.onCompleted()
-            }).disposed(by: self.disposebag)
-        }).disposed(by: disposebag)
+            }).disposed(by: disposebag)
         return Output(isEnable: isEnable.asDriver(),
-                      result: result.asSignal(onErrorJustReturn: "회원가입 실패"))
+                      result: result.asSignal(onErrorJustReturn: false))
     }
 }
