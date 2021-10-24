@@ -25,7 +25,7 @@ class SignInModel: ViewModelType {
     }
     
     func transform(_ input: Input) -> Output {
-        let api = AuthAPI()
+        let api = Service()
         let info = Driver.combineLatest(input.username, input.password)
         let isEnabel = info.map{!$0.0.isEmpty && !$0.1.isEmpty}
         let result = PublishSubject<String>()
@@ -35,15 +35,8 @@ class SignInModel: ViewModelType {
             
             guard let self = self else {return}
             
-            api.signIn(userN, userP).subscribe(onNext: { response in
-                switch response {
-                case .ok:
-                    result.onCompleted()
-                case .notFound:
-                    print("아이디나 비밀번호가 일치하지 않습니다.")
-                default:
-                    print("로그인 실패")
-                }
+            api.signIn(userN, userP).subscribe({_ in
+                result.onCompleted()
             }).disposed(by: self.disposebag)
         }).disposed(by: disposebag)
         

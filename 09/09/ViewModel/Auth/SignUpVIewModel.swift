@@ -26,7 +26,7 @@ class SignUpViewModel: ViewModelType {
     }
     
     func transform(_ input: Input) -> Output {
-        let api = AuthAPI()
+        let api = Service()
         let info = Driver.combineLatest(input.name, input.username, input.password)
         let isEnable = info.map {!$0.0.isEmpty && !$0.1.isEmpty && !$0.2.isEmpty}
         let result = PublishSubject<String>()
@@ -34,17 +34,8 @@ class SignUpViewModel: ViewModelType {
         input.doneTap.withLatestFrom(info).asObservable().subscribe(onNext: {[weak self]
             name, userN, pw in
             guard let self = self else {return}
-            api.signUp(name, userN, pw).subscribe(onNext: { response in
-                switch response{
-                case .okay:
-                    result.onCompleted()
-                case .wrongRq:
-                    result.onNext("닉네임은 최대 10까지 가능합니다.")
-                case .conflict:
-                    result.onNext("닉네임 또는 아이디가 존재합니다.")
-                default:
-                    result.onNext("회원가입 실패")
-                }
+            api.signUp(name, userN, pw).subscribe({_ in
+                result.onCompleted()
             }).disposed(by: self.disposebag)
         }).disposed(by: disposebag)
         return Output(isEnable: isEnable.asDriver(),

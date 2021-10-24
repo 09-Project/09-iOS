@@ -26,7 +26,7 @@ class ChangePwViewModel: ViewModelType {
     }
     
     func transform(_ input: Input) -> Output {
-        let api = AuthAPI()
+        let api = Service()
         let result = PublishSubject<String>()
         let info = Driver.combineLatest(input.password, input.new_password, input.check_password)
         let isEnable = info.map { !$0.0.isEmpty && !$0.1.isEmpty && !$0.2.isEmpty}
@@ -34,19 +34,8 @@ class ChangePwViewModel: ViewModelType {
         input.doneTap.withLatestFrom(info).asObservable().subscribe(onNext: {[weak self]
             pw, newpw, check in
             guard let self = self else {return}
-            api.changePW(pw, newpw).subscribe(onNext: { response in
-                switch response {
-                case .okay:
-                    result.onCompleted()
-                case .wrongRq:
-                    print("기존비밀번호와 일치하지 않습니다.")
-                case .tokenError:
-                    print("토큰이 만료되었습니다.")
-                case .notFound:
-                    print("회원이 존재하지 않습니다.")
-                default:
-                    print("비밀번호 변경 실패")
-                }
+            api.changePW(pw, newpw).subscribe({_ in
+                result.onCompleted()
             }).disposed(by: self.disposebag)
         }).disposed(by: disposebag)
         
