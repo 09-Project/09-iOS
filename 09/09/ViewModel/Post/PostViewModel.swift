@@ -24,12 +24,12 @@ class PostViewModel: ViewModelType {
     
     struct Output{
         let isEnable: Driver<Bool>
-        let result: Signal<String>
+        let result: Signal<Bool>
     }
     
     func transform(_ input: Input) -> Output {
         let api = Service()
-        let result = PublishSubject<String>()
+        let result = PublishSubject<Bool>()
         let info = Driver.combineLatest(input.title, input.content, input.transactionRegion,
                                         input.openChatLink, input.image)
         let isEnabel = info.map { !$0.0.isEmpty && !$0.1.isEmpty && !$0.2.isEmpty && !$0.3.isEmpty
@@ -43,6 +43,6 @@ class PostViewModel: ViewModelType {
                 result.onCompleted()
             }).disposed(by: disposebag)
         
-        return Output(isEnable: isEnabel.asDriver(onErrorJustReturn: false), result: result.asSignal(onErrorJustReturn: ""))
+        return Output(isEnable: isEnabel.asDriver(onErrorJustReturn: false), result: result.asSignal(onErrorJustReturn: false))
     }
 }
