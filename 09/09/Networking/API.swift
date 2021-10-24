@@ -36,6 +36,7 @@ enum API {
                       _ openChatLink: String, _ image: String)
     case end(_ postID: Int)
     case seeLikePost
+    case seeDeletePost(_ member_Id: Int)
     
 }
 
@@ -82,6 +83,8 @@ extension API: TargetType {
             return "/like/{\(id)}"
         case .seeLikePost:
             return "/member/like"
+        case .seeDeletePost(let id):
+            return "/member/completed/{\(id)}"
         }
     }
     
@@ -89,7 +92,7 @@ extension API: TargetType {
         switch self {
         case .likeObj, .signUp, .signIn, .postProducts:
             return .post
-        case .profile, .seeLikePost,.getInformation, .seeProducts, .products, .other, .search:
+        case .profile, .seeLikePost,.getInformation, .seeProducts, .products, .other, .search, .seeDeletePost:
             return .get
         case .putProducts, .changepw, .changeInformation:
             return .patch
