@@ -109,21 +109,21 @@ final class Service {
         return provider.rx.request(.seeLikePost)
             .filterSuccessfulStatusCodes()
             .map(PostList.self)
-            .map{($0,.ok)}
+            .map{return ($0, .ok)}
     }
     
     func getInformation() -> Single<(InformationModel?, networkingResult)> {
         return provider.rx.request(.getInformation)
             .filterSuccessfulStatusCodes()
             .map(InformationModel.self)
-            .map{($0, .ok)}
+            .map{return ($0, .ok)}
     }
     
     func profile(_ memberID: Int) -> Single<(ProfileModel?, networkingResult)> {
         return provider.rx.request(.profile(memberID))
             .filterSuccessfulStatusCodes()
             .map(ProfileModel.self)
-            .map{($0, .ok)}
+            .map{return ($0, .ok)}
     }
         
     func like(_ postID: Int) -> Single<networkingResult> {
@@ -136,6 +136,13 @@ final class Service {
         return provider.rx.request(.deleteLike(postId))
             .filterSuccessfulStatusCodes()
             .map{ _ -> networkingResult in return .deleteOk}
+    }
+    
+    func seeDeletePost(_ memberID: Int) -> Single<(PostList?, networkingResult)> {
+        return provider.rx.request(.seeDeletePost(memberID))
+            .filterSuccessfulStatusCodes()
+            .map(PostList.self)
+            .map{return ($0, .ok)}
     }
     
 }
