@@ -21,26 +21,23 @@ class SignInModel: ViewModelType {
     
     struct Output {
         let isEnable: Driver<Bool>
-        let result: Signal<String>
+        let result: Signal<Bool>
     }
     
     func transform(_ input: Input) -> Output {
         let api = Service()
         let info = Driver.combineLatest(input.username, input.password)
         let isEnabel = info.map{!$0.0.isEmpty && !$0.1.isEmpty}
-        let result = PublishSubject<String>()
+        let result = PublishSubject<Bool>()
         
-        input.doneTap.asObservable().withLatestFrom(info).subscribe(onNext: { [weak self]
-            userN, userP in
-            
-            guard let self = self else {return}
-            
-            api.signIn(userN, userP).subscribe({_ in
+        input.doneTap.asObservable().withLatestFrom(info)
+            .flatMap { userN, userP in
+                api.signIn(userN, userP)
+            }.subscribe(onNext: { _ in
                 result.onCompleted()
-            }).disposed(by: self.disposebag)
-        }).disposed(by: disposebag)
+            }).disposed(by: disposebag)
         
         return Output(isEnable: isEnabel.asDriver(),
-                      result: result.asSignal(onErrorJustReturn: "아이디나 비밀번호가 일치하지 않습니다."))
+                      result: result.asSignal(onErrorJustReturn: false))
     }
 }
