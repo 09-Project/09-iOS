@@ -35,4 +35,9 @@ struct Token {
             return UserDefaults.standard.set(newValue, forKey: "refreshToken")
         }
     }
+    
+    static func logOut() {
+        accessToken = nil
+        refreshToken = nil
+    }
 }
