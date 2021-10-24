@@ -22,24 +22,23 @@ class ChangePwViewModel: ViewModelType {
     
     struct Output {
         let isEnable: Driver<Bool>
-        let result: Signal<String>
+        let result: Signal<Bool>
     }
     
     func transform(_ input: Input) -> Output {
         let api = Service()
-        let result = PublishSubject<String>()
+        let result = PublishSubject<Bool>()
         let info = Driver.combineLatest(input.password, input.new_password, input.check_password)
         let isEnable = info.map { !$0.0.isEmpty && !$0.1.isEmpty && !$0.2.isEmpty}
         
-        input.doneTap.withLatestFrom(info).asObservable().subscribe(onNext: {[weak self]
-            pw, newpw, check in
-            guard let self = self else {return}
-            api.changePW(pw, newpw).subscribe({_ in
+        input.doneTap.asObservable().withLatestFrom(info)
+            .flatMap{ pw, newPw, checkPw in
+                api.changePW(pw, newPw)
+            }.subscribe(onNext: { _ in
                 result.onCompleted()
-            }).disposed(by: self.disposebag)
-        }).disposed(by: disposebag)
+            }).disposed(by: disposebag)
         
        return Output(isEnable: isEnable.asDriver(),
-               result: result.asSignal(onErrorJustReturn: "비밀번호가 일치하지 않습니다."))
+               result: result.asSignal(onErrorJustReturn: false))
     }
 }
