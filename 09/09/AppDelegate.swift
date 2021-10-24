@@ -14,7 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        AuthAPI().refreshToken()
+        Service().refreshToken()
         return true
     }
 
@@ -33,7 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func applicationWillEnterForeground(_ application: UIApplication) {
-        AuthAPI().refreshToken()
+        Service().refreshToken()
     }
 
 
