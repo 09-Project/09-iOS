@@ -68,15 +68,8 @@ class MainCollectionViewCell: UICollectionViewCell {
     
     private func setup() {
         self.backgroundColor = .white
-        addSubview(imgView)
-        addSubview(titleLabel)
-        addSubview(locationLabel)
-        addSubview(label)
-        addSubview(pinImg)
-        addSubview(heartBtn)
-        addSubview(priceLabel)
-        addSubview(endView)
-        addSubview(endLabel)
+        [imgView, titleLabel, locationLabel, label, pinImg,
+         heartBtn, priceLabel, endView, endLabel].forEach{self.addSubview($0)}
         
         self.imgView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(8)
