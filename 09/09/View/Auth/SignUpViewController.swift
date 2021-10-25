@@ -142,11 +142,13 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         switch textField.tag {
         case 1:
-           underLine(view: idView, txt: idTxt, color: "mainColor")
+            idView.layer.addBorder([.bottom], color: UIColor.init(named: "mainColor")!, width: 1)
+            
         case 2:
-            underLine(view: pwView, txt: pwTxt, color: "mainColor")
+            pwView.layer.addBorder([.bottom], color: UIColor.init(named: "mainColor")!, width: 1)
+            
         case 3:
-           underLine(view: nickView, txt: nickNameTxt, color: "mainColor")
+            nickView.layer.addBorder([.bottom], color: UIColor.init(named: "mainColor")!, width: 1)
         default:
             print(Error.self)
             
@@ -157,11 +159,11 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         switch textField.tag {
         case 1:
-            underLine(view: idView, txt: idTxt, color: "placeholderColor")
+            idView.layer.addBorder([.bottom], color: UIColor.init(named: "placeholderColor")!, width: 1)
         case 2:
-           underLine(view: pwView, txt: pwTxt, color: "placeholderColor")
+            pwView.layer.addBorder([.bottom], color: UIColor.init(named: "placeholderColor")!, width: 1)
         case 3:
-           underLine(view: nickView, txt: nickNameTxt, color: "placeholderColor")
+            nickView.layer.addBorder([.bottom], color: UIColor.init(named: "placeholderColor")!, width: 1)
         default:
             print(Error.self)
             
@@ -182,8 +184,8 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         })
         
         output.result.emit(
-            onNext: {[unowned self] _ in self.idErrorLabel.isHidden = false
-                nickErrorLabel.isHidden = false
+            onNext: {[unowned self] bool in self.idErrorLabel.isHidden = bool
+                nickErrorLabel.isHidden = bool
             },
             onCompleted: {[unowned self] in
                 let VC = SignInViewController()
@@ -309,11 +311,11 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
     }
     
     private func setBorder() {
-        underLine(view: nickView, txt: nil, color: "placeholderColor")
+        nickView.layer.addBorder([.bottom], color: UIColor.init(named: "placeholderColor")!, width: 1)
         
-        underLine(view: idView, txt: nil, color: "placeholderColor")
+        idView.layer.addBorder([.bottom], color: UIColor.init(named: "placeholderColor")!, width: 1)
         
-        underLine(view: pwView, txt: nil, color: "placeholderColor")
+        pwView.layer.addBorder([.bottom], color: UIColor.init(named: "placeholderColor")!, width: 1)
     }
     
     @objc

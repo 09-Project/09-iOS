@@ -8,11 +8,15 @@
 import UIKit
 import RxSwift
 import RxCocoa
-import Tabman
 
 class MyPageViewController: UIViewController {
     
     let identfier = "cell"
+    private let disposebag = DisposeBag()
+    private let viewmodel = MyPageViewModel()
+    private var postDidTap = true
+    private var likePostDidTap = true
+    private var detailDidTap = true
     
     private lazy var profileImg = UIImageView().then {
         $0.layer.cornerRadius = 10
@@ -111,10 +115,34 @@ class MyPageViewController: UIViewController {
         $0.textColor = .init(named: "mainColor")
     }
     
+    private lazy var postBtn = UIButton().then {
+        $0.backgroundColor = .white
+        $0.setTitle("상품", for: .normal)
+        $0.titleLabel!.font = .init(name: Font.fontMedium.rawValue, size: 15)
+        $0.setTitleColor(.black, for: .normal)
+    }
+    
+    private lazy var likePostBtn = UIButton().then {
+        $0.backgroundColor = .white
+        $0.setTitle("찐함 상품", for: .normal)
+        $0.titleLabel!.font = .init(name: Font.fontMedium.rawValue, size: 15)
+        $0.setTitleColor(.black, for: .normal)
+    }
+     
+    private lazy var detailBtn = UIButton().then {
+        $0.backgroundColor = .white
+        $0.setTitle("거래 내역", for: .normal)
+        $0.titleLabel!.font = .init(name: Font.fontMedium.rawValue, size: 15)
+        $0.setTitleColor(.black, for: .normal)
+    }
+    
     
     private lazy var collectionView = UICollectionView().then {
         $0.backgroundColor = .white
     }
+    
+    private let logoutBtn = UIBarButtonItem(title: "로그아웃", style: .plain,
+                                            target: self, action: nil)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -123,31 +151,76 @@ class MyPageViewController: UIViewController {
         collectionView.register(MainCollectionViewCell.self,
                                 forCellWithReuseIdentifier: identfier)
         view.backgroundColor = .white
+        setBtn()
     }
     
     override func viewDidLayoutSubviews() {
         setNavigationItem()
+        setupView()
     }
+
     
-    
+    private func bindViewModel() {
+//        let input = MyPageViewModel.Input(doneTap: <#T##Driver<Void>#>, doneTap1: <#T##Driver<Void>#>, doneTap2: <#T##Driver<Void>#>, showInfo: <#T##Signal<String>#>, page: <#T##Int#>, memberID: <#T##Int#>)
+        
+//        let output = viewmodel.transform(input)
+    }
     
     private func setNavigationItem(){
         navigationItem.title = "마이페이지"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "로그아웃",
-                                                            style: .plain,
-                                                            target: self,
-                                                            action: #selector(rightBarBtnDidTap))
+        navigationItem.rightBarButtonItem = logoutBtn
         navigationItem.rightBarButtonItem?.tintColor = .red
     }
     
-    @objc
-    private func rightBarBtnDidTap() {
+    private func setBtn() {
+        postBtn.rx.tap.subscribe(onNext: {
+            if(self.postDidTap) {
+            self.postBtn.layer.addBorder([.bottom], color: .init(named: "mainColor")!, width: 1)
+                self.postDidTap.toggle()
+                self.likePostDidTap = true
+                self.detailDidTap = true
+            }
+            else {
+                self.postBtn.layer.addBorder([.bottom], color: .init(named: "placeholderColor")!, width: 1)
+                self.postDidTap.toggle()
+            }
+        }).disposed(by: disposebag)
         
+        likePostBtn.rx.tap.subscribe(onNext: {
+            if(self.likePostDidTap) {
+            self.likePostBtn.layer.addBorder([.bottom], color: .init(named: "mainColor")!, width: 1)
+                self.likePostDidTap.toggle()
+                self.postDidTap = true
+                self.detailDidTap = true
+            }
+            else {
+                self.likePostBtn.layer.addBorder([.bottom], color: .init(named: "placeholderColor")!, width: 1)
+                self.likePostDidTap.toggle()
+            }
+        }).disposed(by: disposebag)
+        
+        detailBtn.rx.tap.subscribe(onNext: {
+            if(self.detailDidTap) {
+            self.detailBtn.layer.addBorder([.bottom], color: .init(named: "mainColor")!, width: 1)
+                self.detailDidTap.toggle()
+                self.likePostDidTap = true
+                self.postDidTap = true
+            }
+            else {
+                self.detailBtn.layer.addBorder([.bottom], color: .init(named: "placeholderColor")!, width: 1)
+                self.detailDidTap.toggle()
+            }
+        }).disposed(by: disposebag)
+        
+        logoutBtn.rx.tap.subscribe(onNext: { _ in
+            Token.logOut()
+        }).disposed(by: disposebag)
     }
+    
     private func setupView() {
         [profileImg, nameLabel, gearBtn, introduceLabel, productView, productNum, productLabel,
         prizeView, prizeNum, prizeLabel, receiveView, receiveNum, receiveLabel, transactionView,
-         transactionNum, transactionLabel, collectionView].forEach {self.view.addSubview($0)}
+         transactionNum, transactionLabel, collectionView, postBtn, likePostBtn, detailBtn].forEach {self.view.addSubview($0)}
         
         
         self.profileImg.snp.makeConstraints {
@@ -247,6 +320,27 @@ class MyPageViewController: UIViewController {
             $0.top.equalTo(self.transactionNum.snp.bottom).offset(13)
             $0.leading.lessThanOrEqualTo(self.transactionView.snp.leading).offset(12)
             $0.trailing.greaterThanOrEqualTo(self.transactionView.snp.trailing).offset(-12)
+        }
+        
+        self.postBtn.snp.makeConstraints {
+            $0.top.equalTo(productView.snp.bottom).inset(36)
+            $0.leading.equalToSuperview().inset(67)
+        }
+        
+        self.likePostBtn.snp.makeConstraints {
+            $0.top.equalTo(productView.snp.bottom).inset(36)
+            $0.leading.lessThanOrEqualTo(postBtn.snp.trailing).inset(83)
+        }
+        
+        self.detailBtn.snp.makeConstraints {
+            $0.top.equalTo(productView.snp.bottom).inset(36)
+            $0.leading.lessThanOrEqualTo(likePostBtn.snp.trailing).inset(51)
+            $0.trailing.equalToSuperview().inset(66)
+        }
+        
+        self.collectionView.snp.makeConstraints {
+            $0.top.equalTo(postBtn.snp.bottom).inset(10)
+            $0.leading.trailing.bottom.equalToSuperview().inset(0)
         }
         
     }

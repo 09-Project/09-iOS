@@ -97,8 +97,8 @@ class ChangePasswordViewController: UIViewController, UITextFieldDelegate {
             changeBtn.isEnabled = bool
         }).disposed(by: disposebag)
         
-        output.result.emit(onNext: {[unowned self] text in
-            errorLabel.isHidden = false},
+        output.result.emit(onNext: {[unowned self] bool in
+            errorLabel.isHidden = bool},
                            onCompleted: {[unowned self] in
             let VC = MyPageViewController()
             present(VC, animated: true, completion: nil)

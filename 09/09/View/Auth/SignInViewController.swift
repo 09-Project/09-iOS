@@ -139,10 +139,11 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         switch textField.tag {
         case 1:
-            underLine(view: idView, txt: idTxt, color: "mainColor")
+            idView.layer.addBorder([.bottom], color: UIColor.init(named: "mainColor")!, width: 1)
             
         case 2:
-            underLine(view: pwView, txt: pwTxt, color: "mainColor")
+            
+            pwView.layer.addBorder([.bottom], color: UIColor.init(named: "mainColor")!, width: 1)
         default:
             print(Error.self)
             
@@ -152,9 +153,9 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         switch textField.tag {
         case 1:
-            underLine(view: idView, txt: idTxt, color: "placeholderColor")
+            idView.layer.addBorder([.bottom], color: UIColor.init(named: "placeholderColor")!, width: 1)
         case 2:
-            underLine(view: pwView, txt: pwTxt, color: "placeholderColor")
+            pwView.layer.addBorder([.bottom], color: UIColor.init(named: "placeholderColor")!, width: 1)
         default:
             print(Error.self)
             
@@ -174,8 +175,8 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         }).disposed(by: disposeBag)
         
         output.result.emit(
-            onNext: {[unowned self] _ in
-                errorLabel.isHidden = false
+            onNext: {[unowned self] bool in
+                errorLabel.isHidden = bool
             },
             onCompleted: {[unowned self] in let VC = MainViewController()
                 present(VC, animated: true, completion: nil)
@@ -262,8 +263,8 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         }
     }
     private func setBorder() {
-        underLine(view: idView, txt: nil, color: "placeholderColor")
-        underLine(view: pwView, txt: nil, color: "placeholderColor")
+        idView.layer.addBorder([.bottom], color: UIColor.init(named: "mainColor")!, width: 1)
+        pwView.layer.addBorder([.bottom], color: UIColor.init(named: "mainColor")!, width: 1)
     }
     
     @objc

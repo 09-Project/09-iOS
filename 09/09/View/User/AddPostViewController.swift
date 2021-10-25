@@ -10,7 +10,6 @@ import RxSwift
 import RxCocoa
 import SnapKit
 import Then
-import Alamofire
 
 class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDelegate {
     
@@ -187,9 +186,6 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     func textFieldDidBeginEditing(_ textField: UITextField) {
         if(textField == price.Txt || textField == area.Txt || textField == openChat.Txt){
             scrollView.setContentOffset(CGPoint(x: 0, y: 350), animated: true)
-        }
-        else  {
-            
         }
     }
     
