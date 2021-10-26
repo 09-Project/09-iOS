@@ -12,3 +12,4 @@ struct InformationModel: Codable {
     var profileUrl = String()
     var introduction = String()
 }
+
