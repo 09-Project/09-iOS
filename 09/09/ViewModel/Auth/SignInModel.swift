@@ -30,13 +30,11 @@ class SignInModel: ViewModelType {
         let isEnabel = info.map{!$0.0.isEmpty && !$0.1.isEmpty}
         let result = PublishSubject<Bool>()
         
-        input.doneTap.asObservable().withLatestFrom(info)
-            .flatMap { userN, userP in
-                api.signIn(userN, userP)
-            }.subscribe(onNext: { _ in
-                result.onCompleted()
-            }).disposed(by: disposebag)
-        
+        input.doneTap.withLatestFrom(info).asObservable().flatMap{ userN, userP in
+            api.signIn(userN, userP)
+        }.subscribe(onNext: { _ in
+            result.onCompleted()
+        })
         return Output(isEnable: isEnabel.asDriver(),
                       result: result.asSignal(onErrorJustReturn: false))
     }
