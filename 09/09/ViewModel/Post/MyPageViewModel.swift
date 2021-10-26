@@ -13,46 +13,71 @@ struct MyPageViewModel: ViewModelType {
     private let disposebag = DisposeBag()
     
     struct Input {
-        let doneTap: Driver<Void>
-        let doneTap1: Driver<Void>
-        let doneTap2: Driver<Void>
-        let showInfo: Signal<String>
-        let page: Int
-        let memberID: Int
+        let getUserInfo: Driver<Void>
+        let getPost: Driver<[PostModel]>
+        let getLikePost: Driver<[PostModel]>
+        let getDetail: Driver<[PostModel]>
+        let memberId: Driver<Int>
     }
     
     struct Output {
-        let result: Signal<String>
+        let getUserInfoResult: PublishRelay<Bool>
+        let myInfo: PublishRelay<InformationModel>
+        let post: BehaviorRelay<[PostModel]>
+        let getPostResult: PublishRelay<Bool>
     }
     
     func transform(_ input: Input) -> Output {
         let api = Service()
-        let result = PublishSubject<String>()
+        let getInfoResult = PublishRelay<Bool>()
+        let userInfo = PublishRelay<InformationModel>()
+        let post = BehaviorRelay<[PostModel]>(value: [])
+        let getPostResult = PublishRelay<Bool>()
         
-        input.doneTap.asObservable().subscribe(onNext: { _ in
-            api.products(page: input.page, size: 16).subscribe({ _ in
-                result.onCompleted()
-            }).disposed(by: disposebag)
+        input.getUserInfo.asObservable().flatMap {
+            _ in api.getInformation()
+        }.subscribe(onNext: { data, res in
+            switch res {
+            case .ok:
+                userInfo.accept(data!)
+            default:
+                getInfoResult.accept(false)
+            }
         }).disposed(by: disposebag)
         
-        input.doneTap1.asObservable().subscribe(onNext: { _ in
-            api.seeLikePost().subscribe({ _ in
-                result.onCompleted()
-            }).disposed(by: disposebag)
+        input.getPost.asObservable().flatMap {
+            _ in api.products(page: 0, size: 16)
+        }.subscribe(onNext: { data, res in
+            switch res {
+            case .ok:
+                post.accept(data!.PostList)
+            default:
+                getPostResult.accept(false)
+            }
         }).disposed(by: disposebag)
         
-        input.doneTap2.asObservable().subscribe(onNext: { _ in
-            api.seeDeletePost(input.memberID).subscribe({ _ in
-                result.onCompleted()
-            }).disposed(by: disposebag)
+        input.getLikePost.asObservable().flatMap {
+            _ in api.seeLikePost()
+        }.subscribe(onNext: { data, res in
+            switch res {
+            case .ok:
+                post.accept(data!.PostList)
+            default:
+                getPostResult.accept(false)
+            }
         }).disposed(by: disposebag)
         
-        input.showInfo.asObservable().subscribe(onNext: { _ in
-            api.profile(input.memberID).subscribe({ _ in
-                result.onCompleted()
-            }).disposed(by: disposebag)
+        input.getDetail.asObservable().withLatestFrom(input.memberId).flatMap { id in
+            api.seeDeletePost(id)
+        }.subscribe(onNext: { data, res in
+            switch res {
+            case .ok:
+                post.accept(data!.PostList)
+            default:
+                getPostResult.accept(false)
+            }
         }).disposed(by: disposebag)
         
-        return Output(result: result.asSignal(onErrorJustReturn: "실패했다."))
+        return Output(getUserInfoResult: getInfoResult, myInfo: userInfo, post: post, getPostResult: getPostResult)
     }
 }
