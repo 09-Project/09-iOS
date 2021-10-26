@@ -14,15 +14,15 @@ struct MyPageViewModel: ViewModelType {
     
     struct Input {
         let getUserInfo: Driver<Void>
-        let getPost: Driver<[PostModel]>
-        let getLikePost: Driver<[PostModel]>
-        let getDetail: Driver<[PostModel]>
+        let getPost: Driver<Void>
+        let getLikePost: Driver<Void>
+        let getDetail: Driver<Void>
         let memberId: Driver<Int>
     }
     
     struct Output {
         let getUserInfoResult: PublishRelay<Bool>
-        let myInfo: PublishRelay<InformationModel>
+        let myInfo: PublishRelay<ProfileModel>
         let post: BehaviorRelay<[PostModel]>
         let getPostResult: PublishRelay<Bool>
     }
@@ -30,15 +30,15 @@ struct MyPageViewModel: ViewModelType {
     func transform(_ input: Input) -> Output {
         let api = Service()
         let getInfoResult = PublishRelay<Bool>()
-        let userInfo = PublishRelay<InformationModel>()
+        let userInfo = PublishRelay<ProfileModel>()
         let post = BehaviorRelay<[PostModel]>(value: [])
         let getPostResult = PublishRelay<Bool>()
         
-        input.getUserInfo.asObservable().flatMap {
-            _ in api.getInformation()
+        input.getUserInfo.asObservable().withLatestFrom(input.memberId).flatMap{ id in
+            api.profile(id)
         }.subscribe(onNext: { data, res in
             switch res {
-            case .ok:
+            case . ok:
                 userInfo.accept(data!)
             default:
                 getInfoResult.accept(false)
@@ -78,6 +78,7 @@ struct MyPageViewModel: ViewModelType {
             }
         }).disposed(by: disposebag)
         
-        return Output(getUserInfoResult: getInfoResult, myInfo: userInfo, post: post, getPostResult: getPostResult)
+        return Output(getUserInfoResult: getInfoResult, myInfo: userInfo, post: post,
+                      getPostResult: getPostResult)
     }
 }
