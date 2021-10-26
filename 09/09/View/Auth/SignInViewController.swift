@@ -36,7 +36,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         $0.backgroundColor = .white
         $0.font = UIFont(name: Font.fontRegular.rawValue, size: 14)
         $0.textColor = UIColor.init(named: "mainColor")
-        $0.attributedPlaceholder = NSAttributedString(string: "ID", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: )])
+        $0.attributedPlaceholder = NSAttributedString(string: "ID", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
     }   // 아이디
     
     private lazy var idView = UIView().then {
@@ -188,7 +188,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
          loginBtn, label, moveSignupBtn].forEach { self.view.addSubview($0)}
         
         self.imgView.snp.makeConstraints {
-            $0.top.equalTo(self.view.safeAreaInsets).inset(52)
+            $0.top.equalTo(self.view.safeAreaInsets).offset(52)
             $0.centerX.equalTo(self.view)
             $0.height.equalTo(28)
             $0.width.equalTo(73)
@@ -262,12 +262,12 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
             $0.top.equalTo(self.loginBtn.snp.bottom).offset(12.5)
         }
     }
+    
     private func setBorder() {
         idView.layer.addBorder([.bottom], color: UIColor.init(named: "mainColor")!, width: 1)
         pwView.layer.addBorder([.bottom], color: UIColor.init(named: "mainColor")!, width: 1)
     }
     
-    @objc
     private func changeEyeBtnImg() {
         if eyeBtnBool {
             pwTxt.isSecureTextEntry = false
@@ -281,7 +281,6 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    @objc
     private func changeCheckBtnImg() {
         if checkBtnBool {
             checkBtn.setImage(UIImage(systemName: "checkmark.square"), for: .normal)
