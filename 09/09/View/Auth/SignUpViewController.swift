@@ -143,12 +143,15 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         switch textField.tag {
         case 1:
             idView.layer.addBorder([.bottom], color: UIColor.init(named: "mainColor")!, width: 1)
+            idTxt.textColor = .init(named: "mainColor")
             
         case 2:
             pwView.layer.addBorder([.bottom], color: UIColor.init(named: "mainColor")!, width: 1)
+            pwTxt.textColor = .init(named: "mainColor")
             
         case 3:
             nickView.layer.addBorder([.bottom], color: UIColor.init(named: "mainColor")!, width: 1)
+            nickNameTxt.textColor = .init(named: "mainColor")
         default:
             print(Error.self)
             
@@ -160,10 +163,13 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         switch textField.tag {
         case 1:
             idView.layer.addBorder([.bottom], color: UIColor.init(named: "placeholderColor")!, width: 1)
+            idTxt.textColor = .init(named: "placeholderColor")
         case 2:
             pwView.layer.addBorder([.bottom], color: UIColor.init(named: "placeholderColor")!, width: 1)
+            pwTxt.textColor = .init(named: "placeholderColor")
         case 3:
             nickView.layer.addBorder([.bottom], color: UIColor.init(named: "placeholderColor")!, width: 1)
+            nickNameTxt.textColor = .init(named: "placeholderColor")
         default:
             print(Error.self)
             
