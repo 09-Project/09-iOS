@@ -116,6 +116,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         pwTxt.tag = 2
         moveSignupBtn.rx.tap.subscribe(onNext: { [unowned self] _ in
            let vc = SignUpViewController()
+            vc.modalPresentationStyle = .fullScreen
             present(vc, animated: true, completion: nil)
         }).disposed(by: disposeBag)
     }
@@ -182,6 +183,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
                 errorLabel.isHidden = bool
             },
             onCompleted: {[unowned self] in let VC = MainViewController()
+                VC.modalPresentationStyle = .fullScreen
                 present(VC, animated: true, completion: nil)
             }).disposed(by: disposeBag)
     }
