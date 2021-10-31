@@ -23,6 +23,7 @@ enum API {
     case getInformation
     case profile(_ memberID: Int)
     case changeInformation(_ name: String, _ introduction: String, _ profileURL: String)
+    case myPage
     
     // Post
     case deleteProducts(_ postID: Int)
@@ -85,6 +86,8 @@ extension API: TargetType {
             return "/member/like"
         case .seeDeletePost(let id):
             return "/member/completed/{\(id)}"
+        case .myPage:
+            return "/member/my-page"
         }
     }
     
@@ -92,7 +95,8 @@ extension API: TargetType {
         switch self {
         case .likeObj, .signUp, .signIn, .postProducts:
             return .post
-        case .profile, .seeLikePost,.getInformation, .seeProducts, .products, .other, .search, .seeDeletePost:
+        case .profile, .seeLikePost,.getInformation, .seeProducts, .products, .other, .search, .seeDeletePost,
+                .myPage:
             return .get
         case .putProducts, .changepw, .changeInformation:
             return .patch
@@ -107,6 +111,7 @@ extension API: TargetType {
         switch self {
         case .signIn, .signUp:
             return ["Content-Type" : "application/json"]
+            
         case .refreshToken:
             guard let token = Token.refreshToken else {return ["Content-Type" : "application/json"]}
             return ["Authorization" : token, "Content-Type" : "application/json"]
