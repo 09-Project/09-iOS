@@ -17,7 +17,7 @@ struct MyPageViewModel: ViewModelType {
         let getPost: Driver<Void>
         let getLikePost: Driver<Void>
         let getDetail: Driver<Void>
-        let memberId: Driver<Int>
+        let memberID: Driver<Int>
     }
     
     struct Output {
@@ -34,12 +34,12 @@ struct MyPageViewModel: ViewModelType {
         let post = BehaviorRelay<[PostModel]>(value: [])
         let getPostResult = PublishRelay<Bool>()
         
-        input.getUserInfo.asObservable().withLatestFrom(input.memberId).flatMap{ id in
-            api.profile(id)
+        input.getUserInfo.asObservable().flatMap { _ in
+            api.myPage()
         }.subscribe(onNext: { data, res in
             switch res {
-            case . ok:
-                userInfo.accept(data!)
+            case .ok:
+                userInfo.accept(data!.self)
             default:
                 getInfoResult.accept(false)
             }
@@ -67,7 +67,7 @@ struct MyPageViewModel: ViewModelType {
             }
         }).disposed(by: disposebag)
         
-        input.getDetail.asObservable().withLatestFrom(input.memberId).flatMap { id in
+        input.getDetail.asObservable().withLatestFrom(input.memberID).flatMap { id in
             api.seeDeletePost(id)
         }.subscribe(onNext: { data, res in
             switch res {
