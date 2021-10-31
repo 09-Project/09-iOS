@@ -14,7 +14,9 @@ class PostViewModel: ViewModelType {
     private let disposebag = DisposeBag()
     
     struct Input {
-        let getPost: Driver<Void>
+        let getPost: Signal<Void>
+        let getMorePost: Signal<Void>
+        let getBackPost: Signal<Void>
     }
     
     struct Output {
@@ -26,18 +28,48 @@ class PostViewModel: ViewModelType {
         let api = Service()
         let getPostResult = PublishRelay<Bool>()
         let post = BehaviorRelay<[PostModel]>(value: [])
-        var pagination = 0
+        var page = 0
         
-        input.getPost.asObservable().flatMap{_ in api.products(page: 8, size: 4)}
+        input.getPost.asObservable().flatMap{ _ in api.products(page: 0, size: 16)}
         .subscribe(onNext: { data, res in
             switch res {
             case .ok:
                 post.accept(data!.PostList)
+                getPostResult.accept(true)
             default:
+                print(res)
                 getPostResult.accept(false)
             }
         }).disposed(by: disposebag)
         
+        input.getMorePost.asObservable().map{ page += 1 }.flatMap{ _ in
+            api.products(page: page, size: 16)
+        }.subscribe(onNext: { data, res in
+            switch res {
+            case .ok:
+                post.accept(data!.PostList)
+                getPostResult.accept(true)
+            default:
+                print(res)
+                getPostResult.accept(false)
+            }
+        }).disposed(by: disposebag)
+        
+        input.getBackPost.asObservable().map{ page -= 1}.flatMap{ _ in
+            api.products(page: page, size: 16)
+        }.subscribe(onNext: { data, res in
+            switch res {
+            case .ok:
+                post.accept(data!.PostList)
+                getPostResult.accept(true)
+            default:
+                print(res)
+                getPostResult.accept(false)
+            }
+        }).disposed(by: disposebag)
+        
+        
         return Output(getPostResult: getPostResult, post: post)
     }
 }
+
