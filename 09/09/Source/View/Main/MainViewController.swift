@@ -12,6 +12,11 @@ import SideMenu
 
 class MainViewController: UIViewController {
     
+    private let disposebag = DisposeBag()
+    
+    private let getData = BehaviorRelay<Void>(value: ())
+    
+    
     private let sideMenu = SideMenuNavigationController(
         rootViewController: SideMenuViewController())
     
@@ -95,6 +100,21 @@ class MainViewController: UIViewController {
         imageView.image = image
         navigationItem.titleView = imageView
         setupView()
+    }
+    
+    private func bindViewModel() {
+        let model = MainViewModel()
+        let input = MainViewModel.Input(getPost: getData.asSignal(onErrorJustReturn: ()), getMorePost: pageFrontBtn.rx.tap.asSignal(), getBackPost: pageBackBTn.rx.tap.asSignal())
+        let output = model.transform(input)
+        
+        output.post.bind(to: mainCollectionView.rx.items(cellIdentifier: "cell", cellType: MainCollectionViewCell.self)) { [weak self] row, items, cell in
+            
+            let url = URL(string: items.image)
+            let data = try? Data(contentsOf: url!)
+            cell.imgView.image = UIImage(data: data!)!
+            cell.titleLabel.text = items.title
+            cell.priceLabel.text = String(items.price)
+        }.disposed(by: disposebag)
     }
     
     private func setupView() {
