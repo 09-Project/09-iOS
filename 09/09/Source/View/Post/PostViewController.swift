@@ -13,8 +13,7 @@ class PostViewController: UIViewController {
     
     let identfier = "cell"
     private let disposebag = DisposeBag()
-    
-    private let viewModel = PostViewModel()
+
     private let getData = BehaviorRelay<Void>(value: ())
     
     private lazy var backBtn = UIButton().then {
@@ -136,6 +135,7 @@ class PostViewController: UIViewController {
     }
     
     private func bindViewModel() {
+       
     }
     
     private func setup() {
