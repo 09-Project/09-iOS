@@ -158,12 +158,8 @@ class MyPageViewController: UIViewController {
         setNavigationItem()
         setupView()
     }
-
     
     private func bindViewModel() {
-//        let input = MyPageViewModel.Input(doneTap: <#T##Driver<Void>#>, doneTap1: <#T##Driver<Void>#>, doneTap2: <#T##Driver<Void>#>, showInfo: <#T##Signal<String>#>, page: <#T##Int#>, memberID: <#T##Int#>)
-        
-//        let output = viewmodel.transform(input)
     }
     
     private func setNavigationItem(){

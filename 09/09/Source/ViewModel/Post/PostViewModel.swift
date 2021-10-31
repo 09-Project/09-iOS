@@ -10,6 +10,7 @@ import RxSwift
 import RxCocoa
 
 class PostViewModel: ViewModelType {
+    
     private let disposebag = DisposeBag()
     
     struct Input {
@@ -25,6 +26,7 @@ class PostViewModel: ViewModelType {
         let api = Service()
         let getPostResult = PublishRelay<Bool>()
         let post = BehaviorRelay<[PostModel]>(value: [])
+        var pagination = 0
         
         input.getPost.asObservable().flatMap{_ in api.products(page: 8, size: 4)}
         .subscribe(onNext: { data, res in
