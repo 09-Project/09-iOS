@@ -145,4 +145,20 @@ final class Service {
             .map{return ($0, .ok)}
     }
     
+    
+    func myPage() -> Single<(ProfileModel?, networkingResult)> {
+        return provider.rx.request(.myPage)
+            .filterSuccessfulStatusCodes()
+            .map(ProfileModel.self)
+            .map{return ($0, .ok)}
+    }
+    
+    func changeInformation(_ name: String, _ introduction: String, _ profileUrl: String) -> Single<networkingResult>
+    {
+        return provider.rx.request(.changeInformation(name, introduction, profileUrl))
+            .filterSuccessfulStatusCodes()
+            .map{_ -> networkingResult in return .ok}
+    }
+    
+    
 }
