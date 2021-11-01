@@ -19,20 +19,20 @@ class ChangePasswordViewController: UIViewController, UITextFieldDelegate {
         $0.Label.text = "기존 비밀번호"
         $0.label.isHidden = true
         $0.Txt.attributedPlaceholder = NSAttributedString(string: "기존비밀번호를 입력해주세요",
-                                            attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
+                                            attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")!])
     }
     
     private lazy var newPW = customView().then {
         $0.Label.text = "새 비밀번호"
         $0.Txt.attributedPlaceholder = NSAttributedString(string: "새 비밀번호를 입력해주세요",
-                                            attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
+                                            attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")!])
         $0.label.isHidden = true
     }
     
     private lazy var checkPW = customView().then {
         $0.Label.text = "비밀번호 확인"
         $0.Txt.attributedPlaceholder = NSAttributedString(string: "변경한 비밀번호를 다시 입력해주세요",
-                                            attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
+                                            attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")!])
         $0.label.isHidden = true
     }
     
