@@ -74,7 +74,7 @@ class MainViewModel: ViewModelType {
         }).disposed(by: disposebag)
         
         input.searchBtn.asObservable().withLatestFrom(input.searchTxt).flatMap{ text in
-            api.search(keywords: text, page: page, size: 8)
+            api.search(keywords: text!, page: page, size: 8)
         }.subscribe(onNext: { data, res in
             switch res {
             case .ok:
