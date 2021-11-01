@@ -10,9 +10,7 @@ import RxSwift
 
 class MainCollectionViewCell: UICollectionViewCell {
     
-    private let fontBold = "NotoSansCJKkr-Bold"
-    private let fontRegular = "NotoSansCJKkr-Regular"
-    private let fontMedium = "NotoSansCJKkr-Medium"
+    let disposebag = DisposeBag()
     
     lazy var imgView = UIImageView().then {
         $0.contentMode = .scaleAspectFit
@@ -20,18 +18,18 @@ class MainCollectionViewCell: UICollectionViewCell {
     
     lazy var titleLabel = UILabel().then {
         $0.backgroundColor = .white
-        $0.font = .init(name: fontMedium, size: 14)
+        $0.font = .init(name: Font.fontMedium.rawValue, size: 14)
     }
     
     lazy var locationLabel = UILabel().then {
         $0.backgroundColor = .white
-        $0.font = .init(name: fontRegular, size: 11)
+        $0.font = .init(name: Font.fontRegular.rawValue, size: 11)
     }
     
     lazy var label = UILabel().then {
         $0.text = "공동구매"
         $0.backgroundColor = .init(named: "searchColor")
-        $0.font = .init(name: fontRegular, size: 11)
+        $0.font = .init(name: Font.fontRegular.rawValue, size: 11)
     }
     
     lazy var pinImg = UIImageView().then {
@@ -47,7 +45,7 @@ class MainCollectionViewCell: UICollectionViewCell {
     
     lazy var priceLabel = UILabel().then {
         $0.backgroundColor = .white
-        $0.font = .init(name: fontBold, size: 13)
+        $0.font = .init(name: Font.fontBold.rawValue, size: 13)
     }
     
     lazy var endView = UIView().then {
@@ -57,7 +55,7 @@ class MainCollectionViewCell: UICollectionViewCell {
     
     lazy var endLabel = UILabel().then {
         $0.backgroundColor = .none
-        $0.font = .init(name: fontBold, size: 16)
+        $0.font = .init(name: Font.fontBold.rawValue, size: 16)
         $0.textColor = .white
     }
     
