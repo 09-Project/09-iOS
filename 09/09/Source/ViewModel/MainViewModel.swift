@@ -12,30 +12,31 @@ class MainViewModel: ViewModelType {
     
     private let disposebag = DisposeBag()
     
+    private var posts = [PostModel]()
+    
     struct Input {
         let getPost: Signal<Void>
         let getMorePost: Signal<Void>
         let getBackPost: Signal<Void>
         let searchBtn: Signal<Void>
         let searchTxt: Signal<String?>
-//        let heartBtnTap: Signal<Void>
-//        let postId: Driver<Int>
+        let flagIt: Driver<Int>
     }
     
     struct Output {
         let getPostResult: PublishRelay<Bool>
         let post: BehaviorRelay<[PostModel]>
-//        let getHearResult: PublishRelay<Bool>
+        let flagItResult: PublishRelay<Bool>
     }
     
     func transform(_ input: Input) -> Output {
         let api = Service()
         let getPostResult = PublishRelay<Bool>()
         let post = BehaviorRelay<[PostModel]>(value: [])
-//        let getHeartResult = PublishRelay<Bool>()
+        let flagItResult = PublishRelay<Bool>()
         var page = 0
         
-        input.getPost.asObservable().flatMap{ _ in api.products(page: 0, size: 16)}
+        input.getPost.asObservable().flatMap{ _ in api.products(page: 0, size: 8)}
         .subscribe(onNext: { data, res in
             switch res {
             case .ok:
@@ -60,7 +61,7 @@ class MainViewModel: ViewModelType {
             }
         }).disposed(by: disposebag)
         
-        input.getBackPost.asObservable().map{ page -= 1}.flatMap{ _ in
+        input.getBackPost.asObservable().map{ page -= 1 }.flatMap{ _ in
             api.products(page: page, size: 8)
         }.subscribe(onNext: { data, res in
             switch res {
@@ -84,18 +85,19 @@ class MainViewModel: ViewModelType {
             }
         }).disposed(by: disposebag)
         
-//        input.heartBtnTap.asObservable().withLatestFrom(input.postId).flatMap{ id in
-//            api.like(id)
-//        }.subscribe(onNext: { res in
-//            switch res {
-//            case .ok:
-//                getHeartResult.accept(true)
-//            default:
-//                getHeartResult.accept(false)
-//            }
-//        }).disposed(by: disposebag)
+        input.flagIt.asObservable().flatMap{ row in
+            api.like(self.posts[row].id)
+        }.subscribe(onNext: { res in
+            switch res {
+            case .ok:
+                flagItResult.accept(true)
+            default:
+                flagItResult.accept(false)
+            }
+        }).disposed(by: disposebag)
         
-        return Output(getPostResult: getPostResult, post: post)
+        
+        return Output(getPostResult: getPostResult, post: post, flagItResult: flagItResult)
     }
 }
 
