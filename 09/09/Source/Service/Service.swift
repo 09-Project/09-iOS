@@ -55,24 +55,24 @@ final class Service {
             .map{ _ -> networkingResult in return .deleteOk}
     }
     
-    func seeProducts(_ post_id: Int) -> Single<(PostList?, networkingResult)> {
+    func seeProducts(_ post_id: Int) -> Single<(posts?, networkingResult)> {
         return provider.rx.request(.seeProducts(post_id))
             .filterSuccessfulStatusCodes()
-            .map(PostList.self)
+            .map(posts.self)
             .map{return ($0, .ok)}
     }
     
-    func products(page: Int, size: Int) -> Single<(PostList?, networkingResult)> {
+    func products(page: Int, size: Int) -> Single<(posts?, networkingResult)> {
         return provider.rx.request(.products(page, size))
             .filterSuccessfulStatusCodes()
-            .map(PostList.self)
+            .map(posts.self)
             .map{return ($0, .ok)}
     }
-    func search(keywords: String, page: Int, size: Int) -> Single<(PostList?,
+    func search(keywords: String, page: Int, size: Int) -> Single<(posts?,
                                                                    networkingResult)> {
         return provider.rx.request(.search(keywords, page, size))
             .filterSuccessfulStatusCodes()
-            .map(PostList.self)
+            .map(posts.self)
             .map{return ($0, .ok)}
     }
     
@@ -105,10 +105,10 @@ final class Service {
             .map{_ -> networkingResult in return .okay}
     }
     
-    func seeLikePost() -> Single<(PostList?, networkingResult)> {
+    func seeLikePost() -> Single<(posts?, networkingResult)> {
         return provider.rx.request(.seeLikePost)
             .filterSuccessfulStatusCodes()
-            .map(PostList.self)
+            .map(posts.self)
             .map{return ($0, .ok)}
     }
     
@@ -138,10 +138,10 @@ final class Service {
             .map{ _ -> networkingResult in return .deleteOk}
     }
     
-    func seeDeletePost(_ memberID: Int) -> Single<(PostList?, networkingResult)> {
+    func seeDeletePost(_ memberID: Int) -> Single<(posts?, networkingResult)> {
         return provider.rx.request(.seeDeletePost(memberID))
             .filterSuccessfulStatusCodes()
-            .map(PostList.self)
+            .map(posts.self)
             .map{return ($0, .ok)}
     }
     
