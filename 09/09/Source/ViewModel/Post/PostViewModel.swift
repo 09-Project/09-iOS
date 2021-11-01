@@ -34,7 +34,7 @@ class PostViewModel: ViewModelType {
         .subscribe(onNext: { data, res in
             switch res {
             case .ok:
-                post.accept(data!.PostList)
+                post.accept(data!.posts)
                 getPostResult.accept(true)
             default:
                 print(res)
@@ -47,7 +47,7 @@ class PostViewModel: ViewModelType {
         }.subscribe(onNext: { data, res in
             switch res {
             case .ok:
-                post.accept(data!.PostList)
+                post.accept(data!.posts)
                 getPostResult.accept(true)
             default:
                 print(res)
@@ -60,7 +60,7 @@ class PostViewModel: ViewModelType {
         }.subscribe(onNext: { data, res in
             switch res {
             case .ok:
-                post.accept(data!.PostList)
+                post.accept(data!.posts)
                 getPostResult.accept(true)
             default:
                 print(res)
