@@ -15,13 +15,14 @@ class MainViewController: UIViewController {
     private let disposebag = DisposeBag()
     
     private let getData = BehaviorRelay<Void>(value: ())
-    
+    var post_id = Int()
+    private let flagIt = PublishSubject<Int>()
+    let identfier = "cell"
     
     private let sideMenu = SideMenuNavigationController(
         rootViewController: SideMenuViewController())
     
-    let identfier = "cell"
-
+    
     private lazy var searchField = UITextField().then {
         $0.backgroundColor = .init(named: "searchColor")
         $0.textAlignment = .left
@@ -62,7 +63,7 @@ class MainViewController: UIViewController {
         $0.setImage(.init(systemName: "arrowtriangle.backward.square"), for: .normal)
         $0.tintColor = .init(named: "mainColor")
     }
-
+    
     private lazy var pageFrontBtn = UIButton().then {
         $0.backgroundColor = .white
         $0.setImage(.init(systemName: "arrowtriangle.forward.square"), for: .normal)
@@ -73,24 +74,22 @@ class MainViewController: UIViewController {
         $0.backgroundColor = .white
     }
     
+    private lazy var lineBtn = UIBarButtonItem(image: .init(named: "line.horizontal.3"), style: .plain, target: self, action: nil)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         view.backgroundColor = .white
         let img = UIImage(named: "logo&symbolImg")
         navigationItem.titleView = UIImageView(image: img)
         sideMenu.leftSide = false
         SideMenuManager.default.rightMenuNavigationController = sideMenu
         SideMenuManager.default.addPanGestureToPresent(toView: view)
-        navigationItem.leftBarButtonItem = UIBarButtonItem(
-            image: .init(systemName: "line.horizontal.3"),
-            style: .plain,
-            target: self,
-            action: #selector(sideMenuDidTap))
+        lineBtn.rx.tap.subscribe(onNext: { _ in
+            self.present(self.sideMenu, animated: true, completion: nil)
+        }).disposed(by: disposebag)
         mainCollectionView.delegate = self
         mainCollectionView.dataSource = self
-        mainCollectionView.register(MainCollectionViewCell.self,
-                                    forCellWithReuseIdentifier: identfier)
     }
     
     override func viewDidLayoutSubviews() {
@@ -104,17 +103,30 @@ class MainViewController: UIViewController {
     
     private func bindViewModel() {
         let model = MainViewModel()
-        let input = MainViewModel.Input(getPost: getData.asSignal(onErrorJustReturn: ()), getMorePost: pageFrontBtn.rx.tap.asSignal(), getBackPost: pageBackBTn.rx.tap.asSignal())
+        let input = MainViewModel.Input(
+            getPost: getData.asSignal(onErrorJustReturn: ()),
+            getMorePost: pageFrontBtn.rx.tap.asSignal(),
+            getBackPost: pageBackBTn.rx.tap.asSignal(),
+            searchBtn: searchBtn.rx.tap.asSignal(),
+            searchTxt: searchField.rx.text.asSignal(onErrorJustReturn: ""),
+            flagIt: flagIt.asDriver(onErrorJustReturn: 0)
+        )
+        
         let output = model.transform(input)
         
-        output.post.bind(to: mainCollectionView.rx.items(cellIdentifier: "cell", cellType: MainCollectionViewCell.self)) { [weak self] row, items, cell in
-            
+        output.post.bind(to: mainCollectionView.rx.items(cellIdentifier: "cell", cellType: MainCollectionViewCell.self)) { row, items, cell in
             let url = URL(string: items.image)
             let data = try? Data(contentsOf: url!)
             cell.imgView.image = UIImage(data: data!)!
             cell.titleLabel.text = items.title
             cell.priceLabel.text = String(items.price)
+            cell.label.text = items.purpose
+            
+            cell.heartBtn.rx.tap.subscribe(onNext: {
+                self.flagIt.onNext(row)
+            }).disposed(by: cell.disposebag)
         }.disposed(by: disposebag)
+        
     }
     
     private func setupView() {
