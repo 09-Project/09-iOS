@@ -19,6 +19,6 @@ struct PostModel: Codable {
     let image: String
 }
 
-struct PostList: Codable {
-    var PostList: [PostModel]
+struct posts: Codable {
+    var posts: [PostModel]
 }
