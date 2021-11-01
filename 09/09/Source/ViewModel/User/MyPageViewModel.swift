@@ -50,7 +50,7 @@ struct MyPageViewModel: ViewModelType {
         }.subscribe(onNext: { data, res in
             switch res {
             case .ok:
-                post.accept(data!.PostList)
+                post.accept(data!.posts)
             default:
                 getPostResult.accept(false)
             }
@@ -61,7 +61,7 @@ struct MyPageViewModel: ViewModelType {
         }.subscribe(onNext: { data, res in
             switch res {
             case .ok:
-                post.accept(data!.PostList)
+                post.accept(data!.posts)
             default:
                 getPostResult.accept(false)
             }
@@ -72,7 +72,7 @@ struct MyPageViewModel: ViewModelType {
         }.subscribe(onNext: { data, res in
             switch res {
             case .ok:
-                post.accept(data!.PostList)
+                post.accept(data!.posts)
             default:
                 getPostResult.accept(false)
             }
