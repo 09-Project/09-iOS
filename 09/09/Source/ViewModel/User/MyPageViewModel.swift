@@ -17,7 +17,7 @@ struct MyPageViewModel: ViewModelType {
         let getPost: Driver<Void>
         let getLikePost: Driver<Void>
         let getDetail: Driver<Void>
-        let memberID: Driver<Int>
+        let memberID: Int
     }
     
     struct Output {
@@ -46,7 +46,7 @@ struct MyPageViewModel: ViewModelType {
         }).disposed(by: disposebag)
         
         input.getPost.asObservable().flatMap {
-            _ in api.products(page: 0, size: 16)
+            _ in api.products(page: 0, size: 8)
         }.subscribe(onNext: { data, res in
             switch res {
             case .ok:
@@ -67,8 +67,8 @@ struct MyPageViewModel: ViewModelType {
             }
         }).disposed(by: disposebag)
         
-        input.getDetail.asObservable().withLatestFrom(input.memberID).flatMap { id in
-            api.seeDeletePost(id)
+        input.getDetail.asObservable().flatMap { _ in
+            api.seeDeletePost(input.memberID)
         }.subscribe(onNext: { data, res in
             switch res {
             case .ok:
