@@ -12,11 +12,15 @@ import RxCocoa
 class MyPageViewController: UIViewController {
     
     let identfier = "cell"
+    var memberID = Int()
+    
     private let disposebag = DisposeBag()
     private let viewmodel = MyPageViewModel()
     private var postDidTap = true
     private var likePostDidTap = true
     private var detailDidTap = true
+    
+    private let getProfileData = BehaviorRelay<Void>(value: ())
     
     private lazy var profileImg = UIImageView().then {
         $0.layer.cornerRadius = 10
@@ -128,7 +132,7 @@ class MyPageViewController: UIViewController {
         $0.titleLabel!.font = .init(name: Font.fontMedium.rawValue, size: 15)
         $0.setTitleColor(.black, for: .normal)
     }
-     
+    
     private lazy var detailBtn = UIButton().then {
         $0.backgroundColor = .white
         $0.setTitle("거래 내역", for: .normal)
@@ -143,7 +147,7 @@ class MyPageViewController: UIViewController {
     
     private let logoutBtn = UIBarButtonItem(title: "로그아웃", style: .plain,
                                             target: self, action: nil)
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.delegate = self
@@ -160,6 +164,31 @@ class MyPageViewController: UIViewController {
     }
     
     private func bindViewModel() {
+        let model = MyPageViewModel()
+        let input = MyPageViewModel.Input(getUserInfo: getProfileData.asDriver(), getPost: postBtn.rx.tap.asDriver(), getLikePost: likePostBtn.rx.tap.asDriver(), getDetail: detailBtn.rx.tap.asDriver(), memberID: memberID)
+        
+        let output = model.transform(input)
+        
+        output.myInfo.subscribe(onNext: { [self] data in
+            let url = URL(string: data.profileUrl)
+            let img = try? Data(contentsOf: url!)
+            profileImg.image = UIImage(data: img!)
+            nameLabel.text = data.name
+            introduceLabel.text = data.introduction
+            productNum.text = String(data.allPostCount)
+            prizeNum.text = String(data.likePostCount)
+            receiveNum.text = String(data.getLikesCount)
+            transactionNum.text = String(data.completedPostCount)
+        }).disposed(by: disposebag)
+        
+        output.post.bind(to: collectionView.rx.items(cellIdentifier: "cell", cellType: MainCollectionViewCell.self)) { row, items, cell in
+            let url = URL(string: items.image)
+            let data = try? Data(contentsOf: url!)
+            cell.imgView.image = UIImage(data: data!)
+            cell.titleLabel.text = items.title
+            cell.priceLabel.text = String(items.price)
+            cell.label.text = items.purpose
+        }.disposed(by: disposebag)
     }
     
     private func setNavigationItem(){
@@ -171,7 +200,7 @@ class MyPageViewController: UIViewController {
     private func setBtn() {
         postBtn.rx.tap.subscribe(onNext: {
             if(self.postDidTap) {
-            self.postBtn.layer.addBorder([.bottom], color: .init(named: "mainColor")!, width: 1)
+                self.postBtn.layer.addBorder([.bottom], color: .init(named: "mainColor")!, width: 1)
                 self.postDidTap.toggle()
                 self.likePostDidTap = true
                 self.detailDidTap = true
@@ -184,7 +213,7 @@ class MyPageViewController: UIViewController {
         
         likePostBtn.rx.tap.subscribe(onNext: {
             if(self.likePostDidTap) {
-            self.likePostBtn.layer.addBorder([.bottom], color: .init(named: "mainColor")!, width: 1)
+                self.likePostBtn.layer.addBorder([.bottom], color: .init(named: "mainColor")!, width: 1)
                 self.likePostDidTap.toggle()
                 self.postDidTap = true
                 self.detailDidTap = true
@@ -197,7 +226,7 @@ class MyPageViewController: UIViewController {
         
         detailBtn.rx.tap.subscribe(onNext: {
             if(self.detailDidTap) {
-            self.detailBtn.layer.addBorder([.bottom], color: .init(named: "mainColor")!, width: 1)
+                self.detailBtn.layer.addBorder([.bottom], color: .init(named: "mainColor")!, width: 1)
                 self.detailDidTap.toggle()
                 self.likePostDidTap = true
                 self.postDidTap = true
@@ -215,7 +244,7 @@ class MyPageViewController: UIViewController {
     
     private func setupView() {
         [profileImg, nameLabel, gearBtn, introduceLabel, productView, productNum, productLabel,
-        prizeView, prizeNum, prizeLabel, receiveView, receiveNum, receiveLabel, transactionView,
+         prizeView, prizeNum, prizeLabel, receiveView, receiveNum, receiveLabel, transactionView,
          transactionNum, transactionLabel, collectionView, postBtn, likePostBtn, detailBtn].forEach {self.view.addSubview($0)}
         
         
@@ -340,5 +369,5 @@ class MyPageViewController: UIViewController {
         }
         
     }
-
+    
 }
