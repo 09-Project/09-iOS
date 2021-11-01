@@ -78,6 +78,11 @@ class ChangeProfileViewController: UIViewController, UITextFieldDelegate {
         }).disposed(by: disposeBag)
     }
     
+    private func bindViewModel() {
+        let model = ChangeProfileViewModel()
+        let input = ChangeProfileViewModel.Input(name: nickName.Txt.rx.text.asDriver(), introduction: introduceTxtField.rx.text.asDriver(), profileURL: String(profileImg.rx.image), doneTap: changeBtn.rx.tap.asDriver())
+    }
+    
     override func viewDidLayoutSubviews() {
         setup()
     }
