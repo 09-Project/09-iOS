@@ -36,7 +36,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         $0.backgroundColor = .white
         $0.font = UIFont(name: Font.fontRegular.rawValue, size: 14)
         $0.textColor = UIColor.init(named: "mainColor")
-        $0.attributedPlaceholder = NSAttributedString(string: "ID", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
+        $0.attributedPlaceholder = NSAttributedString(string: "ID", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")!])
     }   // 아이디
     
     private lazy var idView = UIView().then {
@@ -49,7 +49,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         $0.backgroundColor = .white
         $0.textColor = UIColor.init(named: "mainColor")
         $0.font = UIFont(name: Font.fontRegular.rawValue, size: 14)
-        $0.attributedPlaceholder = NSAttributedString(string: "PASSWORD", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
+        $0.attributedPlaceholder = NSAttributedString(string: "PASSWORD", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")!])
     }   // 비밀번호
     
     private lazy var pwView = UIView().then {
