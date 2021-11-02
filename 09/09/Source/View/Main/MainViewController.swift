@@ -17,7 +17,9 @@ class MainViewController: UIViewController {
     private let getData = BehaviorRelay<Void>(value: ())
     var post_id = Int()
     private let flagIt = PublishSubject<Int>()
+    private let deleteFlagIt = PublishSubject<Int>()
     let identfier = "cell"
+    private var heartBool = false
     
     private let sideMenu = SideMenuNavigationController(
         rootViewController: SideMenuViewController())
@@ -79,7 +81,7 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        bindViewModel()
         view.backgroundColor = .white
         let img = UIImage(named: "logo&symbolImg")
         navigationItem.titleView = UIImageView(image: img)
@@ -110,7 +112,8 @@ class MainViewController: UIViewController {
             getBackPost: pageBackBTn.rx.tap.asSignal(),
             searchBtn: searchBtn.rx.tap.asSignal(),
             searchTxt: searchField.rx.text.asSignal(onErrorJustReturn: ""),
-            flagIt: flagIt.asDriver(onErrorJustReturn: 0)
+            flagIt: flagIt.asDriver(onErrorJustReturn: 0),
+            deleteFlagIt: deleteFlagIt.asDriver(onErrorJustReturn: 0)
         )
         
         let output = model.transform(input)
@@ -122,9 +125,24 @@ class MainViewController: UIViewController {
             cell.titleLabel.text = items.title
             cell.priceLabel.text = String(items.price)
             cell.label.text = items.purpose
+            self.heartBool = items.liked
             
-            cell.heartBtn.rx.tap.subscribe(onNext: {
-                self.flagIt.onNext(row)
+            if self.heartBool {
+                cell.heartBtn.setImage(.init(systemName: "heart.fill"), for: .normal)
+            }
+            else {
+                cell.heartBtn.setImage(.init(systemName: "heart"), for: .normal)
+            }
+            
+            cell.heartBtn.rx.tap.subscribe(onNext: {[unowned self] _ in
+                if heartBool {
+                    flagIt.onNext(row)
+                    cell.heartBtn.setImage(.init(systemName: "heart.fill"), for: .normal)
+                }
+                else {
+                    deleteFlagIt.onNext(row)
+                    cell.heartBtn.setImage(.init(systemName: "heart"), for: .normal)
+                }
             }).disposed(by: cell.disposebag)
         }.disposed(by: disposebag)
         
@@ -189,10 +207,6 @@ class MainViewController: UIViewController {
             $0.trailing.greaterThanOrEqualToSuperview().offset(-16)
             $0.bottom.equalToSuperview().offset(0)
         }
-    }
-    @objc
-    private func sideMenuDidTap() {
-        present(sideMenu, animated: true, completion: nil)
     }
     
     
