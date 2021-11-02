@@ -21,21 +21,27 @@ class SignInModel: ViewModelType {
     
     struct Output {
         let isEnable: Driver<Bool>
-        let result: Signal<Bool>
+        let result: PublishRelay<Bool>
     }
     
     func transform(_ input: Input) -> Output {
         let api = Service()
         let info = Driver.combineLatest(input.username, input.password)
         let isEnabel = info.map{!$0.0.isEmpty && !$0.1.isEmpty}
-        let result = PublishSubject<Bool>()
+        let result = PublishRelay<Bool>()
         
         input.doneTap.withLatestFrom(info).asObservable().flatMap{ userN, userP in
             api.signIn(userN, userP)
-        }.subscribe(onNext: { _ in
-            result.onCompleted()
-        })
+        }.subscribe(onNext: { res in
+            switch res {
+            case .ok :
+                result.accept(true)
+            default:
+                result.accept(false)
+            }
+        }).disposed(by: disposebag)
+        
         return Output(isEnable: isEnabel.asDriver(),
-                      result: result.asSignal(onErrorJustReturn: false))
+                      result: result)
     }
 }
