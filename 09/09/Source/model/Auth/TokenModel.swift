@@ -8,16 +8,13 @@
 import Foundation
 
 struct TokenModel: Codable {
+    
     let accessToken: String
     let refreshToken: String
-    
-    init(accessToken: String, refreshToken: String) {
-        self.accessToken = accessToken
-        self.refreshToken = refreshToken
-    }
 }
 
 struct Token {
+    
     static var accessToken: String? {
         get {
             return UserDefaults.standard.string(forKey: "token")

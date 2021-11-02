@@ -17,17 +17,4 @@ struct ProfileModel: Codable {
     var completedPostCount = Int()
     var likePostCount = Int()
     
-    init(name: String, profileUrl: String, introduction: String, allPostCount: Int,
-         getLikesCount: Int, inProgressPostCount: Int, completedPostCount: Int, likePostCount:Int)
-    {
-        self.name = name
-        self.profileUrl = profileUrl
-        self.introduction = introduction
-        self.allPostCount = allPostCount
-        self.getLikesCount = getLikesCount
-        self.inProgressPostCount = inProgressPostCount
-        self.completedPostCount = completedPostCount
-        self.likePostCount = likePostCount
-    }
-    
 }
