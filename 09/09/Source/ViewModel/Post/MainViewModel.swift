@@ -96,6 +96,17 @@ class MainViewModel: ViewModelType {
             }
         }).disposed(by: disposebag)
         
+        input.flagIt.asObservable().flatMap{ row in
+            api.delete(self.posts[row].id)
+        }.subscribe(onNext: { res in
+            switch res {
+            case .ok:
+                flagItResult.accept(true)
+            default:
+                flagItResult.accept(false)
+            }
+        }).disposed(by: disposebag)
+        
         
         return Output(getPostResult: getPostResult, post: post, flagItResult: flagItResult)
     }
