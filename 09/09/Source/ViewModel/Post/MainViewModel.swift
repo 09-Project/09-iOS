@@ -107,7 +107,6 @@ class MainViewModel: ViewModelType {
             }
         }).disposed(by: disposebag)
         
-        
         return Output(getPostResult: getPostResult, post: post, flagItResult: flagItResult)
     }
 }
