@@ -136,16 +136,22 @@ extension API: TargetType {
             return .uploadMultipart(multipartFormData)
             
         case .signIn(let username, let password):
-            return .requestParameters(parameters: ["username": username, "password": password], encoding: JSONEncoding.prettyPrinted)
+            return .requestParameters(parameters: ["username": username, "password": password],
+                                      encoding: JSONEncoding.prettyPrinted)
             
         case .signUp(let name, let username, let password):
-            return .requestParameters(parameters: ["name": name, "username": username, "password": password], encoding: JSONEncoding.prettyPrinted)
+            return .requestParameters(parameters: ["name": name, "username": username,
+                                                   "password": password],
+                                      encoding: JSONEncoding.prettyPrinted)
             
         case .changepw(let password, let new_password):
-            return .requestParameters(parameters: ["password": password, "new_password": new_password], encoding: JSONEncoding.prettyPrinted)
+            return .requestParameters(parameters: ["password": password,
+                                                   "new_password": new_password],
+                                      encoding: JSONEncoding.prettyPrinted)
             
         case .changeInformation(let name, let introduction, let profileURL):
-            return .requestParameters(parameters: ["name": name, "introduction": introduction, "profileUrl": profileURL], encoding: JSONEncoding.prettyPrinted)
+            return .requestParameters(parameters: ["name": name, "introduction": introduction,                                                "profileUrl": profileURL],
+                                      encoding: JSONEncoding.prettyPrinted)
             
         case .putProducts(let postID, let title, let content, let price, let transactionRegion,
                           let openChatLink, let image):
@@ -158,6 +164,7 @@ extension API: TargetType {
             multipartFormData.append(MultipartFormData(provider: .data(transactionRegion.data(using: .utf8)!), name: "transactionRegion", mimeType: "text/plain"))
             multipartFormData.append(MultipartFormData(provider: .data(openChatLink.data(using: .utf8)!), name: "openChatLink", mimeType: "text/plain"))
             return .uploadMultipart(multipartFormData)
+            
         default:
             return .requestPlain
             

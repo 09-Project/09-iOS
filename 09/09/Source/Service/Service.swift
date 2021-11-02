@@ -125,7 +125,7 @@ final class Service {
             .map(ProfileModel.self)
             .map{return ($0, .ok)}
     }
-        
+    
     func like(_ postID: Int) -> Single<networkingResult> {
         return provider.rx.request(.likeObj(postID))
             .filterSuccessfulStatusCodes()
