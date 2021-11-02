@@ -21,6 +21,7 @@ class MainViewModel: ViewModelType {
         let searchBtn: Signal<Void>
         let searchTxt: Signal<String?>
         let flagIt: Driver<Int>
+        let deleteFlagIt: Driver<Int>
     }
     
     struct Output {
@@ -96,14 +97,14 @@ class MainViewModel: ViewModelType {
             }
         }).disposed(by: disposebag)
         
-        input.flagIt.asObservable().flatMap{ row in
+        input.deleteFlagIt.asObservable().flatMap{ row in
             api.delete(self.posts[row].id)
         }.subscribe(onNext: { res in
             switch res {
             case .ok:
-                flagItResult.accept(true)
-            default:
                 flagItResult.accept(false)
+            default:
+                flagItResult.accept(true)
             }
         }).disposed(by: disposebag)
         
