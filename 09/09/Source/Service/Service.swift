@@ -68,6 +68,7 @@ final class Service {
             .map(posts.self)
             .map{return ($0, .ok)}
     }
+    
     func search(keywords: String, page: Int, size: Int) -> Single<(posts?,
                                                                    networkingResult)> {
         return provider.rx.request(.search(keywords, page, size))
