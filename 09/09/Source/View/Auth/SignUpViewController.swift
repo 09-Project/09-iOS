@@ -185,17 +185,21 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         
         let output = viewModel.transform(input)
         output.isEnable.drive(signupBtn.rx.isEnabled).disposed(by: disposebag)
-        output.isEnable.drive(onNext: { _ in
+        output.isEnable.drive(onNext: {[unowned self] bool in
             self.Btn(self.signupBtn)
         }).disposed(by: disposebag)
         
-        output.result.emit(
-            onNext: {[unowned self] bool in self.idErrorLabel.isHidden = bool
-                nickErrorLabel.isHidden = bool
-            },
-            onCompleted: {[unowned self] in
-                let VC = SignInViewController()
-                present(VC, animated: true, completion: nil)
+        output.result.subscribe(onNext: {[unowned self] bool in
+            if bool {
+                let vc = SignInViewController()
+                vc.modalPresentationStyle = .fullScreen
+                present(vc, animated: true, completion: nil)
+            }
+            else {
+                self.idErrorLabel.isHidden = true
+                nickErrorLabel.isHidden = true
+            }
+            
         }).disposed(by: disposebag)
     }
     
