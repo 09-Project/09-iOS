@@ -49,11 +49,11 @@ extension API: TargetType {
     var path: String {
         switch self {
         case .signIn:
-            return "/member/auth/login"
+            return "/auth/login"
         case .signUp:
-            return "/member/auth/signup"
+            return "/auth/signup"
         case .refreshToken:
-            return "/member/auth/reissue"
+            return "/auth/reissue"
         case .changepw:
             return "/member/password"
         case .getInformation:
