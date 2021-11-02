@@ -23,7 +23,7 @@ class SideMenuViewController: UIViewController {
         $0.backgroundColor = .black
     }
     
-    private lazy var homeBtn = UIButton().then {
+    private lazy var homeBtn = UIButton(type: .system).then {
         $0.setImage(.init(systemName: "house.fill"), for: .normal)
         $0.semanticContentAttribute = .forceLeftToRight
         $0.setTitle("\t 홈", for: .normal)
@@ -32,7 +32,7 @@ class SideMenuViewController: UIViewController {
 
     }
     
-    private lazy var myPageBtn = UIButton().then {
+    private lazy var myPageBtn = UIButton(type: .system).then {
         $0.setImage(.init(systemName: "person.fill"), for: .normal)
         $0.semanticContentAttribute = .forceLeftToRight
         $0.setTitle("\t 마이페이지", for: .normal)
@@ -40,7 +40,7 @@ class SideMenuViewController: UIViewController {
         $0.titleLabel!.font = .init(name: Font.fontRegular.rawValue, size: 12)
     }
 
-    private lazy var postBtn = UIButton().then {
+    private lazy var postBtn = UIButton(type: .system).then {
         $0.setImage(.init(systemName: "pencil"), for: .normal)
         $0.semanticContentAttribute = .forceLeftToRight
         $0.setTitle("\t 게시물 작성", for: .normal)

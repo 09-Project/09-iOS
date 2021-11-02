@@ -17,7 +17,7 @@ class ChangeProfileViewController: UIViewController, UITextFieldDelegate {
         $0.layer.cornerRadius = 5
     }
 
-    private lazy var pencilBtn = UIButton().then {
+    private lazy var pencilBtn = UIButton(type: .system).then {
         $0.backgroundColor = .black.withAlphaComponent(0.5)
         $0.setImage(.init(systemName: "pencil"), for: .normal)
         $0.tintColor = .white
@@ -42,7 +42,7 @@ class ChangeProfileViewController: UIViewController, UITextFieldDelegate {
         $0.font = .init(name: Font.fontRegular.rawValue, size: 14)
     }
     
-    private lazy var changeBtn = UIButton().then {
+    private lazy var changeBtn = UIButton(type: .system).then {
         $0.backgroundColor = .init(named: "mainColor")
         $0.setTitle("변경하기", for: .normal)
         $0.setTitleColor(.white, for: .normal)
@@ -78,10 +78,10 @@ class ChangeProfileViewController: UIViewController, UITextFieldDelegate {
         }).disposed(by: disposeBag)
     }
     
-    private func bindViewModel() {
-        let model = ChangeProfileViewModel()
-        let input = ChangeProfileViewModel.Input(name: nickName.Txt.rx.text.asDriver(), introduction: introduceTxtField.rx.text.asDriver(), profileURL: String(profileImg.rx.image), doneTap: changeBtn.rx.tap.asDriver())
-    }
+//    private func bindViewModel() {
+//        let model = ChangeProfileViewModel()
+//        let input = ChangeProfileViewModel.Input(name: nickName.Txt.rx.text.asDriver(), introduction: introduceTxtField.rx.text.asDriver(), profileURL: String(profileImg.rx.image), doneTap: changeBtn.rx.tap.asDriver())
+//    }
     
     override func viewDidLayoutSubviews() {
         setup()

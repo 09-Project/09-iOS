@@ -34,7 +34,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         $0.textAlignment = .left
         $0.textColor = .init(named: "mainColor")
         $0.font = .init(name: Font.fontRegular.rawValue, size: 14)
-        $0.attributedPlaceholder = NSAttributedString(string: "Nickname", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
+        $0.attributedPlaceholder = NSAttributedString(string: "Nickname", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")!])
     }
     
     private lazy var nickView = UIView().then {
@@ -81,13 +81,13 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         $0.font = .init(name: Font.fontRegular.rawValue, size: 10)
     }
     
-    private lazy var eyeBtn = UIButton().then {
+    private lazy var eyeBtn = UIButton(type: .system).then {
         $0.backgroundColor = .white
         $0.tintColor = .init(named: "placeholderColor")
         $0.setImage(.init(systemName: "eye.slash"), for: .normal)
     }
     
-    private lazy var signupBtn = UIButton().then {
+    private lazy var signupBtn = UIButton(type: .system).then {
         $0.backgroundColor = .init(named: "mainColor")
         $0.setTitle("JOIN US", for: .normal)
         $0.layer.cornerRadius = 10
@@ -102,7 +102,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         $0.textColor = .black
     }
     
-    private lazy var moveLoginBtn = UIButton().then {
+    private lazy var moveLoginBtn = UIButton(type: .system).then {
         $0.backgroundColor = .white
         $0.setTitle("로그인하기", for: .normal)
         $0.titleLabel!.font = .init(name: Font.fontRegular.rawValue, size: 12)
@@ -185,9 +185,9 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         
         let output = viewModel.transform(input)
         output.isEnable.drive(signupBtn.rx.isEnabled).disposed(by: disposebag)
-        output.isEnable.drive(onNext: {[unowned self] _ in
-            Btn(signupBtn)
-        })
+        output.isEnable.drive(onNext: { _ in
+            self.Btn(self.signupBtn)
+        }).disposed(by: disposebag)
         
         output.result.emit(
             onNext: {[unowned self] bool in self.idErrorLabel.isHidden = bool

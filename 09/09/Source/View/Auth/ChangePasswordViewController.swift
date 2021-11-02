@@ -50,7 +50,7 @@ class ChangePasswordViewController: UIViewController, UITextFieldDelegate {
         $0.font = .init(name: Font.fontRegular.rawValue, size: 11)
     }   // 에러 라벨
     
-    private lazy var changeBtn = UIButton().then {
+    private lazy var changeBtn = UIButton(type: .system).then {
         $0.backgroundColor = .init(named: "mainColor")
         $0.setTitle("변경하기", for: .normal)
         $0.titleLabel!.font = .init(name: Font.fontBold.rawValue, size: 15)
@@ -80,7 +80,13 @@ class ChangePasswordViewController: UIViewController, UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        error()
+        if newPW.Txt.text == checkPW.Txt.text {
+            errorLabel.isHidden = true
+        }
+        
+        else {
+            errorLabel.isHidden = false
+        }
     }
     
     private func bindViewModel() {
@@ -103,16 +109,6 @@ class ChangePasswordViewController: UIViewController, UITextFieldDelegate {
             let VC = MyPageViewController()
             present(VC, animated: true, completion: nil)
         }).disposed(by: disposebag)
-    }
-    
-    private func error() {
-        if newPW.Txt.text == checkPW.Txt.text {
-            errorLabel.isHidden = true
-        }
-        
-        else {
-            errorLabel.isHidden = false
-        }
     }
     
     private func setup() {

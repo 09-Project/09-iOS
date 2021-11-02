@@ -38,7 +38,7 @@ class MainCollectionViewCell: UICollectionViewCell {
         $0.backgroundColor = .white
     }
     
-    lazy var heartBtn = UIButton().then {
+    lazy var heartBtn = UIButton(type: .system).then {
         $0.setImage(.init(systemName: "heart"), for: .normal)
         $0.tintColor = .init(named: "hearColor")
     }

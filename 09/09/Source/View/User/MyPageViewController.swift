@@ -33,7 +33,7 @@ class MyPageViewController: UIViewController {
         $0.font = .init(name: Font.fontBold.rawValue, size: 16)
     }
     
-    private lazy var gearBtn = UIButton().then {
+    private lazy var gearBtn = UIButton(type: .system).then {
         $0.setImage(.init(named: "gearImg"), for: .normal)
         $0.tintColor = .init(named: "mainColor")
     }
@@ -119,21 +119,21 @@ class MyPageViewController: UIViewController {
         $0.textColor = .init(named: "mainColor")
     }
     
-    private lazy var postBtn = UIButton().then {
+    private lazy var postBtn = UIButton(type: .system).then {
         $0.backgroundColor = .white
         $0.setTitle("상품", for: .normal)
         $0.titleLabel!.font = .init(name: Font.fontMedium.rawValue, size: 15)
         $0.setTitleColor(.black, for: .normal)
     }
     
-    private lazy var likePostBtn = UIButton().then {
+    private lazy var likePostBtn = UIButton(type: .system).then {
         $0.backgroundColor = .white
         $0.setTitle("찐함 상품", for: .normal)
         $0.titleLabel!.font = .init(name: Font.fontMedium.rawValue, size: 15)
         $0.setTitleColor(.black, for: .normal)
     }
     
-    private lazy var detailBtn = UIButton().then {
+    private lazy var detailBtn = UIButton(type: .system).then {
         $0.backgroundColor = .white
         $0.setTitle("거래 내역", for: .normal)
         $0.titleLabel!.font = .init(name: Font.fontMedium.rawValue, size: 15)

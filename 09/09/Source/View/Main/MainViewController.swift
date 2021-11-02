@@ -29,7 +29,7 @@ class MainViewController: UIViewController {
         $0.font = .init(name: Font.fontRegular.rawValue, size: 13)
     }
     
-    private lazy var searchBtn = UIButton().then {
+    private lazy var searchBtn = UIButton(type: .system).then {
         $0.setImage(.init(systemName: "magnifyingglass"), for: .normal)
         $0.tintColor = .init(named: "mainColor")
     }
@@ -58,13 +58,13 @@ class MainViewController: UIViewController {
         $0.font = .init(name: Font.fontBold.rawValue, size: 20)
     }
     
-    private lazy var pageBackBTn = UIButton().then {
+    private lazy var pageBackBTn = UIButton(type: .system).then {
         $0.backgroundColor = .white
         $0.setImage(.init(systemName: "arrowtriangle.backward.square"), for: .normal)
         $0.tintColor = .init(named: "mainColor")
     }
     
-    private lazy var pageFrontBtn = UIButton().then {
+    private lazy var pageFrontBtn = UIButton(type: .system).then {
         $0.backgroundColor = .white
         $0.setImage(.init(systemName: "arrowtriangle.forward.square"), for: .normal)
         $0.tintColor = .init(named: "mainColor")
@@ -74,7 +74,8 @@ class MainViewController: UIViewController {
         $0.backgroundColor = .white
     }
     
-    private lazy var lineBtn = UIBarButtonItem(image: .init(named: "line.horizontal.3"), style: .plain, target: self, action: nil)
+    private lazy var lineBtn = UIBarButtonItem(image: .init(named: "line.horizontal.3"),
+                                               style: .plain, target: self, action: nil)
     
     override func viewDidLoad() {
         super.viewDidLoad()

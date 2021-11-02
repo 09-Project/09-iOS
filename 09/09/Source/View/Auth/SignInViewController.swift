@@ -63,13 +63,13 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         $0.textColor = .init(named: "mainColor")
     }   // 에러 라벨
     
-    private lazy var eyeBtn = UIButton().then {
+    private lazy var eyeBtn = UIButton(type: .system).then {
         $0.backgroundColor = .white
         $0.setImage(UIImage(systemName: "eye.slash"), for: .normal)
         $0.tintColor = .init(named: "placeholderColor")
     }   // 눈 버튼
     
-    private lazy var checkBtn = UIButton().then {
+    private lazy var checkBtn = UIButton(type: .system).then {
         $0.setImage(UIImage(systemName: "checkmark.square"), for: .normal)
         $0.tintColor = .init(named: "idCheckColor")
     }   // 아이디 저장 버튼
@@ -81,7 +81,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         $0.backgroundColor = .white
     }   // 아이디 저장 라벨
     
-    private lazy var loginBtn = UIButton().then {
+    private lazy var loginBtn = UIButton(type: .system).then {
         $0.backgroundColor = .init(named: "mainColor")
         $0.setTitle("LOGIN", for: .normal)
         $0.setTitleColor(.white, for: .normal)
@@ -96,7 +96,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         $0.font = UIFont(name: Font.fontRegular.rawValue, size: 12)
     }   // 회원가입 안내 라벨
     
-    private lazy var moveSignupBtn = UIButton().then {
+    private lazy var moveSignupBtn = UIButton(type: .system).then {
         $0.backgroundColor = .white
         $0.setTitle("회원가입하기", for: .normal)
         $0.setTitleColor(.init(named: "mainColor"), for: .normal)
