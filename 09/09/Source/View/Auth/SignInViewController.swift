@@ -35,7 +35,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         $0.textAlignment = .left
         $0.backgroundColor = .white
         $0.font = UIFont(name: Font.fontRegular.rawValue, size: 14)
-        $0.textColor = UIColor.init(named: "mainColor")
+        $0.textColor = UIColor.init(named: "placeholderColor")
         $0.attributedPlaceholder = NSAttributedString(string: "ID", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")!])
     }   // 아이디
     
@@ -47,7 +47,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         $0.borderStyle = .none
         $0.textAlignment = .left
         $0.backgroundColor = .white
-        $0.textColor = UIColor.init(named: "mainColor")
+        $0.textColor = UIColor.init(named: "placeholderColor")
         $0.font = UIFont(name: Font.fontRegular.rawValue, size: 14)
         $0.attributedPlaceholder = NSAttributedString(string: "PASSWORD", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")!])
     }   // 비밀번호
@@ -125,6 +125,8 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         UserDefaults.standard.string(forKey: "id")
         idTxt.text! = UserDefaults.standard.string(forKey: "id") ?? ""
         setBorder()
+        checkBtnBool = UserDefaults.standard.bool(forKey: "bool")
+        changeCheckBtnImg()
     }
     
     override func viewDidLayoutSubviews() {
@@ -174,18 +176,20 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         
         let output = viewModel.transform(input)
         output.isEnable.drive(loginBtn.rx.isEnabled).disposed(by: disposeBag)
-        output.isEnable.drive(onNext: {[unowned self] _ in
+        output.isEnable.drive(onNext: {[unowned self] bool in
             Btn(loginBtn)
         }).disposed(by: disposeBag)
         
-        output.result.emit(
-            onNext: {[unowned self] bool in
-                errorLabel.isHidden = bool
-            },
-            onCompleted: {[unowned self] in let VC = MainViewController()
-                VC.modalPresentationStyle = .fullScreen
-                present(VC, animated: true, completion: nil)
-            }).disposed(by: disposeBag)
+        output.result.subscribe(onNext: { [unowned self] bool in
+            if bool {
+                let vc = MainViewController()
+                vc.modalPresentationStyle = .fullScreen
+                present(vc, animated: true, completion: nil)
+            }
+            else {
+                errorLabel.isHidden = false
+            }
+        }).disposed(by: disposeBag)
     }
     
     private func setupView() {
@@ -290,12 +294,14 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         if checkBtnBool {
             checkBtn.setImage(UIImage(systemName: "checkmark.square"), for: .normal)
             UserDefaults.standard.set(nil, forKey: "id")
+            UserDefaults.standard.set(true, forKey: "bool")
             checkBtnBool.toggle()
         }
         
         else {
             checkBtn.setImage(UIImage(systemName: "checkmark.square.fill"), for: .normal)
             UserDefaults.standard.set(idTxt.text!, forKey: "id")
+            UserDefaults.standard.set(false, forKey: "bool")
             checkBtnBool.toggle()
         }
     }
