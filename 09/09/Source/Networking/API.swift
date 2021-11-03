@@ -9,6 +9,7 @@ import Foundation
 import Moya
 
 enum API {
+    
     // Auth
     case signUp(_ name: String, _ username: String, _ password: String)
     case signIn(_ username: String, _ password: String)
