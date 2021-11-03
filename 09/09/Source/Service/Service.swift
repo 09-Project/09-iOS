@@ -19,8 +19,8 @@ final class Service {
             .filterSuccessfulStatusCodes()
             .map(TokenModel.self)
             .map{ response -> networkingResult in
-                Token.accessToken = response.accessToken
-                Token.refreshToken = response.refreshToken
+                Token.accessToken = response.access_token
+                Token.refreshToken = response.refresh_token
                 return .ok
             }
     }
@@ -43,8 +43,8 @@ final class Service {
             .filterSuccessfulStatusCodes()
             .map(TokenModel.self)
             .map { response -> networkingResult in
-                Token.accessToken = response.accessToken
-                Token.refreshToken = response.refreshToken
+                Token.accessToken = response.access_token
+                Token.refreshToken = response.refresh_token
                 return .ok
             }
     }
