@@ -18,6 +18,7 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     private var giveBtnBool = true
     
     private let picker = UIImagePickerController()
+    private var image = PublishRelay<Data>()
     private lazy var scrollView = UIScrollView()
     
     private lazy var View = UIView().then {
@@ -133,15 +134,14 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         $0.distribution = .fillEqually
     }
     
+    private let okBtn = UIBarButtonItem(title: "완료", style: .plain, target: self, action: nil)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         navigationItem.title = "게시물 작성"
         navigationController?.navigationBar.tintColor = .white
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료",
-                                                            style: .plain,
-                                                            target: self,
-                                                            action: #selector(okBtn))
+        navigationItem.rightBarButtonItem = okBtn
         navigationItem.rightBarButtonItem?.tintColor = .black
         imageBtn.rx.tap.subscribe(onNext: {
             self.imageViewTap()
@@ -173,6 +173,7 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
             }
         }).disposed(by: disposebag)
     }
+    
     
     override func viewDidAppear(_ animated: Bool) {
         placeholderSetting()
@@ -218,10 +219,11 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         }
     }
     
-    
-    @objc
-    private func okBtn() {
+    private func bindViewModel() {
+        let model = AddPostViewModel()
+        let input = AddPostViewModel.Input(title: titleTxt.rx.text.asDriver(), content: content.rx.text.asDriver(), price: Int(price.Txt.rx.text), transactionRegion: area.Txt.rx.text.asDriver(), openChatLink: openChat.Txt.rx.text.asDriver(), image: image.asDriver(onErrorJustReturn: nil), doneTap: okBtn.rx.tap.asSignal())
         
+        let output = model.transform(input)
     }
     
     private func placeholderSetting() {
@@ -401,9 +403,10 @@ extension AddPostViewController: UIImagePickerControllerDelegate, UINavigationCo
     
     func imagePickerController(_ picker: UIImagePickerController,
                                didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        var img = Data()
         if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-            imageBtn.isHidden = true
             photo.image = image
+            
             picker.dismiss(animated: true, completion: nil)
         }
     }
