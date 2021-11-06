@@ -18,7 +18,7 @@ class AddPostViewModel: ViewModelType {
         let price: Int?
         let transactionRegion: Driver<String>
         let openChatLink: Driver<String>
-        let image: Driver<String>
+        let image: Driver<Data>
         let doneTap: Signal<Void>
     }
     
@@ -33,7 +33,8 @@ class AddPostViewModel: ViewModelType {
         let info = Driver.combineLatest(input.title, input.content, input.transactionRegion,
                                         input.openChatLink, input.image)
         let isEnabel = info.map { !$0.0.isEmpty && !$0.1.isEmpty && !$0.2.isEmpty && !$0.3.isEmpty
-            && !$0.4.isEmpty}
+            && !$0.4.isEmpty
+        }
         
         input.doneTap.asObservable()
             .withLatestFrom(info)
