@@ -23,7 +23,7 @@ enum API {
     // User
     case getInformation
     case profile(_ memberID: Int)
-    case changeInformation(_ name: String, _ introduction: String, _ profileURL: String)
+    case changeInformation(_ name: String, _ introduction: String, _ profileURL: Data)
     case myPage
     
     // Post
@@ -33,9 +33,9 @@ enum API {
     case search(_ keywords: String, _ page: Int, _ size: Int)
     case other
     case putProducts(_ postID: Int, _ title: String, _ content: String, _ price: Int,
-                     _ transactionRegion: String, _ openChatLink: String, _ image: String)
+                     _ transactionRegion: String, _ openChatLink: String, _ image: Data)
     case postProducts(_ title: String, _ content: String, _ price: Int, _ transactionRegion: String,
-                      _ openChatLink: String, _ image: String)
+                      _ openChatLink: String, _ image: Data)
     case end(_ postID: Int)
     case seeLikePost
     case seeDeletePost(_ member_Id: Int)
@@ -128,7 +128,7 @@ extension API: TargetType {
         case .postProducts(let title, let content, let price, let transactionRegion,
                            let openChatLink, let image):
             var multipartFormData = [MultipartFormData]()
-            multipartFormData.append(MultipartFormData(provider: .data(image.data(using: .utf8)!), name: "image", fileName: "image.jpg", mimeType: "image/png"))
+            multipartFormData.append(MultipartFormData(provider: .data(image), name: "image", fileName: "image.jpg", mimeType: "image/png"))
             multipartFormData.append(MultipartFormData(provider: .data(title.data(using: .utf8)!), name: "title", mimeType: "text/plain"))
             multipartFormData.append(MultipartFormData(provider: .data(content.data(using: .utf8)!), name: "content", mimeType: "text/plain"))
             multipartFormData.append(MultipartFormData(provider: .data(price.description.data(using: .utf8)!), name: "price", mimeType: "text/plain"))
@@ -158,7 +158,7 @@ extension API: TargetType {
                           let openChatLink, let image):
             var multipartFormData = [MultipartFormData]()
             multipartFormData.append(MultipartFormData(provider: .data(postID.description.data(using: .utf8)!), name: "postID", mimeType: "text/plain"))
-            multipartFormData.append(MultipartFormData(provider: .data(image.data(using: .utf8)!), name: "image", fileName: "image.jpg", mimeType: "image/png"))
+            multipartFormData.append(MultipartFormData(provider: .data(image), name: "image", fileName: "image.jpg", mimeType: "image/png"))
             multipartFormData.append(MultipartFormData(provider: .data(title.data(using: .utf8)!), name: "title", mimeType: "text/plain"))
             multipartFormData.append(MultipartFormData(provider: .data(content.data(using: .utf8)!), name: "content", mimeType: "text/plain"))
             multipartFormData.append(MultipartFormData(provider: .data(price.description.data(using: .utf8)!), name: "price", mimeType: "text/plain"))
