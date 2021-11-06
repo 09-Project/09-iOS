@@ -85,7 +85,7 @@ final class Service {
     }
     
     func pathProducts(post_id: Int, title: String, content: String,price: Int,
-                      transactionRegion: String, openChatLink: String, image: String) -> Single<networkingResult> {
+                      transactionRegion: String, openChatLink: String, image: Data) -> Single<networkingResult> {
         return provider.rx.request(.putProducts(post_id, title, content, price, transactionRegion,
                                                 openChatLink, image))
             .filterSuccessfulStatusCodes()
@@ -93,7 +93,7 @@ final class Service {
     }
     
     func post(title: String, content: String, price: Int, transactionRegion: String,
-              openChatLink: String, image: String) -> Single<networkingResult> {
+              openChatLink: String, image: Data) -> Single<networkingResult> {
         return provider.rx.request(.postProducts(title, content, price, transactionRegion, openChatLink, image))
             .filterSuccessfulStatusCodes()
             .map{_ -> networkingResult in return .okay}
@@ -154,7 +154,7 @@ final class Service {
             .map{return ($0, .ok)}
     }
     
-    func changeInformation(_ name: String, _ introduction: String, _ profileUrl: String) -> Single<networkingResult>
+    func changeInformation(_ name: String, _ introduction: String, _ profileUrl: Data) -> Single<networkingResult>
     {
         return provider.rx.request(.changeInformation(name, introduction, profileUrl))
             .filterSuccessfulStatusCodes()
