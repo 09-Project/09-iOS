@@ -21,12 +21,12 @@ class ChangeProfileViewModel: ViewModelType {
     }
     
     struct Output {
-        let result: Signal<Bool>
+        let result: PublishRelay<Bool>
     }
     
     func transform(_ input: Input) -> Output {
         let api = Service()
-        let result = PublishSubject<Bool>()
+        let result = PublishRelay<Bool>()
         let info = Driver.combineLatest(input.name, input.introduction, input.profileURL)
         
         input.doneTap.asObservable().withLatestFrom(info).flatMap{ name, introduction, profileUrl in
@@ -34,12 +34,12 @@ class ChangeProfileViewModel: ViewModelType {
         }.subscribe(onNext: { res in
             switch res {
             case .ok:
-                result.onNext(true)
+                result.accept(true)
             default:
-                result.onNext(false)
+                result.accept(false)
             }
         }).disposed(by: bag)
         
-        return Output(result: result.asSignal(onErrorJustReturn: false))
+        return Output(result: result)
     }
 }
