@@ -18,7 +18,7 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     private var giveBtnBool = true
     
     private let picker = UIImagePickerController()
-    private var image = PublishRelay<Data>()
+    private var img = PublishRelay<Data>()
     private lazy var scrollView = UIScrollView()
     
     private lazy var View = UIView().then {
@@ -221,7 +221,15 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     
     private func bindViewModel() {
         let model = AddPostViewModel()
-        let input = AddPostViewModel.Input(title: titleTxt.rx.text.asDriver(), content: content.rx.text.asDriver(), price: Int(price.Txt.rx.text), transactionRegion: area.Txt.rx.text.asDriver(), openChatLink: openChat.Txt.rx.text.asDriver(), image: image.asDriver(onErrorJustReturn: nil), doneTap: okBtn.rx.tap.asSignal())
+        let input = AddPostViewModel.Input(
+            title: titleTxt.rx.text.orEmpty.asDriver(),
+            content: content.rx.text.orEmpty.asDriver(),
+            price: Int(price.Txt.text!),
+            transactionRegion: area.Txt.rx.text.orEmpty.asDriver(),
+            openChatLink: openChat.Txt.rx.text.orEmpty.asDriver(),
+            image: img.asDriver(onErrorJustReturn: Data),
+            doneTap: okBtn.rx.tap.asSignal()
+        )
         
         let output = model.transform(input)
     }
@@ -403,9 +411,10 @@ extension AddPostViewController: UIImagePickerControllerDelegate, UINavigationCo
     
     func imagePickerController(_ picker: UIImagePickerController,
                                didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        var img = Data()
+        
         if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
             photo.image = image
+            img.accept(image.jpegData(compressionQuality: 0.8)!)
             
             picker.dismiss(animated: true, completion: nil)
         }
