@@ -28,10 +28,11 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     
     private lazy var titleView = UIView().then {
         $0.backgroundColor = .white
+        $0.layer.addBorder([.top, .bottom], color: .init(named: "placeholderColor")!, width: 0.5)
+        
     }
     
     private lazy var titleTxt = UITextField().then {
-        $0.backgroundColor = .white
         $0.attributedPlaceholder = NSAttributedString(string: "제목을 입력해주세요", attributes: [NSAttributedString.Key.foregroundColor : UIColor.init(named: "placeholderColor")])
         $0.font = .init(name: Font.fontRegular.rawValue, size: 13)
         $0.textColor = .init(named: "placeholderColor")
@@ -45,6 +46,7 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     
     private lazy var contentView = UIView().then {
         $0.backgroundColor = .white
+        $0.layer.addBorder( [.top, .bottom], color: .init(named: "placeholderColor"), width: 0.5)
     }
     
     private lazy var content = UITextView().then {
@@ -242,8 +244,6 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     
     
     private func setup() {
-        line(view: titleView)
-        line(view: contentView)
         
         self.view.addSubview(scrollView)
         self.scrollView.addSubview(View)
