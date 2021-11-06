@@ -108,30 +108,18 @@ extension UIViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    func line(view: UIView) {
-        lazy var lineView1 = UIView().then {
-        $0.backgroundColor = .init(named: "placeholderColor")
+    func presentVC(_ viewController: UIViewController) {
+        let vc = viewController
+        vc.modalPresentationStyle = .fullScreen
+        present(vc, animated: true, completion: nil)
     }
-        lazy var lineView2 = UIView().then {
-        $0.backgroundColor = .init(named: "placeholderColor")
+    
+    func pushVC(_ viewController: UIViewController) {
+        let vc = viewController
+        vc.modalPresentationStyle = .fullScreen
+        self.navigationController?.pushViewController(vc, animated: true)
     }
-        
-        view.addSubview(lineView1)
-        view.addSubview(lineView2)
-        
-        lineView1.snp.makeConstraints {
-            $0.bottom.equalTo(view.snp.top).offset(0)
-            $0.height.equalTo(0.5)
-            $0.width.equalToSuperview()
-        }
-        
-        lineView2.snp.makeConstraints {
-            $0.bottom.equalTo(view.snp.bottom).offset(0)
-            $0.height.equalTo(0.5)
-            $0.width.equalToSuperview()
-        }
-        
-    }
+    
 }
 
 extension CALayer {
