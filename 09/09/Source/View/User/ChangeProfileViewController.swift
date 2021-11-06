@@ -12,9 +12,13 @@ import RxCocoa
 class ChangeProfileViewController: UIViewController, UITextFieldDelegate {
     
     private let disposeBag = DisposeBag()
+    private let img = PublishRelay<Data>()
+    private let picker = UIImagePickerController()
+    let profileImage = UIImage.init(named: "ProfileImg")
     
-    private lazy var profileImg = UIImageView().then {
+    private lazy var profile = UIImageView().then {
         $0.layer.cornerRadius = 5
+        $0.image = .init(named: "ProfileImg")
     }
 
     private lazy var pencilBtn = UIButton(type: .system).then {
@@ -66,6 +70,7 @@ class ChangeProfileViewController: UIViewController, UITextFieldDelegate {
         view.backgroundColor = .white
         navigationItem.title = "프로필 수정"
         nickName.Txt.delegate = self
+        picker.delegate = self
         
         nickName.Txt.rx.text.subscribe(onNext : { [unowned self] str in
             let num = str?.count
@@ -78,11 +83,21 @@ class ChangeProfileViewController: UIViewController, UITextFieldDelegate {
         }).disposed(by: disposeBag)
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        img.accept(profileImage!.jpegData(compressionQuality: 0.8)!)
+    }
+    
     private func bindViewModel() {
         let model = ChangeProfileViewModel()
-//        let input = ChangeProfileViewModel.Input(name: nickName.Txt.rx.text.asDriver(), introduction: introduceTxtField.rx.text.asDriver(), profileURL: String(profileImg.rx.image), doneTap: changeBtn.rx.tap.asDriver())
+        let input = ChangeProfileViewModel.Input(
+            name: nickName.Txt.rx.text.orEmpty.asDriver(),
+            introduction: introduceTxtField.rx.text.orEmpty.asDriver(),
+            profileURL: img.asDriver(
+                onErrorJustReturn: (profileImage?.jpegData(compressionQuality: 0.8))!
+            ),
+            doneTap: changeBtn.rx.tap.asDriver())
         
-//        let output = model.transform(input)
+        let output = model.transform(input)
         
     }
     
@@ -91,10 +106,10 @@ class ChangeProfileViewController: UIViewController, UITextFieldDelegate {
     }
     
     private func setup() {
-        [profileImg, pencilBtn, nickName, introduceLabel, introduceTxtField, changeBtn,
+        [profile, pencilBtn, nickName, introduceLabel, introduceTxtField, changeBtn,
          numLabel, numLabel2].forEach{view.addSubview($0)}
         
-        profileImg.snp.makeConstraints {
+        profile.snp.makeConstraints {
             $0.top.equalToSuperview().inset(86)
             $0.leading.equalToSuperview().inset(39)
             $0.height.width.equalTo(88)
@@ -107,7 +122,7 @@ class ChangeProfileViewController: UIViewController, UITextFieldDelegate {
         }
         
         nickName.snp.makeConstraints {
-            $0.top.equalTo(profileImg.snp.bottom).inset(60)
+            $0.top.equalTo(profile.snp.bottom).inset(60)
             $0.leading.trailing.equalToSuperview()
         }
         
@@ -136,6 +151,24 @@ class ChangeProfileViewController: UIViewController, UITextFieldDelegate {
             $0.height.equalTo(45)
             $0.leading.equalToSuperview().inset(39)
             $0.trailing.equalToSuperview().inset(-39)
+        }
+    }
+}
+
+extension ChangeProfileViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func openLibary() {
+        picker.sourceType = .photoLibrary
+        present(picker, animated: false, completion: nil)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController,
+                               didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+        if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            profile.image = image
+            img.accept(image.jpegData(compressionQuality: 0.8)!)
+            
+            picker.dismiss(animated: true, completion: nil)
         }
     }
 }
