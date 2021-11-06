@@ -20,7 +20,7 @@ class ChangeProfileViewController: UIViewController, UITextFieldDelegate {
         $0.layer.cornerRadius = 5
         $0.image = .init(named: "ProfileImg")
     }
-
+    
     private lazy var pencilBtn = UIButton(type: .system).then {
         $0.backgroundColor = .black.withAlphaComponent(0.5)
         $0.setImage(.init(systemName: "pencil"), for: .normal)
@@ -98,6 +98,23 @@ class ChangeProfileViewController: UIViewController, UITextFieldDelegate {
             doneTap: changeBtn.rx.tap.asDriver())
         
         let output = model.transform(input)
+        
+        output.result.subscribe(onNext: { [weak self] bool in
+            if bool {
+                    self!.okAlert(title: "프로필을 바꾸시는데 성공하셨습니다.", action: { ACTION in
+                    let vc = MyPageViewController()
+                    vc.modalPresentationStyle = .fullScreen
+                    self!.present(vc, animated: true, completion: nil)
+                })
+            }
+            else {
+                self!.okAlert(title: "프로필을 바꾸시는데 실패하셨습니다.", action: { ACTION in
+                    let vc = MyPageViewController()
+                    vc.modalPresentationStyle = .fullScreen
+                    self!.present(vc, animated: true, completion: nil)
+                })
+            }
+        }).disposed(by: disposeBag)
         
     }
     
