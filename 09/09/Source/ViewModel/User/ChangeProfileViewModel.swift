@@ -16,7 +16,7 @@ class ChangeProfileViewModel: ViewModelType {
     struct Input {
         let name: Driver<String>
         let introduction: Driver<String>
-        let profileURL: Driver<String>
+        let profileURL: Driver<Data>
         let doneTap: Driver<Void>
     }
     
