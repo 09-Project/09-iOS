@@ -395,7 +395,7 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         singleTapGestureRecognizer.isEnabled = true
         singleTapGestureRecognizer.cancelsTouchesInView = false
         scrollView.addGestureRecognizer(singleTapGestureRecognizer)
-    }
+    }ㄹ
     
     @objc
     func MyTapMethod(sender: UITapGestureRecognizer) {
