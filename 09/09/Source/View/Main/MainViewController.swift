@@ -38,6 +38,7 @@ class MainViewController: UIViewController {
     
     private lazy var bennerImgView = UIImageView().then {
         $0.contentMode = .scaleAspectFit
+        $0.image = UIImage.init(named: "banner")
     }
     
     private lazy var label = UILabel().then {
