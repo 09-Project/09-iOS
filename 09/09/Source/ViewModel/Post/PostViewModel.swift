@@ -12,25 +12,27 @@ import RxCocoa
 class PostViewModel: ViewModelType {
     
     private let disposebag = DisposeBag()
+    private var posts = [PostModel]()
     
     struct Input {
         let getPost: Signal<Void>
-        let getMorePost: Signal<Void>
-        let getBackPost: Signal<Void>
+        let flagIt: Driver<Int>
+        let deleteFlagIt: Driver<Int>
     }
     
     struct Output {
         let getPostResult: PublishRelay<Bool>
         let post: BehaviorRelay<[PostModel]>
+        let flagItResult: PublishRelay<Bool>
     }
     
     func transform(_ input: Input) -> Output {
         let api = Service()
         let getPostResult = PublishRelay<Bool>()
         let post = BehaviorRelay<[PostModel]>(value: [])
-        var page = 0
+        let flagItResult = PublishRelay<Bool>()
         
-        input.getPost.asObservable().flatMap{ _ in api.products(page: 0, size: 16)}
+        input.getPost.asObservable().flatMap{ _ in api.products(page: 0, size: 6)}
         .subscribe(onNext: { data, res in
             switch res {
             case .ok:
@@ -42,34 +44,29 @@ class PostViewModel: ViewModelType {
             }
         }).disposed(by: disposebag)
         
-        input.getMorePost.asObservable().map{ page += 1 }.flatMap{ _ in
-            api.products(page: page, size: 16)
-        }.subscribe(onNext: { data, res in
+        input.flagIt.asObservable().flatMap{ row in
+            api.like(self.posts[row].id)
+        }.subscribe(onNext: { res in
             switch res {
             case .ok:
-                post.accept(data!.posts)
-                getPostResult.accept(true)
+                flagItResult.accept(true)
             default:
-                print(res)
-                getPostResult.accept(false)
+                flagItResult.accept(false)
             }
         }).disposed(by: disposebag)
         
-        input.getBackPost.asObservable().map{ page -= 1}.flatMap{ _ in
-            api.products(page: page, size: 16)
-        }.subscribe(onNext: { data, res in
+        input.deleteFlagIt.asObservable().flatMap{ row in
+            api.like(self.posts[row].id)
+        }.subscribe(onNext: { res in
             switch res {
             case .ok:
-                post.accept(data!.posts)
-                getPostResult.accept(true)
+                flagItResult.accept(true)
             default:
-                print(res)
-                getPostResult.accept(false)
+                flagItResult.accept(false)
             }
         }).disposed(by: disposebag)
         
-        
-        return Output(getPostResult: getPostResult, post: post)
-    }
+        return Output(getPostResult: getPostResult, post: post, flagItResult: flagItResult)
 }
 
+}
