@@ -103,6 +103,9 @@ class PostViewController: UIViewController {
         $0.layer.cornerRadius = 5
         $0.layer.borderWidth = 0.5
         $0.layer.borderColor = UIColor.init(named: "borderColor")?.cgColor
+        $0.setImage(.init(systemName: "heart"), for: .normal)
+        $0.semanticContentAttribute = .forceLeftToRight
+        $0.setTitle("\t찜하기", for: .normal)
     }
     
     private lazy var chatBtn = UIButton().then {
@@ -112,6 +115,9 @@ class PostViewController: UIViewController {
         $0.layer.cornerRadius  = 5
         $0.layer.borderWidth = 0.5
         $0.layer.borderColor = UIColor.init(named: "borderColor")?.cgColor
+        $0.setImage(.init(named: "chatImg"), for: .normal)
+        $0.semanticContentAttribute = .forceLeftToRight
+        $0.setTitle("\t채팅", for: .normal)
     }
     
     private lazy var lineView = UIView().then {
@@ -135,7 +141,8 @@ class PostViewController: UIViewController {
     }
     
     private func bindViewModel() {
-       
+       let model = PostViewModel()
+        let input = PostViewModel.Input(getPost: getData.asSignal(), getMorePost: <#T##Signal<Void>#>, getBackPost: <#T##Signal<Void>#>)
     }
     
     private func setup() {

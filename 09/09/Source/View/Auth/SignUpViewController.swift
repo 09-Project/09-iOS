@@ -122,7 +122,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         eyeBtn.rx.tap.subscribe(onNext: {[unowned self] _ in
             changeBtn()}).disposed(by: disposebag)
         moveLoginBtn.rx.tap.subscribe(onNext: {[unowned self] _ in
-            moveSignInViewController()}).disposed(by: disposebag)
+            self.presentVC(SignInViewController())}).disposed(by: disposebag)
         idErrorLabel.isHidden = true
         nickErrorLabel.isHidden = true
         // Do any additional setup after loading the view.
@@ -191,9 +191,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         
         output.result.subscribe(onNext: {[unowned self] bool in
             if bool {
-                let vc = SignInViewController()
-                vc.modalPresentationStyle = .fullScreen
-                present(vc, animated: true, completion: nil)
+                self.presentVC(SignInViewController())
             }
             else {
                 self.idErrorLabel.isHidden = true
@@ -326,13 +324,6 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         idView.layer.addBorder([.bottom], color: UIColor.init(named: "placeholderColor")!, width: 1)
         
         pwView.layer.addBorder([.bottom], color: UIColor.init(named: "placeholderColor")!, width: 1)
-    }
-    
-    @objc
-    private func moveSignInViewController() {
-        let VC = SignInViewController()
-        VC.modalPresentationStyle = .fullScreen
-        present(VC, animated: true, completion: nil)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

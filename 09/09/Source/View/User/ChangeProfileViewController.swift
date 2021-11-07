@@ -101,17 +101,13 @@ class ChangeProfileViewController: UIViewController, UITextFieldDelegate {
         
         output.result.subscribe(onNext: { [weak self] bool in
             if bool {
-                    self!.okAlert(title: "프로필을 바꾸시는데 성공하셨습니다.", action: { ACTION in
-                    let vc = MyPageViewController()
-                    vc.modalPresentationStyle = .fullScreen
-                    self!.present(vc, animated: true, completion: nil)
+                self!.okAlert(title: "프로필을 바꾸시는데 성공하셨습니다.", action: { ACTION in
+                    self!.presentVC(MyPageViewController())
                 })
             }
             else {
                 self!.okAlert(title: "프로필을 바꾸시는데 실패하셨습니다.", action: { ACTION in
-                    let vc = MyPageViewController()
-                    vc.modalPresentationStyle = .fullScreen
-                    self!.present(vc, animated: true, completion: nil)
+                    self!.presentVC(MyPageViewController())
                 })
             }
         }).disposed(by: disposeBag)
