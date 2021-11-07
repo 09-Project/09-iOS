@@ -15,6 +15,9 @@ class PostViewController: UIViewController {
     private let disposebag = DisposeBag()
 
     private let getData = BehaviorRelay<Void>(value: ())
+    private var heartBool = Bool()
+    private let flagIt = PublishSubject<Int>()
+    private let deleteFlagIt = PublishSubject<Int>()
     
     private lazy var backBtn = UIButton().then {
         $0.backgroundColor = .none
@@ -142,7 +145,41 @@ class PostViewController: UIViewController {
     
     private func bindViewModel() {
        let model = PostViewModel()
-        let input = PostViewModel.Input(getPost: getData.asSignal(), getMorePost: <#T##Signal<Void>#>, getBackPost: <#T##Signal<Void>#>)
+        let input = PostViewModel.Input (
+            getPost: getData.asSignal(onErrorJustReturn: ()),
+            flagIt: flagIt.asDriver(onErrorJustReturn: 0),
+            deleteFlagIt: deleteFlagIt.asDriver(onErrorJustReturn: 0)
+        )
+        
+        let output = model.transform(input)
+        
+        output.post.bind(to: collectionView.rx.items(cellIdentifier: "cell", cellType: MainCollectionViewCell.self)) { row, items, cell in
+            let url = URL(string: items.image)
+            let data = try? Data(contentsOf: url!)
+            cell.imgView.image = UIImage(data: data!)!
+            cell.titleLabel.text = items.title
+            cell.priceLabel.text = String(items.price)
+            cell.label.text = items.purpose
+            self.heartBool = items.liked
+            
+            if self.heartBool {
+                cell.heartBtn.setImage(.init(systemName: "heart.fill"), for: .normal)
+            }
+            else {
+                cell.heartBtn.setImage(.init(systemName: "heart"), for: .normal)
+            }
+            
+            cell.heartBtn.rx.tap.subscribe(onNext: {[unowned self] _ in
+                if heartBool {
+                    flagIt.onNext(row)
+                    cell.heartBtn.setImage(.init(systemName: "heart.fill"), for: .normal)
+                }
+                else {
+                    deleteFlagIt.onNext(row)
+                    cell.heartBtn.setImage(.init(systemName: "heart"), for: .normal)
+                }
+            }).disposed(by: cell.disposebag)
+        }.disposed(by: disposebag)
     }
     
     private func setup() {
