@@ -16,6 +16,7 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     private let disposebag = DisposeBag()
     private var buyBtnBool = true
     private var giveBtnBool = true
+    private let postImg = UIImage.init(named: "postImg")
     
     private let picker = UIImagePickerController()
     private var img = PublishRelay<Data>()
@@ -229,11 +230,22 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
             price: Int(price.Txt.text!),
             transactionRegion: area.Txt.rx.text.orEmpty.asDriver(),
             openChatLink: openChat.Txt.rx.text.orEmpty.asDriver(),
-            image: img.asDriver(onErrorJustReturn: Data),
+            image: img.asDriver(onErrorJustReturn: (postImg?.jpegData(compressionQuality: 0.8))!),
             doneTap: okBtn.rx.tap.asSignal()
         )
         
         let output = model.transform(input)
+        
+        output.result.asObservable().subscribe(onNext: { [unowned self] bool in
+            if bool {
+                self.presentVC(MainViewController())
+            } else {
+                self.okAlert(title: "게시물을 전송하는데 실패하셨습니다.", action: { ACTION in
+                    self.presentVC(MainViewController())
+                })
+            }
+        }).disposed(by: disposebag)
+        
     }
     
     private func placeholderSetting() {
@@ -395,7 +407,7 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         singleTapGestureRecognizer.isEnabled = true
         singleTapGestureRecognizer.cancelsTouchesInView = false
         scrollView.addGestureRecognizer(singleTapGestureRecognizer)
-    }ㄹ
+    }
     
     @objc
     func MyTapMethod(sender: UITapGestureRecognizer) {
@@ -409,8 +421,10 @@ extension AddPostViewController: UIImagePickerControllerDelegate, UINavigationCo
         present(picker, animated: false, completion: nil)
     }
     
-    func imagePickerController(_ picker: UIImagePickerController,
-                               didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    func imagePickerController(
+        _ picker: UIImagePickerController,
+        didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]
+    ) {
         
         if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
             photo.image = image
