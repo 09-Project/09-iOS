@@ -46,7 +46,7 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     
     private lazy var contentView = UIView().then {
         $0.backgroundColor = .white
-        $0.layer.addBorder( [.top, .bottom], color: .init(named: "placeholderColor"), width: 0.5)
+        $0.layer.addBorder( [.top, .bottom], color: .init(named: "placeholderColor")!, width: 0.5)
     }
     
     private lazy var content = UITextView().then {
