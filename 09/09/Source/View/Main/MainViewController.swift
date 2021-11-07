@@ -15,11 +15,10 @@ class MainViewController: UIViewController {
     private let disposebag = DisposeBag()
     
     private let getData = BehaviorRelay<Void>(value: ())
-    var post_id = Int()
     private let flagIt = PublishSubject<Int>()
     private let deleteFlagIt = PublishSubject<Int>()
+    private var heartBool = Bool()
     let identfier = "cell"
-    private var heartBool = false
     
     private let sideMenu = SideMenuNavigationController(
         rootViewController: SideMenuViewController())
