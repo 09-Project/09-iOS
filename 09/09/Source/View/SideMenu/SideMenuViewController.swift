@@ -63,11 +63,7 @@ class SideMenuViewController: UIViewController {
     }
     
     private func setupView() {
-        view.addSubview(pageLabel)
-        view.addSubview(lineView)
-        view.addSubview(homeBtn)
-        view.addSubview(myPageBtn)
-        view.addSubview(postBtn)
+        [pageLabel, lineView, homeBtn, myPageBtn, postBtn].forEach{view.addSubview($0)}
         
         self.pageLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(64)
@@ -98,32 +94,16 @@ class SideMenuViewController: UIViewController {
     }
     
     private func setButton() {
-        homeBtn.rx.tap.subscribe(onNext: {[unowned self] _ in self.homeBtnDidTap()
+        homeBtn.rx.tap.subscribe(onNext: { _ in
+            self.pushVC(MainViewController())
         }).disposed(by: disposebag)
         
-        myPageBtn.rx.tap.subscribe(onNext: {[unowned self] _ in self.myPageBtnDidTap()
+        myPageBtn.rx.tap.subscribe(onNext: { _ in
+            self.pushVC(MyPageViewController())
         }).disposed(by: disposebag)
         
-        postBtn.rx.tap.subscribe(onNext: {[unowned self] _ in self.postBtnDidTap()
+        postBtn.rx.tap.subscribe(onNext: { _ in
+            self.pushVC(AddPostViewController())
         }).disposed(by: disposebag)
     }
-    
-    @objc
-    private func homeBtnDidTap() {
-        let VC = MainViewController()
-        self.navigationController?.pushViewController(VC, animated: false)
-    }
-    
-    @objc
-    private func myPageBtnDidTap() {
-        let VC = MyPageViewController()
-        self.navigationController?.pushViewController(VC, animated: false)
-    }
-    
-    @objc
-    private func postBtnDidTap() {
-        let VC = PostViewController()
-        self.navigationController?.pushViewController(VC, animated: false)
-    }
-
 }
