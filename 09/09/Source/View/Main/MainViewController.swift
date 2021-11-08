@@ -41,14 +41,12 @@ class MainViewController: UIViewController {
     }
     
     private lazy var label = UILabel().then {
-        $0.backgroundColor = .none
         $0.text = "공동구매부터 무료나눔까지"
         $0.textColor = .white
         $0.font = .init(name: Font.fontBold.rawValue, size: 22)
     }
     
     private lazy var label2 = UILabel().then {
-        $0.backgroundColor = .none
         $0.text = "09"
         $0.textColor = .white
         $0.font = .init(name: Font.fontRegular.rawValue, size: 17)
@@ -72,12 +70,14 @@ class MainViewController: UIViewController {
         $0.tintColor = .init(named: "mainColor")
     }
     
-    private lazy var mainCollectionView = UICollectionView().then {
+    private lazy var mainCollectionView = UICollectionView(frame: .zero, collectionViewLayout: setCollectionView()).then {
         $0.backgroundColor = .white
     }
     
-    private lazy var lineBtn = UIBarButtonItem(image: .init(named: "line.horizontal.3"),
-                                               style: .plain, target: self, action: nil)
+    private var lineBtn = UIBarButtonItem(image: .init(systemName: "line.horizontal.3"),
+                                          style: .plain, target: self, action: nil).then {
+        $0.tintColor = .black
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -85,6 +85,7 @@ class MainViewController: UIViewController {
         view.backgroundColor = .white
         let img = UIImage(named: "logo&symbolImg")
         navigationItem.titleView = UIImageView(image: img)
+        navigationItem.rightBarButtonItem = lineBtn
         sideMenu.leftSide = false
         SideMenuManager.default.rightMenuNavigationController = sideMenu
         SideMenuManager.default.addPanGestureToPresent(toView: view)
@@ -92,8 +93,8 @@ class MainViewController: UIViewController {
             self.present(self.sideMenu, animated: true, completion: nil)
         }).disposed(by: disposebag)
         mainCollectionView.delegate = self
-        mainCollectionView.dataSource = self
     }
+    
     
     override func viewDidLayoutSubviews() {
         let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 73, height: 28))
@@ -102,6 +103,14 @@ class MainViewController: UIViewController {
         imageView.image = image
         navigationItem.titleView = imageView
         setupView()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        mainCollectionView.reloadData()
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
     }
     
     private func bindViewModel() {
@@ -144,25 +153,20 @@ class MainViewController: UIViewController {
                     cell.heartBtn.setImage(.init(systemName: "heart"), for: .normal)
                 }
             }).disposed(by: cell.disposebag)
+            
         }.disposed(by: disposebag)
         
     }
     
     private func setupView() {
-        view.addSubview(searchField)
-        view.addSubview(searchBtn)
-        view.addSubview(bennerImgView)
-        view.addSubview(label)
-        view.addSubview(label2)
-        view.addSubview(label3)
-        view.addSubview(pageFrontBtn)
-        view.addSubview(pageBackBTn)
-        view.addSubview(mainCollectionView)
+        [searchField, searchBtn, bennerImgView, label, label2, label3, pageFrontBtn, pageBackBTn,
+         mainCollectionView].forEach{view.addSubview($0)}
         
         self.searchField.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(12)
+            $0.top.equalToSuperview().offset(100)
             $0.leading.equalToSuperview().offset(40)
             $0.trailing.equalToSuperview().offset(-40)
+            $0.height.equalTo(26)
         }
         
         self.searchBtn.snp.makeConstraints{
@@ -210,5 +214,24 @@ class MainViewController: UIViewController {
     }
     
     
+}
+
+extension MainViewController: UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        let width = collectionView.frame.width / 2 - 1
+        let size = CGSize(width: width, height: width)
+        
+        return size
+    }
 }
 
