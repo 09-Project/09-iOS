@@ -26,11 +26,8 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         $0.backgroundColor = .white
     }
     
-    
     private lazy var titleView = UIView().then {
         $0.backgroundColor = .white
-        $0.layer.addBorder([.top, .bottom], color: .init(named: "placeholderColor")!, width: 0.5)
-        
     }
     
     private lazy var titleTxt = UITextField().then {
@@ -47,7 +44,6 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     
     private lazy var contentView = UIView().then {
         $0.backgroundColor = .white
-        $0.layer.addBorder( [.top, .bottom], color: .init(named: "placeholderColor")!, width: 0.5)
     }
     
     private lazy var content = UITextView().then {
@@ -143,9 +139,8 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         super.viewDidLoad()
         view.backgroundColor = .white
         navigationItem.title = "게시물 작성"
-        navigationController?.navigationBar.tintColor = .white
         navigationItem.rightBarButtonItem = okBtn
-        navigationItem.rightBarButtonItem?.tintColor = .black
+        navigationItem.rightBarButtonItem!.tintColor = .black
         imageBtn.rx.tap.subscribe(onNext: {
             self.imageViewTap()
         }).disposed(by: disposebag)
@@ -181,6 +176,8 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     override func viewDidAppear(_ animated: Bool) {
         placeholderSetting()
         imageBtn.isHidden = false
+        titleView.layer.addBorder([.top, .bottom], color: .init(named: "placeholderColor")!, width: 0.5)
+        contentView.layer.addBorder([.top, .bottom], color: .init(named: "placeholderColor")!, width: 0.5)
     }
     
     override func viewDidLayoutSubviews() {
@@ -222,6 +219,10 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         }
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
     private func bindViewModel() {
         let model = AddPostViewModel()
         let input = AddPostViewModel.Input(
@@ -238,14 +239,17 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         
         output.result.asObservable().subscribe(onNext: { [unowned self] bool in
             if bool {
-                self.presentVC(MainViewController())
+                self.navigationController?.popViewController(animated: true)
             } else {
                 self.okAlert(title: "게시물을 전송하는데 실패하셨습니다.", action: { ACTION in
-                    self.presentVC(MainViewController())
+                    self.navigationController?.popViewController(animated: true)
                 })
             }
         }).disposed(by: disposebag)
         
+        output.isEnable.asObservable().subscribe(onNext: { [unowned self] bool in
+            okBtn.isEnabled = bool
+        }).disposed(by: disposebag)
     }
     
     private func placeholderSetting() {
@@ -275,7 +279,7 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         titleView.snp.makeConstraints {
             $0.top.equalTo(self.view.safeAreaInsets).offset(1)
             $0.height.equalTo(52)
-            $0.leading.trailing.equalTo(self.View).inset(0)
+            $0.leading.trailing.equalTo(self.View)
         }
         
         titleTxt.snp.makeConstraints {
@@ -290,8 +294,8 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         }
         
         contentView.snp.makeConstraints {
-            $0.top.equalTo(self.titleView.snp.bottom).offset(0)
-            $0.leading.trailing.equalToSuperview().offset(0)
+            $0.top.equalTo(self.titleView.snp.bottom).offset(1)
+            $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(135)
         }
         
