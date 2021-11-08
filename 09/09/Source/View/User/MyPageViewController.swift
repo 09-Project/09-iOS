@@ -24,6 +24,7 @@ class MyPageViewController: UIViewController {
     
     private lazy var profileImg = UIImageView().then {
         $0.layer.cornerRadius = 10
+        $0.image = .init(named: "ProfileImg")
         $0.contentMode = .scaleAspectFit
     }
     
@@ -51,12 +52,10 @@ class MyPageViewController: UIViewController {
     }
     
     private lazy var productNum = UILabel().then {
-        $0.backgroundColor = .none
         $0.font = .init(name: Font.fontBold.rawValue, size: 18)
     }
     
     private lazy var productLabel = UILabel().then {
-        $0.backgroundColor = .none
         $0.text = "상품"
         $0.textColor = .init(named: "mainColor")
         $0.font = .init(name: Font.fontMedium.rawValue, size: 13)
@@ -69,13 +68,11 @@ class MyPageViewController: UIViewController {
     }
     
     private lazy var prizeNum = UILabel().then {
-        $0.backgroundColor = .none
         $0.font = .init(name: Font.fontBold.rawValue, size: 18)
         $0.textColor = .black
     }
     
     private lazy var prizeLabel = UILabel().then {
-        $0.backgroundColor = .none
         $0.font = .init(name: Font.fontMedium.rawValue, size: 13)
         $0.textColor = .init(named: "mainColor")
         $0.text = "찜한 상품"
@@ -88,13 +85,11 @@ class MyPageViewController: UIViewController {
     }
     
     private lazy var receiveNum = UILabel().then {
-        $0.backgroundColor = .none
         $0.font = .init(name: Font.fontBold.rawValue, size: 18)
         $0.textColor = .black
     }
     
     private lazy var receiveLabel = UILabel().then {
-        $0.backgroundColor = .none
         $0.text = "받은 찜"
         $0.font = .init(name: Font.fontMedium.rawValue, size: 13)
         $0.textColor = .init(named: "mainColor")
@@ -107,13 +102,11 @@ class MyPageViewController: UIViewController {
     }
     
     private lazy var transactionNum = UILabel().then {
-        $0.backgroundColor = .none
         $0.font = .init(name: Font.fontBold.rawValue, size: 18)
         $0.textColor = .black
     }
     
     private lazy var transactionLabel = UILabel().then {
-        $0.backgroundColor = .none
         $0.text = "거래 내역"
         $0.font = .init(name: Font.fontMedium.rawValue, size: 13)
         $0.textColor = .init(named: "mainColor")
@@ -127,21 +120,19 @@ class MyPageViewController: UIViewController {
     }
     
     private lazy var likePostBtn = UIButton(type: .system).then {
-        $0.backgroundColor = .white
         $0.setTitle("찐함 상품", for: .normal)
         $0.titleLabel!.font = .init(name: Font.fontMedium.rawValue, size: 15)
         $0.setTitleColor(.black, for: .normal)
     }
     
     private lazy var detailBtn = UIButton(type: .system).then {
-        $0.backgroundColor = .white
         $0.setTitle("거래 내역", for: .normal)
         $0.titleLabel!.font = .init(name: Font.fontMedium.rawValue, size: 15)
         $0.setTitleColor(.black, for: .normal)
     }
     
     
-    private lazy var collectionView = UICollectionView().then {
+    private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: setCollectionView()).then {
         $0.backgroundColor = .white
     }
     
@@ -151,7 +142,6 @@ class MyPageViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.delegate = self
-        collectionView.dataSource = self
         collectionView.register(MainCollectionViewCell.self,
                                 forCellWithReuseIdentifier: identfier)
         view.backgroundColor = .white
@@ -249,18 +239,18 @@ class MyPageViewController: UIViewController {
         
         
         self.profileImg.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(26)
+            $0.top.equalToSuperview().offset(126)
             $0.leading.lessThanOrEqualToSuperview().offset(40)
             $0.width.height.equalTo(80)
         }
         
         self.nameLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(32)
+            $0.top.equalToSuperview().offset(132)
             $0.leading.equalTo(self.profileImg.snp.trailing).offset(23)
         }
         
         self.gearBtn.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(32)
+            $0.top.equalToSuperview().offset(132)
             $0.leading.equalTo(self.nameLabel.snp.trailing).offset(7)
             $0.height.width.equalTo(14)
         }
@@ -348,26 +338,43 @@ class MyPageViewController: UIViewController {
         }
         
         self.postBtn.snp.makeConstraints {
-            $0.top.equalTo(productView.snp.bottom).inset(36)
-            $0.leading.equalToSuperview().inset(67)
+            $0.top.equalTo(productView.snp.bottom).offset(36)
+            $0.leading.equalToSuperview().offset(67)
         }
         
         self.likePostBtn.snp.makeConstraints {
-            $0.top.equalTo(productView.snp.bottom).inset(36)
-            $0.leading.lessThanOrEqualTo(postBtn.snp.trailing).inset(83)
+            $0.top.equalTo(productView.snp.bottom).offset(36)
+            $0.leading.lessThanOrEqualTo(postBtn.snp.trailing).offset(83)
         }
         
         self.detailBtn.snp.makeConstraints {
-            $0.top.equalTo(productView.snp.bottom).inset(36)
-            $0.leading.lessThanOrEqualTo(likePostBtn.snp.trailing).inset(51)
+            $0.top.equalTo(productView.snp.bottom).offset(36)
+            $0.leading.lessThanOrEqualTo(likePostBtn.snp.trailing).offset(51)
             $0.trailing.equalToSuperview().inset(66)
         }
         
         self.collectionView.snp.makeConstraints {
-            $0.top.equalTo(postBtn.snp.bottom).inset(10)
-            $0.leading.trailing.bottom.equalToSuperview().inset(0)
+            $0.top.equalTo(postBtn.snp.bottom).offset(10)
+            $0.leading.trailing.bottom.equalToSuperview().offset(0)
         }
         
     }
     
+}
+
+extension MyPageViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+            return 1        }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+            return 1
+        }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+
+            let width = collectionView.frame.width / 2 - 1
+            let size = CGSize(width: width, height: width)
+
+            return size
+        }
 }
