@@ -127,7 +127,7 @@ class PostViewController: UIViewController {
         $0.backgroundColor = .init(named: "D3D3D3Color")
     }
     
-    private lazy var collectionView = UICollectionView().then {
+    private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: setCollectionView()).then {
         $0.backgroundColor = .white
     }
     
@@ -287,4 +287,22 @@ class PostViewController: UIViewController {
             $0.bottom.equalToSuperview().offset(-39)
         }
     }
+}
+
+extension PostViewController: UICollectionViewDelegateFlowLayout{
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+            return 1        }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+            return 1
+        }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+
+            let width = collectionView.frame.width / 3 - 1
+            let size = CGSize(width: width, height: width)
+
+            return size
+        }
 }
