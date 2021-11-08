@@ -6,16 +6,18 @@
 //
 
 import UIKit
+import RxSwift
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window : UIWindow?
+    var disposebag = DisposeBag()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         sleep(1)
-//        Service().refreshToken()
+        Service().refreshToken().subscribe().disposed(by: disposebag)
         return true
     }
 
@@ -34,7 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func applicationWillEnterForeground(_ application: UIApplication) {
-//        Service().refreshToken()
+        Service().refreshToken().subscribe().disposed(by: disposebag)
     }
 
 
