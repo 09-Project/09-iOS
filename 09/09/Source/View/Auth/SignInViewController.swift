@@ -174,9 +174,6 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         
         let output = viewModel.transform(input)
         output.isEnable.drive(loginBtn.rx.isEnabled).disposed(by: disposeBag)
-        output.isEnable.drive(onNext: {[unowned self] bool in
-            Btn(loginBtn)
-        }).disposed(by: disposeBag)
         
         output.result.subscribe(onNext: { [unowned self] bool in
             if bool {
@@ -313,15 +310,6 @@ private extension SignInViewController {
             .disposed(by: disposeBag)
         self.checkBtn.rx.tap.subscribe(onNext: {[unowned self] _ in changeCheckBtnImg()})
             .disposed(by: disposeBag)
-    }
-    
-    private func Btn(_ sender: UIButton){
-        if sender.isEnabled{
-            sender.isEnabled = true
-        }
-        else {
-            sender.isEnabled = false
-        }
     }
     private func setObj() {
         let aa = NSMutableAttributedString(string: moveSignupBtn.currentTitle!)
