@@ -128,7 +128,7 @@ extension API: TargetType {
         case .postProducts(let title, let content, let price, let transactionRegion,
                            let openChatLink, let image):
             var multipartFormData = [MultipartFormData]()
-            multipartFormData.append(MultipartFormData(provider: .data(image), name: "image", fileName: "image.jpg", mimeType: "image/png"))
+            multipartFormData.append(MultipartFormData(provider: .data(image), name: "image", fileName: "image.jpg", mimeType: "image/jpg"))
             multipartFormData.append(MultipartFormData(provider: .data(title.data(using: .utf8)!), name: "title", mimeType: "text/plain"))
             multipartFormData.append(MultipartFormData(provider: .data(content.data(using: .utf8)!), name: "content", mimeType: "text/plain"))
             multipartFormData.append(MultipartFormData(provider: .data(price.description.data(using: .utf8)!), name: "price", mimeType: "text/plain"))
@@ -158,7 +158,7 @@ extension API: TargetType {
                           let openChatLink, let image):
             var multipartFormData = [MultipartFormData]()
             multipartFormData.append(MultipartFormData(provider: .data(postID.description.data(using: .utf8)!), name: "postID", mimeType: "text/plain"))
-            multipartFormData.append(MultipartFormData(provider: .data(image), name: "image", fileName: "image.jpg", mimeType: "image/png"))
+            multipartFormData.append(MultipartFormData(provider: .data(image), name: "image", fileName: "image.jpg", mimeType: "image/jpg"))
             multipartFormData.append(MultipartFormData(provider: .data(title.data(using: .utf8)!), name: "title", mimeType: "text/plain"))
             multipartFormData.append(MultipartFormData(provider: .data(content.data(using: .utf8)!), name: "content", mimeType: "text/plain"))
             multipartFormData.append(MultipartFormData(provider: .data(price.description.data(using: .utf8)!), name: "price", mimeType: "text/plain"))
