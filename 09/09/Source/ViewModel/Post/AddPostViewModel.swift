@@ -24,12 +24,12 @@ class AddPostViewModel: ViewModelType {
     
     struct Output{
         let isEnable: Driver<Bool>
-        let result: Signal<Bool>
+        let result: PublishRelay<Bool>
     }
     
     func transform(_ input: Input) -> Output {
         let api = Service()
-        let result = PublishSubject<Bool>()
+        let result = PublishRelay<Bool>()
         let info = Driver.combineLatest(input.title, input.content, input.transactionRegion,
                                         input.openChatLink, input.image)
         let isEnabel = info.map { !$0.0.isEmpty && !$0.1.isEmpty && !$0.2.isEmpty && !$0.3.isEmpty
@@ -40,10 +40,15 @@ class AddPostViewModel: ViewModelType {
             .withLatestFrom(info)
             .flatMap { title, content, transactionRegion, openChatLink, image in
                 api.post(title: title, content: content, price: input.price ?? 0, transactionRegion: transactionRegion, openChatLink: openChatLink, image: image)
-            }.subscribe(onNext: { _ in
-                result.onCompleted()
+            }.subscribe(onNext: { res in
+                switch res {
+                case .okay:
+                    result.accept(true)
+                default:
+                    result.accept(false)
+                }
             }).disposed(by: disposebag)
         
-        return Output(isEnable: isEnabel.asDriver(onErrorJustReturn: false), result: result.asSignal(onErrorJustReturn: false))
+        return Output(isEnable: isEnabel.asDriver(onErrorJustReturn: false), result: result)
     }
 }
