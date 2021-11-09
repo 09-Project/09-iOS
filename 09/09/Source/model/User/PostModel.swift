@@ -11,15 +11,16 @@ struct PostModel: Codable {
     let id: Int
     let title: String
     let price: Int
-    let transactionRegion: String
+    let transaction_region: String
     let purpose: String
     let completed: String
-    let createdData: String
-    let updatedData: String
+    let created_date: String
+    let updated_date: String
     let image: String
     let liked: Bool
 }
 
 struct posts: Codable {
+    var count: Int
     var posts: [PostModel]
 }
