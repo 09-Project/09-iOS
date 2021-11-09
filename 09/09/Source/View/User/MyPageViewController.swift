@@ -178,6 +178,7 @@ class MyPageViewController: UIViewController {
             cell.titleLabel.text = items.title
             cell.priceLabel.text = String(items.price)
             cell.label.text = items.purpose
+            cell.locationLabel.text = items.transaction_region
         }.disposed(by: disposebag)
     }
     
