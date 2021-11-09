@@ -17,6 +17,7 @@ class MainViewController: UIViewController {
     private let getData = BehaviorRelay<Void>(value: ())
     private let flagIt = PublishSubject<Int>()
     private let deleteFlagIt = PublishSubject<Int>()
+    private let refreshToken = PublishSubject<Void>()
     private var heartBool = Bool()
     let identfier = "cell"
     
@@ -107,6 +108,7 @@ class MainViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         mainCollectionView.reloadData()
+        refresh()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -122,7 +124,8 @@ class MainViewController: UIViewController {
             searchBtn: searchBtn.rx.tap.asSignal(),
             searchTxt: searchField.rx.text.asSignal(onErrorJustReturn: ""),
             flagIt: flagIt.asDriver(onErrorJustReturn: 0),
-            deleteFlagIt: deleteFlagIt.asDriver(onErrorJustReturn: 0)
+            deleteFlagIt: deleteFlagIt.asDriver(onErrorJustReturn: 0),
+            refresh: refreshToken.asDriver(onErrorJustReturn: ())
         )
         
         let output = model.transform(input)
@@ -134,6 +137,7 @@ class MainViewController: UIViewController {
             cell.titleLabel.text = items.title
             cell.priceLabel.text = String(items.price)
             cell.label.text = items.purpose
+            cell.locationLabel.text = items.transaction_region
             self.heartBool = items.liked
             
             if self.heartBool {
@@ -156,6 +160,16 @@ class MainViewController: UIViewController {
             
         }.disposed(by: disposebag)
         
+        output.refreshResult.subscribe(onNext: { bool in
+            if bool == false {
+                self.presentVC(SignInViewController())
+            }
+        }).disposed(by: disposebag)
+        
+    }
+    
+    private func refresh() {
+        refreshToken.onNext(())
     }
     
     private func setupView() {
@@ -169,7 +183,7 @@ class MainViewController: UIViewController {
             $0.height.equalTo(26)
         }
         
-        self.searchBtn.snp.makeConstraints{
+        self.searchBtn.snp.makeConstraints {
             $0.top.equalTo(self.searchField.snp.top).offset(7)
             $0.trailing.equalTo(self.searchField.snp.trailing).offset(-12)
             $0.height.width.equalTo(11)
@@ -212,7 +226,6 @@ class MainViewController: UIViewController {
             $0.bottom.equalToSuperview().offset(0)
         }
     }
-    
     
 }
 
