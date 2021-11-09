@@ -177,7 +177,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         
         output.result.subscribe(onNext: { [unowned self] bool in
             if bool {
-                self.presentVC(MainViewController())
+                self.pushVC(MainViewController())
             }
             else {
                 errorLabel.isHidden = false
