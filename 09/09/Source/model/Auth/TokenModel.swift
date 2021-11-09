@@ -15,21 +15,27 @@ struct TokenModel: Codable {
 
 struct Token {
     
+    static var _accessToken: String?
     static var accessToken: String? {
         get {
-            return UserDefaults.standard.string(forKey: "token")
+            _accessToken = UserDefaults.standard.string(forKey: "token")
+            return _accessToken
         }
         set {
-            return UserDefaults.standard.set(newValue, forKey: "token")
+            UserDefaults.standard.setValue(newValue, forKey: "token")
+            _accessToken = UserDefaults.standard.string(forKey: "token")
         }
     }
     
+    static var _refreshToken: String?
     static var refreshToken: String?{
         get {
-            return UserDefaults.standard.string(forKey: "refreshToken")
+            _refreshToken = UserDefaults.standard.string(forKey: "refreshToken")
+            return _refreshToken
         }
         set {
-            return UserDefaults.standard.set(newValue, forKey: "refreshToken")
+             UserDefaults.standard.set(newValue, forKey: "refreshToken")
+            _refreshToken = UserDefaults.standard.string(forKey: "refreshToken")
         }
     }
     
