@@ -114,8 +114,12 @@ extension API: TargetType {
             return ["Content-Type" : "application/json"]
             
         case .refreshToken:
-            guard let token = Token.refreshToken else {return ["Content-Type" : "application/json"]}
-            return ["Authorization" : token, "Content-Type" : "application/json"]
+            guard let refreshToken = Token.refreshToken else {return ["Content-Type" : "application/json"]}
+            return ["X-Refresh-Token" : refreshToken, "Content-Type" : "application/json"]
+            
+        case .postProducts, .putProducts, .changeInformation:
+            guard let token = Token.accessToken else { return ["Content-Type" : "application/json"]}
+            return ["Authorization" : "Bearer" + token, "Content-Type" : "multipart/form-data"]
             
         default:
             guard let token = Token.accessToken else {return ["Content-Type" : "application/json"]}
@@ -136,6 +140,15 @@ extension API: TargetType {
             multipartFormData.append(MultipartFormData(provider: .data(openChatLink.data(using: .utf8)!), name: "openChatLink", mimeType: "text/plain"))
             return .uploadMultipart(multipartFormData)
             
+        case .changeInformation(let name, let introduce, let profileUrl):
+            var multipartFormData = [MultipartFormData]()
+            
+            multipartFormData.append(MultipartFormData(provider: .data(name.data(using: .utf8)!), name: "name", mimeType: "text/plain"))
+            multipartFormData.append(MultipartFormData(provider: .data(introduce.data(using: .utf8)!), name: "introduction", mimeType: "text/plain"))
+            multipartFormData.append(MultipartFormData(provider: .data(profileUrl), name: "profileUrl", fileName: "image.jpg", mimeType: "image/jpg"))
+            
+            return .uploadMultipart(multipartFormData)
+            
         case .signIn(let username, let password):
             return .requestParameters(parameters: ["username": username, "password": password],
                                       encoding: JSONEncoding.prettyPrinted)
@@ -150,10 +163,6 @@ extension API: TargetType {
                                                    "new_password": new_password],
                                       encoding: JSONEncoding.prettyPrinted)
             
-        case .changeInformation(let name, let introduction, let profileURL):
-            return .requestParameters(parameters: ["name": name, "introduction": introduction,                                                "profileUrl": profileURL],
-                                      encoding: JSONEncoding.prettyPrinted)
-            
         case .putProducts(let postID, let title, let content, let price, let transactionRegion,
                           let openChatLink, let image):
             var multipartFormData = [MultipartFormData]()
@@ -165,6 +174,12 @@ extension API: TargetType {
             multipartFormData.append(MultipartFormData(provider: .data(transactionRegion.data(using: .utf8)!), name: "transactionRegion", mimeType: "text/plain"))
             multipartFormData.append(MultipartFormData(provider: .data(openChatLink.data(using: .utf8)!), name: "openChatLink", mimeType: "text/plain"))
             return .uploadMultipart(multipartFormData)
+            
+        case .products(let page, let size):
+            return .requestParameters(parameters: ["page" : page, "size" : size], encoding: JSONEncoding.prettyPrinted)
+            
+        case .search(let keyword, let page, let size):
+            return .requestParameters(parameters: ["keyword" : keyword, "page" : page, "size" : size], encoding: JSONEncoding.prettyPrinted)
             
         default:
             return .requestPlain
