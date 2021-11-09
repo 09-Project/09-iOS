@@ -22,12 +22,14 @@ class MainViewModel: ViewModelType {
         let searchTxt: Signal<String?>
         let flagIt: Driver<Int>
         let deleteFlagIt: Driver<Int>
+        let refresh: Driver<Void>
     }
     
     struct Output {
         let getPostResult: PublishRelay<Bool>
         let post: BehaviorRelay<[PostModel]>
         let flagItResult: PublishRelay<Bool>
+        let refreshResult: PublishRelay<Bool>
     }
     
     func transform(_ input: Input) -> Output {
@@ -35,9 +37,10 @@ class MainViewModel: ViewModelType {
         let getPostResult = PublishRelay<Bool>()
         let post = BehaviorRelay<[PostModel]>(value: [])
         let flagItResult = PublishRelay<Bool>()
+        let refreshResult = PublishRelay<Bool>()
         var page = 0
         
-        input.getPost.asObservable().flatMap{ _ in api.products(page: 0, size: 8)}
+        input.getPost.asObservable().flatMap{ _ in api.products(page: 0, size: 16)}
         .subscribe(onNext: { data, res in
             switch res {
             case .ok:
@@ -50,7 +53,7 @@ class MainViewModel: ViewModelType {
         }).disposed(by: disposebag)
         
         input.getMorePost.asObservable().map{ page += 1 }.flatMap{ _ in
-            api.products(page: page, size: 8)
+            api.products(page: page, size: 16)
         }.subscribe(onNext: { data, res in
             switch res {
             case .ok:
@@ -63,7 +66,7 @@ class MainViewModel: ViewModelType {
         }).disposed(by: disposebag)
         
         input.getBackPost.asObservable().map{ page -= 1 }.flatMap{ _ in
-            api.products(page: page, size: 8)
+            api.products(page: page, size: 16)
         }.subscribe(onNext: { data, res in
             switch res {
             case .ok:
@@ -76,7 +79,7 @@ class MainViewModel: ViewModelType {
         }).disposed(by: disposebag)
         
         input.searchBtn.asObservable().withLatestFrom(input.searchTxt).flatMap{ text in
-            api.search(keywords: text!, page: page, size: 8)
+            api.search(keywords: text!, page: page, size: 16)
         }.subscribe(onNext: { data, res in
             switch res {
             case .ok:
@@ -90,7 +93,7 @@ class MainViewModel: ViewModelType {
             api.like(self.posts[row].id)
         }.subscribe(onNext: { res in
             switch res {
-            case .ok:
+            case .okay:
                 flagItResult.accept(true)
             default:
                 flagItResult.accept(false)
@@ -101,14 +104,25 @@ class MainViewModel: ViewModelType {
             api.delete(self.posts[row].id)
         }.subscribe(onNext: { res in
             switch res {
-            case .ok:
+            case .deleteOk:
                 flagItResult.accept(false)
             default:
                 flagItResult.accept(true)
             }
         }).disposed(by: disposebag)
         
-        return Output(getPostResult: getPostResult, post: post, flagItResult: flagItResult)
+        input.refresh.asObservable().flatMap{ _ in
+            api.refreshToken()
+        }.subscribe(onNext: { res in
+            switch res {
+            case .ok:
+                refreshResult.accept(true)
+            default:
+                refreshResult.accept(false)
+            }
+        }).disposed(by: disposebag)
+        
+        return Output(getPostResult: getPostResult, post: post, flagItResult: flagItResult, refreshResult: refreshResult)
     }
 }
 
