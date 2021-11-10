@@ -25,7 +25,3 @@ struct SeePostModel: Codable {
     let postsCount: Int
     let everyLikeCounts: Int
 }
-
-struct SeePostList: Codable {
-    var SeePostList: [SeePostModel]
-}

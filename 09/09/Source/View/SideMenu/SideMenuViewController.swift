@@ -95,7 +95,7 @@ class SideMenuViewController: UIViewController {
     
     private func setButton() {
         homeBtn.rx.tap.subscribe(onNext: { _ in
-            self.pushVC(MainViewController())
+            self.dismiss(animated: true, completion: nil)
         }).disposed(by: disposebag)
         
         myPageBtn.rx.tap.subscribe(onNext: { _ in

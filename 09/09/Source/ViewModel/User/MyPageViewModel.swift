@@ -46,7 +46,7 @@ struct MyPageViewModel: ViewModelType {
         }).disposed(by: disposebag)
         
         input.getPost.asObservable().flatMap {
-            _ in api.products(page: 0, size: 8)
+            _ in api.products(page: 0)
         }.subscribe(onNext: { data, res in
             switch res {
             case .ok:

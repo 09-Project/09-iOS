@@ -40,20 +40,20 @@ class MainViewModel: ViewModelType {
         let refreshResult = PublishRelay<Bool>()
         var page = 0
         
-        input.getPost.asObservable().flatMap{ _ in api.products(page: 0, size: 16)}
+        input.getPost.asObservable().flatMap{ _ in
+            api.products(page: 0)}
         .subscribe(onNext: { data, res in
             switch res {
             case .ok:
                 post.accept(data!.posts)
                 getPostResult.accept(true)
             default:
-                print(res)
                 getPostResult.accept(false)
             }
         }).disposed(by: disposebag)
-        
+  
         input.getMorePost.asObservable().map{ page += 1 }.flatMap{ _ in
-            api.products(page: page, size: 16)
+            api.products(page: page)
         }.subscribe(onNext: { data, res in
             switch res {
             case .ok:
@@ -66,7 +66,7 @@ class MainViewModel: ViewModelType {
         }).disposed(by: disposebag)
         
         input.getBackPost.asObservable().map{ page -= 1 }.flatMap{ _ in
-            api.products(page: page, size: 16)
+            api.products(page: page)
         }.subscribe(onNext: { data, res in
             switch res {
             case .ok:
@@ -79,7 +79,7 @@ class MainViewModel: ViewModelType {
         }).disposed(by: disposebag)
         
         input.searchBtn.asObservable().withLatestFrom(input.searchTxt).flatMap{ text in
-            api.search(keywords: text!, page: page, size: 16)
+            api.search(keywords: text!, page: 0)
         }.subscribe(onNext: { data, res in
             switch res {
             case .ok:
@@ -93,7 +93,7 @@ class MainViewModel: ViewModelType {
             api.like(self.posts[row].id)
         }.subscribe(onNext: { res in
             switch res {
-            case .okay:
+            case .createOk:
                 flagItResult.accept(true)
             default:
                 flagItResult.accept(false)

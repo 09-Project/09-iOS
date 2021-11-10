@@ -10,7 +10,7 @@ import Foundation
 struct PostModel: Codable {
     let id: Int
     let title: String
-    let price: Int
+    let price: Int?
     let transaction_region: String
     let purpose: String
     let completed: String
@@ -20,7 +20,7 @@ struct PostModel: Codable {
     let liked: Bool
 }
 
-struct posts: Codable {
+struct Posts: Codable {
     var count: Int
     var posts: [PostModel]
 }

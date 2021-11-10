@@ -11,7 +11,6 @@ import RxCocoa
 
 class PostViewController: UIViewController {
     
-    let identfier = "cell"
     private let disposebag = DisposeBag()
 
     private let getData = BehaviorRelay<Void>(value: ())
@@ -135,8 +134,7 @@ class PostViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         // Do any additional setup after loading the view.
-        self.collectionView.register(MainCollectionViewCell.self,
-                                     forCellWithReuseIdentifier: identfier)
+        self.collectionView.register(MainCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
     }
     
     override func viewDidLayoutSubviews() {
@@ -158,7 +156,7 @@ class PostViewController: UIViewController {
             let data = try? Data(contentsOf: url!)
             cell.imgView.image = UIImage(data: data!)!
             cell.titleLabel.text = items.title
-            cell.priceLabel.text = String(items.price)
+            cell.priceLabel.text = String(items.price ?? 0)
             cell.label.text = items.purpose
             cell.locationLabel.text = items.transaction_region
             self.heartBool = items.liked

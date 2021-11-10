@@ -29,8 +29,8 @@ enum API {
     // Post
     case deleteProducts(_ postID: Int)
     case seeProducts(_ postID: Int)
-    case products(_ page: Int, _ size: Int)
-    case search(_ keywords: String, _ page: Int, _ size: Int)
+    case products(_ page: Int)
+    case search(_ keywords: String, _ page: Int)
     case other
     case putProducts(_ postID: Int, _ title: String, _ content: String, _ price: Int,
                      _ transactionRegion: String, _ openChatLink: String, _ image: Data)
@@ -67,7 +67,7 @@ extension API: TargetType {
             return "/post/{\(id)}"
         case .seeProducts(let id):
             return "/post/{\(id)}"
-        case .products:
+        case .products(let page):
             return "/post"
         case .search:
             return "/post/search"
@@ -96,8 +96,7 @@ extension API: TargetType {
         switch self {
         case .likeObj, .signUp, .signIn, .postProducts:
             return .post
-        case .profile, .seeLikePost,.getInformation, .seeProducts, .products, .other, .search, .seeDeletePost,
-                .myPage:
+        case .profile, .seeLikePost,.getInformation, .seeProducts, .products, .other, .search, .seeDeletePost, .myPage:
             return .get
         case .putProducts, .changepw, .changeInformation:
             return .patch
@@ -112,18 +111,17 @@ extension API: TargetType {
         switch self {
         case .signIn, .signUp:
             return ["Content-Type" : "application/json"]
-            
         case .refreshToken:
             guard let refreshToken = Token.refreshToken else {return ["Content-Type" : "application/json"]}
-            return ["X-Refresh-Token" : refreshToken, "Content-Type" : "application/json"]
+            return ["X-Refresh-Token" : refreshToken]
             
         case .postProducts, .putProducts, .changeInformation:
-            guard let token = Token.accessToken else { return ["Content-Type" : "application/json"]}
+            guard let token = Token.accessToken else {return ["Content-Type" : "application/json"]}
             return ["Authorization" : "Bearer" + token, "Content-Type" : "multipart/form-data"]
             
         default:
             guard let token = Token.accessToken else {return ["Content-Type" : "application/json"]}
-            return ["Authorization" : "Bearer" + token, "Content-Type" : "application/json"]
+            return ["Authorization" : "Bearer" + token]
         }
     }
     
@@ -145,7 +143,7 @@ extension API: TargetType {
             
             multipartFormData.append(MultipartFormData(provider: .data(name.data(using: .utf8)!), name: "name", mimeType: "text/plain"))
             multipartFormData.append(MultipartFormData(provider: .data(introduce.data(using: .utf8)!), name: "introduction", mimeType: "text/plain"))
-            multipartFormData.append(MultipartFormData(provider: .data(profileUrl), name: "profileUrl", fileName: "image.jpg", mimeType: "image/jpg"))
+            multipartFormData.append(MultipartFormData(provider: .data(profileUrl), name: "profileUrl", fileName: "ProfileUrl.jpg", mimeType: "ProfileUrl/jpg"))
             
             return .uploadMultipart(multipartFormData)
             
@@ -173,17 +171,21 @@ extension API: TargetType {
             multipartFormData.append(MultipartFormData(provider: .data(price.description.data(using: .utf8)!), name: "price", mimeType: "text/plain"))
             multipartFormData.append(MultipartFormData(provider: .data(transactionRegion.data(using: .utf8)!), name: "transactionRegion", mimeType: "text/plain"))
             multipartFormData.append(MultipartFormData(provider: .data(openChatLink.data(using: .utf8)!), name: "openChatLink", mimeType: "text/plain"))
+            
             return .uploadMultipart(multipartFormData)
             
-        case .products(let page, let size):
-            return .requestParameters(parameters: ["page" : page, "size" : size], encoding: JSONEncoding.prettyPrinted)
+        case .search(let keyword, let page):
+            return .requestParameters(parameters: ["keyword" : keyword, "page" : page], encoding: URLEncoding.queryString)
             
-        case .search(let keyword, let page, let size):
-            return .requestParameters(parameters: ["keyword" : keyword, "page" : page, "size" : size], encoding: JSONEncoding.prettyPrinted)
+        case .products(let page):
+            return .requestParameters(parameters: ["page" : page], encoding: URLEncoding.queryString)
             
         default:
             return .requestPlain
-            
         }
+    }
+    
+    var validationType: ValidationType {
+        return .successCodes
     }
 }

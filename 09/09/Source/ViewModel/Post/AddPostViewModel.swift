@@ -42,7 +42,7 @@ class AddPostViewModel: ViewModelType {
                 api.post(title: title, content: content, price: input.price ?? 0, transactionRegion: transactionRegion, openChatLink: openChatLink, image: image)
             }.subscribe(onNext: { res in
                 switch res {
-                case .okay:
+                case .createOk:
                     result.accept(true)
                 default:
                     result.accept(false)

@@ -330,6 +330,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         self.view.endEditing(true)
     }
 }
+
 extension SignUpViewController {
     private func Btn(_ sender: UIButton){
         if sender.isEnabled{

@@ -11,7 +11,6 @@ import RxCocoa
 
 class MyPageViewController: UIViewController {
     
-    let identfier = "cell"
     var memberID = Int()
     
     private let disposebag = DisposeBag()
@@ -32,6 +31,21 @@ class MyPageViewController: UIViewController {
         $0.backgroundColor = .white
         $0.textColor = .black
         $0.font = .init(name: Font.fontBold.rawValue, size: 16)
+    }
+    
+    private lazy var buttonView = UIView().then {
+        $0.backgroundColor = .white
+        $0.layer.cornerRadius = 1
+    }
+    
+    private lazy var chngProfileBtn = UIButton(type: .system).then {
+        $0.setTitle("프로필 설정", for: .normal)
+        $0.titleLabel?.font = .init(name: Font.fontRegular.rawValue, size: 11)
+    }
+    
+    private lazy var chngPwBtn = UIButton(type: .system).then {
+        $0.setTitle("비밀번호 변경", for: .normal)
+        $0.titleLabel?.font = .init(name: Font.fontRegular.rawValue, size: 11)
     }
     
     private lazy var gearBtn = UIButton(type: .system).then {
@@ -142,8 +156,7 @@ class MyPageViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.delegate = self
-        collectionView.register(MainCollectionViewCell.self,
-                                forCellWithReuseIdentifier: identfier)
+        collectionView.register(MainCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         view.backgroundColor = .white
         setBtn()
     }
@@ -151,6 +164,7 @@ class MyPageViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         setNavigationItem()
         setupView()
+        getProfileData.accept(())
     }
     
     private func bindViewModel() {
@@ -176,7 +190,7 @@ class MyPageViewController: UIViewController {
             let data = try? Data(contentsOf: url!)
             cell.imgView.image = UIImage(data: data!)
             cell.titleLabel.text = items.title
-            cell.priceLabel.text = String(items.price)
+            cell.priceLabel.text = String(items.price ?? 0)
             cell.label.text = items.purpose
             cell.locationLabel.text = items.transaction_region
         }.disposed(by: disposebag)
@@ -229,6 +243,7 @@ class MyPageViewController: UIViewController {
         }).disposed(by: disposebag)
         
         logoutBtn.rx.tap.subscribe(onNext: { _ in
+            self.navigationController?.popViewController(animated: true)
             Token.logOut()
         }).disposed(by: disposebag)
     }

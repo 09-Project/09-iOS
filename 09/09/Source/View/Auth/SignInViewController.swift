@@ -115,8 +115,9 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         idTxt.tag = 1
         pwTxt.tag = 2
         moveSignupBtn.rx.tap.subscribe(onNext: { [unowned self] _ in
-           presentVC(SignUpViewController())
+           pushVC(SignUpViewController())
         }).disposed(by: disposeBag)
+        navigationController?.navigationBar.isHidden = true
     }
     
     override func viewDidAppear(_ animated: Bool) {

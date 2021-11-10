@@ -19,7 +19,6 @@ class MainViewController: UIViewController {
     private let deleteFlagIt = PublishSubject<Int>()
     private let refreshToken = PublishSubject<Void>()
     private var heartBool = Bool()
-    let identfier = "cell"
     
     private let sideMenu = SideMenuNavigationController(
         rootViewController: SideMenuViewController())
@@ -87,6 +86,7 @@ class MainViewController: UIViewController {
         let img = UIImage(named: "logo&symbolImg")
         navigationItem.titleView = UIImageView(image: img)
         navigationItem.rightBarButtonItem = lineBtn
+        self.mainCollectionView.register(MainCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         sideMenu.leftSide = false
         SideMenuManager.default.rightMenuNavigationController = sideMenu
         SideMenuManager.default.addPanGestureToPresent(toView: view)
@@ -94,6 +94,7 @@ class MainViewController: UIViewController {
             self.present(self.sideMenu, animated: true, completion: nil)
         }).disposed(by: disposebag)
         mainCollectionView.delegate = self
+        navigationItem.leftBarButtonItem = nil
     }
     
     
@@ -108,7 +109,7 @@ class MainViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         mainCollectionView.reloadData()
-        refresh()
+        refreshToken.onNext(())
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -135,7 +136,7 @@ class MainViewController: UIViewController {
             let data = try? Data(contentsOf: url!)
             cell.imgView.image = UIImage(data: data!)!
             cell.titleLabel.text = items.title
-            cell.priceLabel.text = String(items.price)
+            cell.priceLabel.text = String(items.price ?? 0)
             cell.label.text = items.purpose
             cell.locationLabel.text = items.transaction_region
             self.heartBool = items.liked
@@ -162,14 +163,11 @@ class MainViewController: UIViewController {
         
         output.refreshResult.subscribe(onNext: { bool in
             if bool == false {
-                self.presentVC(SignInViewController())
+                self.pushVC(SignInViewController())
             }
+            
         }).disposed(by: disposebag)
         
-    }
-    
-    private func refresh() {
-        refreshToken.onNext(())
     }
     
     private func setupView() {

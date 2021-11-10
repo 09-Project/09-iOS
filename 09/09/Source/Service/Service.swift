@@ -30,7 +30,7 @@ final class Service {
     Single<networkingResult> {
         return provider.rx.request(.signUp(name, username, password))
             .filterSuccessfulStatusCodes()
-            .map{ _ -> networkingResult in return .okay}
+            .map{ _ -> networkingResult in return .createOk}
             .catch{[unowned self] in return .just(setNetworkError($0))}
     }
     
@@ -60,10 +60,10 @@ final class Service {
             .catch{ [unowned self] in return .just(setNetworkError($0))}
     }
     
-    func seeProducts(_ post_id: Int) -> Single<(posts?, networkingResult)> {
+    func seeProducts(_ post_id: Int) -> Single<(Posts?, networkingResult)> {
         return provider.rx.request(.seeProducts(post_id))
             .filterSuccessfulStatusCodes()
-            .map(posts.self)
+            .map(Posts.self)
             .map{return ($0, .ok)}
             .catch { error in
                 print(error)
@@ -71,10 +71,10 @@ final class Service {
             }
     }
     
-    func products(page: Int, size: Int) -> Single<(posts?, networkingResult)> {
-        return provider.rx.request(.products(page, size))
+    func products(page: Int) -> Single<(Posts?, networkingResult)> {
+        return provider.rx.request(.products(page))
             .filterSuccessfulStatusCodes()
-            .map(posts.self)
+            .map(Posts.self)
             .map{return ($0, .ok)}
             .catch { error in
                 print(error)
@@ -82,16 +82,16 @@ final class Service {
             }
     }
     
-    func search(keywords: String, page: Int, size: Int) -> Single<(posts?,
-                                                                   networkingResult)> {
-        return provider.rx.request(.search(keywords, page, size))
+    func search(keywords: String, page: Int) -> Single<(Posts?, networkingResult)> {
+        return provider.rx.request(.search(keywords, page))
             .filterSuccessfulStatusCodes()
-            .map(posts.self)
+            .map(Posts.self)
             .map{return ($0, .ok)}
             .catch { error in
                 print(error)
                 return .just((nil, .fault))
             }
+        
     }
     
     func other() -> Single<(OtherList?, networkingResult)> {
@@ -118,7 +118,7 @@ final class Service {
               openChatLink: String, image: Data) -> Single<networkingResult> {
         return provider.rx.request(.postProducts(title, content, price, transactionRegion, openChatLink, image))
             .filterSuccessfulStatusCodes()
-            .map{_ -> networkingResult in return .okay}
+            .map{_ -> networkingResult in return .createOk}
             .catch{ [unowned self] in return .just(setNetworkError($0))}
         
     }
@@ -126,14 +126,14 @@ final class Service {
     func end(_ post_id: Int) -> Single<networkingResult> {
         return provider.rx.request(.end(post_id))
             .filterSuccessfulStatusCodes()
-            .map{_ -> networkingResult in return .okay}
+            .map{_ -> networkingResult in return .createOk}
             .catch{ [unowned self] in return .just(setNetworkError($0))}
     }
     
-    func seeLikePost() -> Single<(posts?, networkingResult)> {
+    func seeLikePost() -> Single<(Posts?, networkingResult)> {
         return provider.rx.request(.seeLikePost)
             .filterSuccessfulStatusCodes()
-            .map(posts.self)
+            .map(Posts.self)
             .map{return ($0, .ok)}
             .catch { error in
                 print(error)
@@ -166,7 +166,7 @@ final class Service {
     func like(_ postID: Int) -> Single<networkingResult> {
         return provider.rx.request(.likeObj(postID))
             .filterSuccessfulStatusCodes()
-            .map{_ -> networkingResult in return .okay}
+            .map{_ -> networkingResult in return .createOk}
             .catch{ [unowned self] in return .just(setNetworkError($0))}
     }
     
@@ -177,17 +177,16 @@ final class Service {
             .catch{ [unowned self] in return .just(setNetworkError($0))}
     }
     
-    func seeDeletePost(_ memberID: Int) -> Single<(posts?, networkingResult)> {
+    func seeDeletePost(_ memberID: Int) -> Single<(Posts?, networkingResult)> {
         return provider.rx.request(.seeDeletePost(memberID))
             .filterSuccessfulStatusCodes()
-            .map(posts.self)
+            .map(Posts.self)
             .map{return ($0, .ok)}
             .catch { error in
                 print(error)
                 return .just((nil, .fault))
             }
     }
-    
     
     func myPage() -> Single<(ProfileModel?, networkingResult)> {
         return provider.rx.request(.myPage)

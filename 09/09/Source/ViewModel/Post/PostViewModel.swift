@@ -32,8 +32,9 @@ class PostViewModel: ViewModelType {
         let post = BehaviorRelay<[PostModel]>(value: [])
         let flagItResult = PublishRelay<Bool>()
         
-        input.getPost.asObservable().flatMap{ _ in api.products(page: 0, size: 6)}
-        .subscribe(onNext: { data, res in
+        input.getPost.asObservable().flatMap{ _ in
+            api.products(page: 0)
+        }.subscribe(onNext: { data, res in
             switch res {
             case .ok:
                 post.accept(data!.posts)
@@ -49,14 +50,14 @@ class PostViewModel: ViewModelType {
         }.subscribe(onNext: { res in
             switch res {
             case .ok:
-                flagItResult.accept(true)
-            default:
                 flagItResult.accept(false)
+            default:
+                flagItResult.accept(true)
             }
         }).disposed(by: disposebag)
         
         input.deleteFlagIt.asObservable().flatMap{ row in
-            api.like(self.posts[row].id)
+            api.deleteLike(self.posts[row].id)
         }.subscribe(onNext: { res in
             switch res {
             case .ok:
@@ -67,6 +68,6 @@ class PostViewModel: ViewModelType {
         }).disposed(by: disposebag)
         
         return Output(getPostResult: getPostResult, post: post, flagItResult: flagItResult)
-}
-
+    }
+    
 }
