@@ -17,12 +17,10 @@ class MainCollectionViewCell: UICollectionViewCell {
     }
     
     lazy var titleLabel = UILabel().then {
-        $0.backgroundColor = .white
         $0.font = .init(name: Font.fontMedium.rawValue, size: 14)
     }
     
     lazy var locationLabel = UILabel().then {
-        $0.backgroundColor = .white
         $0.font = .init(name: Font.fontRegular.rawValue, size: 11)
     }
     
@@ -35,16 +33,13 @@ class MainCollectionViewCell: UICollectionViewCell {
     lazy var pinImg = UIImageView().then {
         $0.image = .init(named: "pinImg")
         $0.contentMode = .scaleAspectFit
-        $0.backgroundColor = .white
     }
     
     lazy var heartBtn = UIButton(type: .system).then {
-        $0.setImage(.init(systemName: "heart"), for: .normal)
-        $0.tintColor = .init(named: "hearColor")
+        $0.tintColor = .init(named: "heartColor")
     }
     
     lazy var priceLabel = UILabel().then {
-        $0.backgroundColor = .white
         $0.font = .init(name: Font.fontBold.rawValue, size: 13)
     }
     
@@ -61,6 +56,7 @@ class MainCollectionViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        [endView, endLabel].forEach{$0.isHidden = true}
         setup()
     }
     
@@ -70,44 +66,46 @@ class MainCollectionViewCell: UICollectionViewCell {
          heartBtn, priceLabel, endView, endLabel].forEach{self.addSubview($0)}
         
         self.imgView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(8)
+            $0.top.equalToSuperview().offset(0)
             $0.leading.equalToSuperview().offset(8)
             $0.trailing.equalToSuperview().offset(-8)
         }
         
         self.heartBtn.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(15)
+            $0.top.equalTo(imgView.snp.top).offset(8)
             $0.trailing.equalToSuperview().offset(-15)
             $0.width.equalTo(14)
             $0.height.equalTo(12)
         }
         
         self.titleLabel.snp.makeConstraints {
-            $0.top.equalTo(self.imgView.snp.bottom).offset(8)
+            $0.top.equalTo(self.imgView.snp.bottom).offset(3)
             $0.leading.lessThanOrEqualToSuperview().offset(8)
             $0.trailing.greaterThanOrEqualToSuperview().offset(-8)
         }
         
         self.pinImg.snp.makeConstraints {
-            $0.top.equalTo(self.titleLabel.snp.bottom).offset(7)
+            $0.top.equalTo(self.titleLabel.snp.bottom).offset(0)
             $0.leading.equalToSuperview().offset(8)
             $0.height.equalTo(12)
             $0.width.equalTo(8)
         }
         
         self.locationLabel.snp.makeConstraints {
-            $0.top.equalTo(self.titleLabel.snp.bottom).offset(7)
-            $0.leading.equalTo(self.pinImg.snp.trailing).offset(4)
+            $0.centerY.equalTo(pinImg)
+            $0.leading.equalTo(self.pinImg.snp.trailing).offset(3)
         }
         
         self.label.snp.makeConstraints {
-            $0.top.equalTo(self.titleLabel.snp.bottom).offset(5)
+            $0.top.equalTo(self.locationLabel.snp.bottom).offset(5)
             $0.leading.equalToSuperview().offset(8)
+            $0.bottom.equalToSuperview()
         }
         
         self.priceLabel.snp.makeConstraints {
             $0.top.equalTo(self.titleLabel.snp.bottom).offset(6)
-            $0.leading.equalTo(self.label.snp.trailing).offset(41)
+            $0.trailing.equalToSuperview().offset(-5)
+            $0.bottom.equalToSuperview().offset(-5)
         }
         
         self.endView.snp.makeConstraints {
@@ -115,9 +113,10 @@ class MainCollectionViewCell: UICollectionViewCell {
             $0.leading.equalToSuperview().offset(8)
             $0.trailing.equalToSuperview().offset(-8)
         }
+        
         self.endLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(76)
-            $0.center.equalTo(self.endLabel)
+            $0.center.equalTo(self.endView)
         }
     }
     
