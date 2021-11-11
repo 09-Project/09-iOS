@@ -12,8 +12,10 @@ import RxCocoa
 class PostViewController: UIViewController {
     
     private let disposebag = DisposeBag()
+    var postId = Int()
 
-    private let getData = BehaviorRelay<Void>(value: ())
+    private let getDetail = BehaviorRelay<Void>(value: ())
+    private let getPost = BehaviorRelay<Void>(value: ())
     private var heartBool = Bool()
     private let flagIt = PublishSubject<Int>()
     private let deleteFlagIt = PublishSubject<Int>()
@@ -41,8 +43,7 @@ class PostViewController: UIViewController {
         $0.textColor = .black
     }
     
-    private lazy var profileBtn = UIButton().then {
-        $0.backgroundColor = .none
+    private lazy var profileBtn = UIButton(type: .system).then {
         $0.setImage(.init(systemName: "chevron.right"), for: .normal)
         $0.tintColor = .init(named: "Color")
     }
@@ -98,19 +99,16 @@ class PostViewController: UIViewController {
         $0.font = .init(name: Font.fontBold.rawValue, size: 14)
     }
     
-    private lazy var heartBtn = UIButton().then {
+    private lazy var heartBtn = UIButton(type: .system).then {
         $0.backgroundColor = .white
         $0.layer.maskedCorners  = .layerMinXMinYCorner
         $0.layer.maskedCorners = .layerMinXMaxYCorner
         $0.layer.cornerRadius = 5
-        $0.layer.borderWidth = 0.5
-        $0.layer.borderColor = UIColor.init(named: "borderColor")?.cgColor
-        $0.setImage(.init(systemName: "heart"), for: .normal)
-        $0.semanticContentAttribute = .forceLeftToRight
         $0.setTitle("\t찜하기", for: .normal)
+        $0.layer.borderColor = UIColor.init(named: "borderColor")?.cgColor
     }
     
-    private lazy var chatBtn = UIButton().then {
+    private lazy var chatBtn = UIButton(type: .system).then {
         $0.backgroundColor = .white
         $0.layer.maskedCorners = .layerMaxXMinYCorner
         $0.layer.maskedCorners = .layerMaxXMaxYCorner
@@ -135,16 +133,36 @@ class PostViewController: UIViewController {
         view.backgroundColor = .white
         // Do any additional setup after loading the view.
         self.collectionView.register(MainCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        heartBtn.rx.tap.subscribe(onNext: { [unowned self] _ in
+            if heartBool {
+                flagIt.onNext(postId)
+            }
+            else {
+                flagIt.onNext(postId)
+            }
+        }).disposed(by: disposebag)
     }
     
     override func viewDidLayoutSubviews() {
         setup()
+        if heartBool {
+            heartBtn.setImage(.init(systemName: "heart.fill"), for: .normal)
+            heartBtn.semanticContentAttribute = .forceLeftToRight
+            heartBtn.tintColor = .init(named: "heartColor")
+        }
+        else {
+            heartBtn.setImage(.init(systemName: "heart"), for: .normal)
+            heartBtn.semanticContentAttribute = .forceLeftToRight
+            heartBtn.tintColor = .init(named: "borderColor")
+        }
     }
     
     private func bindViewModel() {
        let model = PostViewModel()
         let input = PostViewModel.Input (
-            getPost: getData.asSignal(onErrorJustReturn: ()),
+            getDetail: getDetail.asDriver(onErrorJustReturn: ()),
+            post_id: postId,
+            getPost: getPost.asSignal(onErrorJustReturn: ()),
             flagIt: flagIt.asDriver(onErrorJustReturn: 0),
             deleteFlagIt: deleteFlagIt.asDriver(onErrorJustReturn: 0)
         )
@@ -156,9 +174,6 @@ class PostViewController: UIViewController {
             let data = try? Data(contentsOf: url!)
             cell.imgView.image = UIImage(data: data!)!
             cell.titleLabel.text = items.title
-            cell.priceLabel.text = String(items.price ?? 0)
-            cell.label.text = items.purpose
-            cell.locationLabel.text = items.transaction_region
             self.heartBool = items.liked
             
             if self.heartBool {
@@ -170,15 +185,38 @@ class PostViewController: UIViewController {
             
             cell.heartBtn.rx.tap.subscribe(onNext: {[unowned self] _ in
                 if heartBool {
-                    flagIt.onNext(row)
-                    cell.heartBtn.setImage(.init(systemName: "heart.fill"), for: .normal)
-                }
-                else {
                     deleteFlagIt.onNext(row)
                     cell.heartBtn.setImage(.init(systemName: "heart"), for: .normal)
                 }
+                else {
+                    flagIt.onNext(row)
+                    cell.heartBtn.setImage(.init(systemName: "heart.fill"), for: .normal)
+                }
             }).disposed(by: cell.disposebag)
         }.disposed(by: disposebag)
+        
+        output.postInformation.subscribe(onNext: { [unowned self] model in
+            let url = URL(string: model!.image)
+            let data = try? Data(contentsOf: url!)
+            imgView.image = UIImage(data: data!)
+            let url1 = URL(string: model!.memberInfo.memberProfile)
+            let data1 = try? Data(contentsOf: url1!)
+            profileImg.image = UIImage(data: data1!)
+            name.text = model!.memberInfo.memberName
+            titleLabel.text = model?.title
+            heartBool = ((model?.liekd) != nil)
+            if model?.price == nil || model?.price == 0 {
+                priceLabel.isHidden = true
+                label.text = "무료나눔"
+            }
+            else {
+                priceLabel.text = String(model?.price ?? 0)
+                label.text = "공동구매"
+            }
+            areaLabel.text = model?.transactionRegion
+            contentLabel.text = model?.content
+        }
+        ).disposed(by: disposebag)
     }
     
     private func setup() {

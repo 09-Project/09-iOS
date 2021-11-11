@@ -15,6 +15,8 @@ class PostViewModel: ViewModelType {
     private var posts = [PostModel]()
     
     struct Input {
+        let getDetail: Driver<Void>
+        let post_id: Int
         let getPost: Signal<Void>
         let flagIt: Driver<Int>
         let deleteFlagIt: Driver<Int>
@@ -22,22 +24,24 @@ class PostViewModel: ViewModelType {
     
     struct Output {
         let getPostResult: PublishRelay<Bool>
-        let post: BehaviorRelay<[PostModel]>
+        let post: BehaviorRelay<[OtherModel]>
         let flagItResult: PublishRelay<Bool>
+        let postInformation: BehaviorRelay<SeePostModel?>
     }
     
     func transform(_ input: Input) -> Output {
         let api = Service()
         let getPostResult = PublishRelay<Bool>()
-        let post = BehaviorRelay<[PostModel]>(value: [])
+        let post = BehaviorRelay<[OtherModel]>(value: [])
         let flagItResult = PublishRelay<Bool>()
+        let detailPost = BehaviorRelay<SeePostModel?>(value: nil)
         
         input.getPost.asObservable().flatMap{ _ in
-            api.products(page: 0)
+            api.other()
         }.subscribe(onNext: { data, res in
             switch res {
             case .ok:
-                post.accept(data!.posts)
+                post.accept(data!.OtherList)
                 getPostResult.accept(true)
             default:
                 print(res)
@@ -45,8 +49,8 @@ class PostViewModel: ViewModelType {
             }
         }).disposed(by: disposebag)
         
-        input.flagIt.asObservable().flatMap{ row in
-            api.like(self.posts[row].id)
+        input.flagIt.asObservable().flatMap{ num in
+            api.like(num)
         }.subscribe(onNext: { res in
             switch res {
             case .ok:
@@ -56,8 +60,8 @@ class PostViewModel: ViewModelType {
             }
         }).disposed(by: disposebag)
         
-        input.deleteFlagIt.asObservable().flatMap{ row in
-            api.deleteLike(self.posts[row].id)
+        input.deleteFlagIt.asObservable().flatMap{ num in
+            api.deleteLike(num)
         }.subscribe(onNext: { res in
             switch res {
             case .ok:
@@ -67,7 +71,18 @@ class PostViewModel: ViewModelType {
             }
         }).disposed(by: disposebag)
         
-        return Output(getPostResult: getPostResult, post: post, flagItResult: flagItResult)
+        input.getDetail.asObservable().flatMap{ _ in
+            api.seeProducts(input.post_id)
+        }.subscribe(onNext: { data, res in
+            switch res {
+            case .ok:
+                detailPost.accept(data!.self)
+            default:
+                detailPost.accept(nil)
+            }
+        }).disposed(by: disposebag)
+        
+        return Output(getPostResult: getPostResult, post: post, flagItResult: flagItResult, postInformation: detailPost)
     }
     
 }
