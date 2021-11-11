@@ -12,6 +12,7 @@ struct OtherModel: Codable {
     let title: String
     let image: String
     let completed: String
+    let liked: Bool
 }
 
 
