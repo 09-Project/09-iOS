@@ -60,10 +60,10 @@ final class Service {
             .catch{ [unowned self] in return .just(setNetworkError($0))}
     }
     
-    func seeProducts(_ post_id: Int) -> Single<(Posts?, networkingResult)> {
+    func seeProducts(_ post_id: Int) -> Single<(SeePostModel?, networkingResult)> {
         return provider.rx.request(.seeProducts(post_id))
             .filterSuccessfulStatusCodes()
-            .map(Posts.self)
+            .map(SeePostModel.self)
             .map{return ($0, .ok)}
             .catch { error in
                 print(error)
