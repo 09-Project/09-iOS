@@ -14,7 +14,6 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
     private var eyeBtnBool: Bool = false
     private var checkBtnBool: Bool = false
     private var disposeBag = DisposeBag()
-    private let viewModel = SignInModel()
     
     
     private lazy var imgView = UIImageView().then {
@@ -168,7 +167,9 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
     }
     
     private func bindViewModel() {
-        let input = SignInModel.Input(
+        let viewModel = SignInViewModel()
+        
+        let input = SignInViewModel.Input(
             username: idTxt.rx.text.orEmpty.asDriver(),
             password: pwTxt.rx.text.orEmpty.asDriver(),
             doneTap: loginBtn.rx.tap.asSignal())

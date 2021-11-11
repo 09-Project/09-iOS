@@ -119,10 +119,13 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         idTxt.tag = 1
         pwTxt.tag = 2
         nickNameTxt.tag = 3
+        
+        navigationController?.navigationBar.isHidden = true
         eyeBtn.rx.tap.subscribe(onNext: {[unowned self] _ in
             changeBtn()}).disposed(by: disposebag)
         moveLoginBtn.rx.tap.subscribe(onNext: {[unowned self] _ in
-            self.presentVC(SignInViewController())}).disposed(by: disposebag)
+            navigationController?.popViewController(animated: true)
+        }).disposed(by: disposebag)
         idErrorLabel.isHidden = true
         nickErrorLabel.isHidden = true
         // Do any additional setup after loading the view.
