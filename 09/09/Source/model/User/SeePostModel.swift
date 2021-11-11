@@ -18,10 +18,17 @@ struct SeePostModel: Codable {
     let createdData: String
     let updatedData: String
     let image: String
+    let memberInfo: memberInfo
     let getLikes: Int
+    let liekd: Bool
+    let mine: Bool
+}
+
+struct memberInfo: Codable {
     let memberId: Int
     let memberName: String
     let memberIntroduction: String
+    let memberProfile: String
     let postsCount: Int
     let everyLikeCounts: Int
 }
