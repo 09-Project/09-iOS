@@ -67,7 +67,7 @@ extension API: TargetType {
             return "/post/{\(id)}"
         case .seeProducts(let id):
             return "/post/{\(id)}"
-        case .products(let page):
+        case .products:
             return "/post"
         case .search:
             return "/post/search"
@@ -117,11 +117,11 @@ extension API: TargetType {
             
         case .postProducts, .putProducts, .changeInformation:
             guard let token = Token.accessToken else {return ["Content-Type" : "application/json"]}
-            return ["Authorization" : "Bearer" + token, "Content-Type" : "multipart/form-data"]
+            return ["Authorization" : "Bearer " + token, "Content-Type" : "multipart/form-data"]
             
         default:
             guard let token = Token.accessToken else {return ["Content-Type" : "application/json"]}
-            return ["Authorization" : "Bearer" + token]
+            return ["Authorization" : "Bearer " + token]
         }
     }
     
