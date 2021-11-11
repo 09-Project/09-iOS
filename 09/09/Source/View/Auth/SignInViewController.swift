@@ -174,7 +174,6 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
             doneTap: loginBtn.rx.tap.asSignal())
         
         let output = viewModel.transform(input)
-        output.isEnable.drive(loginBtn.rx.isEnabled).disposed(by: disposeBag)
         
         output.result.subscribe(onNext: { [unowned self] bool in
             if bool {
