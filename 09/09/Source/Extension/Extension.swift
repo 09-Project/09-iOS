@@ -25,12 +25,6 @@ extension UIViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    func presentVC(_ viewController: UIViewController) {
-        let vc = viewController
-        vc.modalPresentationStyle = .fullScreen
-        present(vc, animated: true, completion: nil)
-    }
-    
     func pushVC(_ viewController: UIViewController) {
         let vc = viewController
         vc.modalPresentationStyle = .fullScreen

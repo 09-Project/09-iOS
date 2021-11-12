@@ -184,8 +184,4 @@ extension API: TargetType {
             return .requestPlain
         }
     }
-    
-    var validationType: ValidationType {
-        return .successCodes
-    }
 }
