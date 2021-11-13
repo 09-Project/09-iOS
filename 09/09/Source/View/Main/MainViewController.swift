@@ -14,9 +14,10 @@ class MainViewController: UIViewController {
     
     private let disposebag = DisposeBag()
     
+    private let model = MainViewModel()
     private let getData = BehaviorRelay<Void>(value: ())
-    private let flagIt = PublishSubject<Int>()
-    private let deleteFlagIt = PublishSubject<Int>()
+    private let flagIt = PublishRelay<Int>()
+    private let deleteFlagIt = PublishRelay<Int>()
     private let refreshToken = PublishSubject<Void>()
     private var heartBool = Bool()
     
@@ -93,8 +94,8 @@ class MainViewController: UIViewController {
         lineBtn.rx.tap.subscribe(onNext: { _ in
             self.present(self.sideMenu, animated: true, completion: nil)
         }).disposed(by: disposebag)
-        mainCollectionView.delegate = self
         navigationItem.leftBarButtonItem = nil
+        mainCollectionView.rx.setDelegate(self).disposed(by: disposebag)
     }
     
     
@@ -117,7 +118,6 @@ class MainViewController: UIViewController {
     }
     
     private func bindViewModel() {
-        let model = MainViewModel()
         let input = MainViewModel.Input(
             getPost: getData.asSignal(onErrorJustReturn: ()),
             getMorePost: pageFrontBtn.rx.tap.asSignal(),
@@ -126,20 +126,32 @@ class MainViewController: UIViewController {
             searchTxt: searchField.rx.text.asSignal(onErrorJustReturn: ""),
             flagIt: flagIt.asDriver(onErrorJustReturn: 0),
             deleteFlagIt: deleteFlagIt.asDriver(onErrorJustReturn: 0),
-            refresh: refreshToken.asDriver(onErrorJustReturn: ())
+            refresh: refreshToken.asDriver(onErrorJustReturn: ()),
+            loadDetail: mainCollectionView.rx.itemSelected.asSignal()
         )
         
         let output = model.transform(input)
+        
+        mainCollectionView.rx.itemSelected.subscribe(onNext: { index in
+            self.mainCollectionView.deselectItem(at: index, animated: true)
+        }).disposed(by: disposebag)
         
         output.post.bind(to: mainCollectionView.rx.items(cellIdentifier: "cell", cellType: MainCollectionViewCell.self)) { row, items, cell in
             let url = URL(string: items.image)
             let data = try? Data(contentsOf: url!)
             cell.imgView.image = UIImage(data: data!)!
             cell.titleLabel.text = items.title
-            cell.priceLabel.text = String(items.price ?? 0)
-            cell.label.text = items.purpose
             cell.locationLabel.text = items.transaction_region
             self.heartBool = items.liked
+            
+            if items.price == 0 || items.price == nil {
+                cell.label.isHidden = true
+                cell.priceLabel.text = "무료나눔"
+            }
+            else {
+                cell.label.text = "공동구매"
+                cell.priceLabel.text = String(items.price ?? 0) + "원"
+            }
             
             if self.heartBool {
                 cell.heartBtn.setImage(.init(systemName: "heart.fill"), for: .normal)
@@ -150,24 +162,29 @@ class MainViewController: UIViewController {
             
             cell.heartBtn.rx.tap.subscribe(onNext: {[unowned self] _ in
                 if heartBool {
-                    flagIt.onNext(row)
-                    cell.heartBtn.setImage(.init(systemName: "heart.fill"), for: .normal)
-                }
-                else {
-                    deleteFlagIt.onNext(row)
+                    heartBool.toggle()
+                    deleteFlagIt.accept(row)
                     cell.heartBtn.setImage(.init(systemName: "heart"), for: .normal)
                 }
+                else {
+                    heartBool.toggle()
+                    flagIt.accept(row)
+                    cell.heartBtn.setImage(.init(systemName: "heart.fill"), for: .normal)
+                }
             }).disposed(by: cell.disposebag)
-            
         }.disposed(by: disposebag)
         
         output.refreshResult.subscribe(onNext: { bool in
             if bool == false {
                 self.pushVC(SignInViewController())
             }
-            
         }).disposed(by: disposebag)
         
+        output.detailIndex.asObservable().subscribe(onNext: { id in
+            let vc = PostViewController()
+            vc.postId = id
+            self.navigationController?.pushViewController(vc, animated: true)
+        }).disposed(by: disposebag)
     }
     
     private func setupView() {
@@ -230,7 +247,7 @@ class MainViewController: UIViewController {
 extension MainViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 1
+        return 8
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
