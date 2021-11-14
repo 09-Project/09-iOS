@@ -15,9 +15,6 @@ class MyPageViewController: UIViewController {
     
     private let disposebag = DisposeBag()
     private let viewmodel = MyPageViewModel()
-    private var postDidTap = true
-    private var likePostDidTap = true
-    private var detailDidTap = true
     
     private let getProfileData = BehaviorRelay<Void>(value: ())
     
@@ -155,10 +152,14 @@ class MyPageViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView.delegate = self
+        collectionView.rx.setDelegate(self).disposed(by: disposebag)
         collectionView.register(MainCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         view.backgroundColor = .white
         setBtn()
+        logoutBtn.rx.tap.subscribe(onNext: { _ in
+            self.navigationController?.popViewController(animated: true)
+            Token.logOut()
+        }).disposed(by: disposebag)
     }
     
     override func viewDidLayoutSubviews() {
@@ -203,49 +204,23 @@ class MyPageViewController: UIViewController {
     }
     
     private func setBtn() {
-        postBtn.rx.tap.subscribe(onNext: {
-            if(self.postDidTap) {
-                self.postBtn.layer.addBorder([.bottom], color: .init(named: "mainColor")!, width: 1)
-                self.postDidTap.toggle()
-                self.likePostDidTap = true
-                self.detailDidTap = true
-            }
-            else {
-                self.postBtn.layer.addBorder([.bottom], color: .init(named: "placeholderColor")!, width: 1)
-                self.postDidTap.toggle()
-            }
+        postBtn.rx.tap.subscribe(onNext: { [unowned self] _ in
+            setButton(postBtn, likePostBtn, detailBtn)
         }).disposed(by: disposebag)
         
-        likePostBtn.rx.tap.subscribe(onNext: {
-            if(self.likePostDidTap) {
-                self.likePostBtn.layer.addBorder([.bottom], color: .init(named: "mainColor")!, width: 1)
-                self.likePostDidTap.toggle()
-                self.postDidTap = true
-                self.detailDidTap = true
-            }
-            else {
-                self.likePostBtn.layer.addBorder([.bottom], color: .init(named: "placeholderColor")!, width: 1)
-                self.likePostDidTap.toggle()
-            }
+        likePostBtn.rx.tap.subscribe(onNext: { [unowned self] _ in
+            setButton(likePostBtn, detailBtn, postBtn)
         }).disposed(by: disposebag)
         
-        detailBtn.rx.tap.subscribe(onNext: {
-            if(self.detailDidTap) {
-                self.detailBtn.layer.addBorder([.bottom], color: .init(named: "mainColor")!, width: 1)
-                self.detailDidTap.toggle()
-                self.likePostDidTap = true
-                self.postDidTap = true
-            }
-            else {
-                self.detailBtn.layer.addBorder([.bottom], color: .init(named: "placeholderColor")!, width: 1)
-                self.detailDidTap.toggle()
-            }
+        detailBtn.rx.tap.subscribe(onNext: { [unowned self] _ in
+            setButton(detailBtn, likePostBtn, postBtn)
         }).disposed(by: disposebag)
-        
-        logoutBtn.rx.tap.subscribe(onNext: { _ in
-            self.navigationController?.popViewController(animated: true)
-            Token.logOut()
-        }).disposed(by: disposebag)
+    }
+    
+    private func setButton(_ mainBtn : UIButton, _ secondBtn: UIButton, _ thirthBtn: UIButton) {
+        mainBtn.layer.addBorder([.bottom], color: .init(named: "mainColor")!, width: 1)
+        secondBtn.layer.addBorder([.bottom], color: .init(named: "placeholderColor")!, width: 1)
+        thirthBtn.layer.addBorder([.bottom], color: .init(named: "placeholderColor")!, width: 1)
     }
     
     private func setupView() {
@@ -380,17 +355,17 @@ class MyPageViewController: UIViewController {
 
 extension MyPageViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-            return 1        }
-
+        return 1        }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-            return 1
-        }
-
+        return 1
+    }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-
-            let width = collectionView.frame.width / 2 - 1
-            let size = CGSize(width: width, height: width)
-
-            return size
-        }
+        
+        let width = collectionView.frame.width / 2 - 1
+        let size = CGSize(width: width, height: width)
+        
+        return size
+    }
 }
