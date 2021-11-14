@@ -194,11 +194,11 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         
         output.result.subscribe(onNext: {[unowned self] bool in
             if bool {
-                self.presentVC(SignInViewController())
+                self.navigationController?.popViewController(animated: true)
             }
             else {
-                self.idErrorLabel.isHidden = true
-                nickErrorLabel.isHidden = true
+                self.idErrorLabel.isHidden = false
+                nickErrorLabel.isHidden = false
             }
             
         }).disposed(by: disposebag)
