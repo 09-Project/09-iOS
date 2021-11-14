@@ -102,12 +102,12 @@ class ChangeProfileViewController: UIViewController, UITextFieldDelegate {
         output.result.subscribe(onNext: { [weak self] bool in
             if bool {
                 self!.okAlert(title: "프로필을 바꾸시는데 성공하셨습니다.", action: { ACTION in
-                    self!.presentVC(MyPageViewController())
+                    self!.navigationController?.popViewController(animated: true)
                 })
             }
             else {
                 self!.okAlert(title: "프로필을 바꾸시는데 실패하셨습니다.", action: { ACTION in
-                    self!.presentVC(MyPageViewController())
+                    self!.navigationController?.popViewController(animated: true)
                 })
             }
         }).disposed(by: disposeBag)
