@@ -11,6 +11,7 @@ import RxCocoa
 
 class SignInViewController: UIViewController, UITextFieldDelegate {
     
+    private let viewModel = SignInViewModel()
     private var eyeBtnBool: Bool = false
     private var checkBtnBool: Bool = false
     private var disposeBag = DisposeBag()
@@ -167,21 +168,17 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
     }
     
     private func bindViewModel() {
-        let viewModel = SignInViewModel()
-        
-        let input = SignInViewModel.Input(
-            username: idTxt.rx.text.orEmpty.asDriver(),
-            password: pwTxt.rx.text.orEmpty.asDriver(),
-            doneTap: loginBtn.rx.tap.asSignal())
-        
+        let input = SignInViewModel.Input(username: idTxt.rx.text.orEmpty.asDriver(),
+                                          password: pwTxt.rx.text.orEmpty.asDriver(),
+                                          doneTap: loginBtn.rx.tap.asSignal())
         let output = viewModel.transform(input)
         
-        output.result.subscribe(onNext: { [unowned self] bool in
+        output.result.subscribe(onNext: { bool in
             if bool {
                 self.pushVC(MainViewController())
             }
             else {
-                errorLabel.isHidden = false
+                self.errorLabel.isHidden = false
             }
         }).disposed(by: disposeBag)
     }
