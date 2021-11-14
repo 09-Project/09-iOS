@@ -23,6 +23,7 @@ class MainViewModel: ViewModelType {
         let flagIt: Driver<Int>
         let deleteFlagIt: Driver<Int>
         let refresh: Driver<Void>
+        let loadDetail: Signal<IndexPath>
     }
     
     struct Output {
@@ -30,6 +31,7 @@ class MainViewModel: ViewModelType {
         let post: BehaviorRelay<[PostModel]>
         let flagItResult: PublishRelay<Bool>
         let refreshResult: PublishRelay<Bool>
+        let detailIndex: Signal<Int>
     }
     
     func transform(_ input: Input) -> Output {
@@ -38,6 +40,8 @@ class MainViewModel: ViewModelType {
         let post = BehaviorRelay<[PostModel]>(value: [])
         let flagItResult = PublishRelay<Bool>()
         let refreshResult = PublishRelay<Bool>()
+        let detailIndex = PublishRelay<Int>()
+        
         var page = 0
         
         input.getPost.asObservable().flatMap{ _ in
@@ -122,7 +126,12 @@ class MainViewModel: ViewModelType {
             }
         }).disposed(by: disposebag)
         
-        return Output(getPostResult: getPostResult, post: post, flagItResult: flagItResult, refreshResult: refreshResult)
+        input.loadDetail.asObservable().subscribe(onNext: { index in
+            let value = post.value
+            detailIndex.accept(value[index.row].id)
+        }).disposed(by: disposebag)
+
+        return Output(getPostResult: getPostResult, post: post, flagItResult: flagItResult, refreshResult: refreshResult, detailIndex: detailIndex.asSignal())
     }
 }
 
