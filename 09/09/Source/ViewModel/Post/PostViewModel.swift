@@ -26,7 +26,7 @@ class PostViewModel: ViewModelType {
         let getPostResult: PublishRelay<Bool>
         let post: BehaviorRelay<[OtherModel]>
         let flagItResult: PublishRelay<Bool>
-        let postInformation: BehaviorRelay<SeePostModel?>
+        let postInformation: PublishRelay<SeePostModel?>
     }
     
     func transform(_ input: Input) -> Output {
@@ -34,7 +34,7 @@ class PostViewModel: ViewModelType {
         let getPostResult = PublishRelay<Bool>()
         let post = BehaviorRelay<[OtherModel]>(value: [])
         let flagItResult = PublishRelay<Bool>()
-        let detailPost = BehaviorRelay<SeePostModel?>(value: nil)
+        let detailPost = PublishRelay<SeePostModel?>()
         
         input.getPost.asObservable().flatMap{ _ in
             api.other()
@@ -76,13 +76,14 @@ class PostViewModel: ViewModelType {
         }.subscribe(onNext: { data, res in
             switch res {
             case .ok:
-                detailPost.accept(data!.self)
+                detailPost.accept(data!)
             default:
                 detailPost.accept(nil)
             }
         }).disposed(by: disposebag)
         
-        return Output(getPostResult: getPostResult, post: post, flagItResult: flagItResult, postInformation: detailPost)
+        return Output(getPostResult: getPostResult, post: post, flagItResult: flagItResult,
+                      postInformation: detailPost)
     }
-    
 }
+
