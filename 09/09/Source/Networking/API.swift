@@ -60,13 +60,14 @@ extension API: TargetType {
         case .getInformation:
             return "/member/information"
         case .profile(let id):
-            return "/memeber/{\(id)}"
+            return "/memeber/\(id)"
         case .changeInformation:
             return "/member/information"
         case .deleteProducts(let id):
-            return "/post/{\(id)}"
+            return "/post/\(id)"
         case .seeProducts(let id):
-            return "/post/{\(id)}"
+            print("path")
+            return "/post/\(id)"
         case .products:
             return "/post"
         case .search:
@@ -74,19 +75,20 @@ extension API: TargetType {
         case .other:
             return "/post/other"
         case .putProducts(let id):
-            return "/post/{\(id)}"
+            return "/post/\(id)"
         case .postProducts:
+            print("hello")
             return "/post"
         case .end(let id):
-            return "/post/{\(id)}"
+            return "/post/\(id)"
         case .likeObj(let id):
-            return "/like/{\(id)}"
+            return "/like/\(id)"
         case .deleteLike(let id):
-            return "/like/{\(id)}"
+            return "/like/\(id)"
         case .seeLikePost:
             return "/member/like"
         case .seeDeletePost(let id):
-            return "/member/completed/{\(id)}"
+            return "/member/completed/\(id)"
         case .myPage:
             return "/member/my-page"
         }
@@ -97,6 +99,7 @@ extension API: TargetType {
         case .likeObj, .signUp, .signIn, .postProducts:
             return .post
         case .profile, .seeLikePost,.getInformation, .seeProducts, .products, .other, .search, .seeDeletePost, .myPage:
+            print("get")
             return .get
         case .putProducts, .changepw, .changeInformation:
             return .patch
@@ -120,6 +123,7 @@ extension API: TargetType {
             return ["Authorization" : "Bearer " + token, "Content-Type" : "multipart/form-data"]
             
         default:
+            print("header")
             guard let token = Token.accessToken else {return ["Content-Type" : "application/json"]}
             return ["Authorization" : "Bearer " + token]
         }
@@ -130,12 +134,12 @@ extension API: TargetType {
         case .postProducts(let title, let content, let price, let transactionRegion,
                            let openChatLink, let image):
             var multipartFormData = [MultipartFormData]()
-            multipartFormData.append(MultipartFormData(provider: .data(image), name: "image", fileName: "image.jpg", mimeType: "image/jpg"))
+            multipartFormData.append(MultipartFormData(provider: .data(image), name: "image", fileName: "image.jpg"))
             multipartFormData.append(MultipartFormData(provider: .data(title.data(using: .utf8)!), name: "title", mimeType: "text/plain"))
             multipartFormData.append(MultipartFormData(provider: .data(content.data(using: .utf8)!), name: "content", mimeType: "text/plain"))
             multipartFormData.append(MultipartFormData(provider: .data(price.description.data(using: .utf8)!), name: "price", mimeType: "text/plain"))
-            multipartFormData.append(MultipartFormData(provider: .data(transactionRegion.data(using: .utf8)!), name: "transactionRegion", mimeType: "text/plain"))
-            multipartFormData.append(MultipartFormData(provider: .data(openChatLink.data(using: .utf8)!), name: "openChatLink", mimeType: "text/plain"))
+            multipartFormData.append(MultipartFormData(provider: .data(transactionRegion.data(using: .utf8)!), name: "transaction_region", mimeType: "text/plain"))
+            multipartFormData.append(MultipartFormData(provider: .data(openChatLink.data(using: .utf8)!), name: "open_chat_link", mimeType: "text/plain"))
             return .uploadMultipart(multipartFormData)
             
         case .changeInformation(let name, let introduce, let profileUrl):
@@ -143,7 +147,7 @@ extension API: TargetType {
             
             multipartFormData.append(MultipartFormData(provider: .data(name.data(using: .utf8)!), name: "name", mimeType: "text/plain"))
             multipartFormData.append(MultipartFormData(provider: .data(introduce.data(using: .utf8)!), name: "introduction", mimeType: "text/plain"))
-            multipartFormData.append(MultipartFormData(provider: .data(profileUrl), name: "profileUrl", fileName: "ProfileUrl.jpg", mimeType: "ProfileUrl/jpg"))
+            multipartFormData.append(MultipartFormData(provider: .data(profileUrl), name: "profileUrl", fileName: "profileUrl.jpg", mimeType: "profileUrl/jpg"))
             
             return .uploadMultipart(multipartFormData)
             
@@ -169,8 +173,8 @@ extension API: TargetType {
             multipartFormData.append(MultipartFormData(provider: .data(title.data(using: .utf8)!), name: "title", mimeType: "text/plain"))
             multipartFormData.append(MultipartFormData(provider: .data(content.data(using: .utf8)!), name: "content", mimeType: "text/plain"))
             multipartFormData.append(MultipartFormData(provider: .data(price.description.data(using: .utf8)!), name: "price", mimeType: "text/plain"))
-            multipartFormData.append(MultipartFormData(provider: .data(transactionRegion.data(using: .utf8)!), name: "transactionRegion", mimeType: "text/plain"))
-            multipartFormData.append(MultipartFormData(provider: .data(openChatLink.data(using: .utf8)!), name: "openChatLink", mimeType: "text/plain"))
+            multipartFormData.append(MultipartFormData(provider: .data(transactionRegion.data(using: .utf8)!), name: "transaction_region", mimeType: "text/plain"))
+            multipartFormData.append(MultipartFormData(provider: .data(openChatLink.data(using: .utf8)!), name: "open_chat_link", mimeType: "text/plain"))
             
             return .uploadMultipart(multipartFormData)
             
