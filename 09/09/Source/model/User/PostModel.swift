@@ -22,5 +22,6 @@ struct PostModel: Codable {
 
 struct Posts: Codable {
     var count: Int
+    var member_id: Int
     var posts: [PostModel]
 }
