@@ -10,25 +10,25 @@ import Foundation
 struct SeePostModel: Codable {
     let title: String
     let content: String
-    let price: Int
-    let transactionRegion: String
-    let openChatLink: String
+    let price: Int?
+    let transaction_region: String
+    let open_chat_link: String
     let purpose: String
     let completed: String
-    let createdData: String
-    let updatedData: String
+    let created_date: String
+    let updated_date: String
     let image: String
-    let memberInfo: memberInfo
-    let getLikes: Int
-    let liekd: Bool
+    let member_info: member_info
+    let get_likes: Int
+    let liked: Bool
     let mine: Bool
 }
 
-struct memberInfo: Codable {
-    let memberId: Int
-    let memberName: String
-    let memberIntroduction: String
-    let memberProfile: String
-    let postsCount: Int
-    let everyLikeCounts: Int
+struct member_info: Codable {
+    let member_id: Int
+    let member_name: String
+    let member_introduction: String?
+    let member_profile: String?
+    let posts_count: Int
+    let every_like_counts: Int
 }
