@@ -61,6 +61,7 @@ final class Service {
     }
     
     func seeProducts(_ post_id: Int) -> Single<(SeePostModel?, networkingResult)> {
+        print("See")
         return provider.rx.request(.seeProducts(post_id))
             .filterSuccessfulStatusCodes()
             .map(SeePostModel.self)
