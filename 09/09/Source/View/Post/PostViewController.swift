@@ -13,18 +13,13 @@ class PostViewController: UIViewController {
     
     private let disposebag = DisposeBag()
     var postId = Int()
-
+    let viewModel = PostViewModel()
+    
     private let getDetail = BehaviorRelay<Void>(value: ())
     private let getPost = BehaviorRelay<Void>(value: ())
     private var heartBool = Bool()
     private let flagIt = PublishSubject<Int>()
     private let deleteFlagIt = PublishSubject<Int>()
-    
-    private lazy var backBtn = UIButton().then {
-        $0.backgroundColor = .none
-        $0.setImage(.init(systemName: "chevron.left"), for: .normal)
-        $0.tintColor = .white
-    }
     
     private lazy var imgView = UIImageView().then {
         $0.backgroundColor = .white
@@ -82,8 +77,9 @@ class PostViewController: UIViewController {
     private lazy var buyLabel = UILabel().then {
         $0.backgroundColor = .init(named: "mainColor")
         $0.text = "공동구매"
-        $0.layer.cornerRadius = 3
         $0.font = .init(name: Font.fontBold.rawValue, size: 11)
+        $0.textAlignment = .center
+        $0.textColor = .white
     }
     
     private lazy var contentLabel = UILabel().then {
@@ -131,7 +127,11 @@ class PostViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        bindViewModel()
+        buyLabel.layer.cornerRadius = 3
+        buyLabel.clipsToBounds  = true
         // Do any additional setup after loading the view.
+        collectionView.rx.setDelegate(self).disposed(by: disposebag)
         self.collectionView.register(MainCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         heartBtn.rx.tap.subscribe(onNext: { [unowned self] _ in
             if heartBool {
@@ -158,7 +158,6 @@ class PostViewController: UIViewController {
     }
     
     private func bindViewModel() {
-       let model = PostViewModel()
         let input = PostViewModel.Input (
             getDetail: getDetail.asDriver(onErrorJustReturn: ()),
             post_id: postId,
@@ -167,13 +166,13 @@ class PostViewController: UIViewController {
             deleteFlagIt: deleteFlagIt.asDriver(onErrorJustReturn: 0)
         )
         
-        let output = model.transform(input)
+        let output = viewModel.transform(input)
         
         output.post.bind(to: collectionView.rx.items(cellIdentifier: "cell", cellType: MainCollectionViewCell.self)) { row, items, cell in
             let url = URL(string: items.image)
             let data = try? Data(contentsOf: url!)
             cell.imgView.image = UIImage(data: data!)!
-            cell.titleLabel.text = items.title
+            cell.titleLabel.text! = items.title
             self.heartBool = items.liked
             
             if self.heartBool {
@@ -199,12 +198,12 @@ class PostViewController: UIViewController {
             let url = URL(string: model!.image)
             let data = try? Data(contentsOf: url!)
             imgView.image = UIImage(data: data!)
-            let url1 = URL(string: model!.memberInfo.memberProfile)
+            let url1 = URL(string: (model!.member_info.member_profile ?? model?.image)!)
             let data1 = try? Data(contentsOf: url1!)
             profileImg.image = UIImage(data: data1!)
-            name.text = model!.memberInfo.memberName
+            name.text = model!.member_info.member_name
             titleLabel.text = model?.title
-            heartBool = ((model?.liekd) != nil)
+            heartBool = model!.liked
             if model?.price == nil || model?.price == 0 {
                 priceLabel.isHidden = true
                 label.text = "무료나눔"
@@ -213,28 +212,19 @@ class PostViewController: UIViewController {
                 priceLabel.text = String(model?.price ?? 0)
                 label.text = "공동구매"
             }
-            areaLabel.text = model?.transactionRegion
+            areaLabel.text = model?.transaction_region
             contentLabel.text = model?.content
-        }
-        ).disposed(by: disposebag)
+        }).disposed(by: disposebag)
     }
     
     private func setup() {
-        [imgView, backBtn, profileImg, name, profileBtn, titleLabel, priceLabel, wonLabel,
-         pinImg, areaLabel, buyLabel, contentLabel, label, heartBtn, chatBtn, collectionView]
+        [imgView, profileImg, name, profileBtn, titleLabel, priceLabel, wonLabel,
+         pinImg, areaLabel, buyLabel, contentLabel, label, heartBtn, chatBtn, lineView, collectionView]
             .forEach{view.addSubview($0)}
         
         self.imgView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(0)
-            $0.leading.trailing.equalToSuperview().offset(0)
-            $0.height.equalTo(self.imgView.snp.width)
-        }
-        
-        self.backBtn.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(44)
-            $0.leading.equalToSuperview().offset(23)
-            $0.height.equalTo(14)
-            $0.width.equalTo(7)
+            $0.top.leading.trailing.equalToSuperview().offset(0)
+            $0.height.equalTo(300)
         }
         
         self.profileImg.snp.makeConstraints {
@@ -244,12 +234,12 @@ class PostViewController: UIViewController {
         }
         
         self.name.snp.makeConstraints {
-            $0.centerY.equalTo(self.profileImg.snp.centerY)
+            $0.centerY.equalTo(profileImg)
             $0.leading.equalTo(self.profileImg.snp.trailing).offset(6)
         }
         
         self.profileBtn.snp.makeConstraints {
-            $0.centerY.equalTo(self.name.snp.centerY)
+            $0.centerY.equalTo(name)
             $0.leading.equalTo(self.name.snp.trailing).offset(5)
             $0.width.equalTo(7)
             $0.height.equalTo(14)
@@ -261,7 +251,7 @@ class PostViewController: UIViewController {
         }
         
         self.priceLabel.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom).offset(0)
+            $0.top.equalTo(titleLabel.snp.bottom)
             $0.leading.equalToSuperview().offset(39)
         }
         
@@ -278,12 +268,12 @@ class PostViewController: UIViewController {
         }
         
         self.areaLabel.snp.makeConstraints {
-            $0.top.equalTo(self.priceLabel.snp.bottom).offset(9)
+            $0.centerY.equalTo(self.pinImg)
             $0.leading.equalTo(self.pinImg.snp.trailing).offset(4)
         }
         
         self.buyLabel.snp.makeConstraints {
-            $0.top.equalTo(self.priceLabel.snp.bottom).offset(5)
+            $0.centerY.equalTo(self.pinImg)
             $0.trailing.equalToSuperview().offset(-39)
             $0.width.equalTo(56)
             $0.height.equalTo(20)
@@ -302,14 +292,13 @@ class PostViewController: UIViewController {
         
         self.contentLabel.snp.makeConstraints {
             $0.top.equalTo(self.heartBtn.snp.bottom).offset(24)
-            $0.leading.equalToSuperview().offset(39)
-            $0.trailing.equalToSuperview().offset(-39)
+            $0.leading.trailing.equalToSuperview().inset(39)
         }
         
         self.lineView.snp.makeConstraints {
             $0.top.equalTo(self.contentLabel.snp.bottom).offset(49)
             $0.height.equalTo(2)
-            $0.leading.trailing.equalToSuperview().offset(0)
+            $0.leading.trailing.equalToSuperview()
         }
         
         self.label.snp.makeConstraints {
@@ -319,9 +308,7 @@ class PostViewController: UIViewController {
         
         self.collectionView.snp.makeConstraints {
             $0.top.equalTo(self.label.snp.bottom).offset(16)
-            $0.leading.equalToSuperview().offset(39)
-            $0.trailing.equalToSuperview().offset(-39)
-            $0.bottom.equalToSuperview().offset(-39)
+            $0.leading.trailing.bottom.equalToSuperview()
         }
     }
 }
@@ -329,17 +316,17 @@ class PostViewController: UIViewController {
 extension PostViewController: UICollectionViewDelegateFlowLayout{
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-            return 1        }
-
+        return 1        }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-            return 1
-        }
-
+        return 1
+    }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-
-            let width = collectionView.frame.width / 3 - 1
-            let size = CGSize(width: width, height: width)
-
-            return size
-        }
+        
+        let width = collectionView.frame.width / 3 - 1
+        let size = CGSize(width: width, height: width)
+        
+        return size
+    }
 }
