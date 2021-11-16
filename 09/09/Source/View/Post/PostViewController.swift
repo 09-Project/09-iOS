@@ -156,6 +156,10 @@ class PostViewController: UIViewController {
         setup()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        getPost.accept(())
+    }
+    
     private func bindViewModel() {
         let input = PostViewModel.Input (
             getDetail: getDetail.asDriver(onErrorJustReturn: ()),
@@ -168,10 +172,12 @@ class PostViewController: UIViewController {
         let output = viewModel.transform(input)
         
         output.post.bind(to: collectionView.rx.items(cellIdentifier: "cell", cellType: MainCollectionViewCell.self)) { row, items, cell in
+            print(items)
             let url = URL(string: items.image)
             let data = try? Data(contentsOf: url!)
             cell.imgView.image = UIImage(data: data!)!
-            cell.titleLabel.text! = items.title
+            cell.titleLabel.text = items.title
+            cell.pinImg.isHidden = true
             if items.liked {
                 cell.heartBtn.setImage(.init(systemName: "suit.heart.fill"), for: .normal)
                 cell.heartBtn.tintColor = .init(named: "heartColor")
@@ -203,12 +209,12 @@ class PostViewController: UIViewController {
             }
             if model?.price == nil || model?.price == 0 {
                 priceLabel.isHidden = true
-                label.text = "무료나눔"
+                buyLabel.text = "무료나눔"
                 wonLabel.isHidden = true
             }
             else {
                 priceLabel.text = String(model?.price ?? 0)
-                label.text = "공동구매"
+                buyLabel.text = "공동구매"
             }
             areaLabel.text = model?.transaction_region
             contentLabel.text = model?.content
@@ -352,7 +358,7 @@ extension PostViewController: UICollectionViewDelegateFlowLayout{
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         let width = collectionView.frame.width / 3 - 1
-        let size = CGSize(width: width, height: width+30)
+        let size = CGSize(width: width, height: width)
         
         return size
     }
