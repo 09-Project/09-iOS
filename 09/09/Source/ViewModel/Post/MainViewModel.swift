@@ -148,5 +148,3 @@ class MainViewModel: ViewModelType {
                       PostCount: count)
     }
 }
-
-
