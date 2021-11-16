@@ -95,10 +95,10 @@ final class Service {
         
     }
     
-    func other() -> Single<(OtherList?, networkingResult)> {
+    func other() -> Single<([OtherModel]?, networkingResult)> {
         return provider.rx.request(.other)
             .filterSuccessfulStatusCodes()
-            .map(OtherList.self)
+            .map([OtherModel].self)
             .map{return ($0, .ok)}
             .catch { error in
                 print(error)
