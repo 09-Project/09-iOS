@@ -117,7 +117,7 @@ final class Service {
     
     func post(title: String, content: String, price: Int, transactionRegion: String,
               openChatLink: String, image: Data) -> Single<networkingResult> {
-        return provider.rx.request(.postProducts(title, content, price, transactionRegion, openChatLink, image))
+        return provider.rx.request(.postProducts(title, content , price ,transactionRegion, openChatLink, image))
             .filterSuccessfulStatusCodes()
             .map{_ -> networkingResult in return .createOk}
             .catch{ [unowned self] in return .just(setNetworkError($0))}
