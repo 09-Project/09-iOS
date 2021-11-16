@@ -16,10 +16,12 @@ class MainViewController: UIViewController {
     
     private let model = MainViewModel()
     private let getData = BehaviorRelay<Void>(value: ())
+    private let count = PublishRelay<Void>()
     private let flagIt = PublishRelay<Int>()
     private let deleteFlagIt = PublishRelay<Int>()
     private let refreshToken = PublishSubject<Void>()
     private var heartBool = Bool()
+    private var page = Int()
     
     private let sideMenu = SideMenuNavigationController(
         rootViewController: SideMenuViewController())
@@ -71,6 +73,16 @@ class MainViewController: UIViewController {
         $0.tintColor = .init(named: "mainColor")
     }
     
+    private lazy var pageAllLabel = UILabel().then {
+        $0.font = .init(name: Font.fontMedium.rawValue, size: 16)
+        $0.textColor = .init(named: "placeholderColor")
+    }
+    
+    private lazy var pageLabel = UILabel().then {
+        $0.font = .init(name: Font.fontBold.rawValue, size: 16)
+        $0.textColor = .black
+    }
+    
     private lazy var mainCollectionView = UICollectionView(frame: .zero, collectionViewLayout: setCollectionView()).then {
         $0.backgroundColor = .white
     }
@@ -94,10 +106,15 @@ class MainViewController: UIViewController {
         lineBtn.rx.tap.subscribe(onNext: { _ in
             self.present(self.sideMenu, animated: true, completion: nil)
         }).disposed(by: disposebag)
-        navigationItem.leftBarButtonItem = nil
         mainCollectionView.rx.setDelegate(self).disposed(by: disposebag)
+        navigationController?.navigationBar.isHidden = false
+        pageFrontBtn.rx.tap.subscribe(onNext: { _ in
+            self.page += 1
+        }).disposed(by: disposebag)
+        pageBackBTn.rx.tap.subscribe(onNext: { _ in
+            self.page -= 1
+        }).disposed(by: disposebag)
     }
-    
     
     override func viewDidLayoutSubviews() {
         let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 73, height: 28))
@@ -110,7 +127,9 @@ class MainViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         mainCollectionView.reloadData()
+        getData.accept(())
         refreshToken.onNext(())
+        self.navigationItem.hidesBackButton = true
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -127,19 +146,16 @@ class MainViewController: UIViewController {
             flagIt: flagIt.asDriver(onErrorJustReturn: 0),
             deleteFlagIt: deleteFlagIt.asDriver(onErrorJustReturn: 0),
             refresh: refreshToken.asDriver(onErrorJustReturn: ()),
-            loadDetail: mainCollectionView.rx.itemSelected.asSignal()
+            loadDetail: mainCollectionView.rx.itemSelected.asSignal(),
+            count: count.asDriver(onErrorJustReturn: ())
         )
         
         let output = model.transform(input)
         
-        mainCollectionView.rx.itemSelected.subscribe(onNext: { index in
-            self.mainCollectionView.deselectItem(at: index, animated: true)
-        }).disposed(by: disposebag)
-        
         output.post.bind(to: mainCollectionView.rx.items(cellIdentifier: "cell", cellType: MainCollectionViewCell.self)) { row, items, cell in
             let url = URL(string: items.image)
             let data = try? Data(contentsOf: url!)
-            cell.imgView.image = UIImage(data: data!)!
+            cell.imgView.image = UIImage(data: data!)
             cell.titleLabel.text = items.title
             cell.locationLabel.text = items.transaction_region
             self.heartBool = items.liked
@@ -149,11 +165,12 @@ class MainViewController: UIViewController {
                 cell.priceLabel.text = "무료나눔"
             }
             else {
+                cell.label.isHidden = false
                 cell.label.text = "공동구매"
                 cell.priceLabel.text = String(items.price ?? 0) + "원"
             }
             
-            if self.heartBool {
+            if items.liked {
                 cell.heartBtn.setImage(.init(systemName: "heart.fill"), for: .normal)
             }
             else {
@@ -161,15 +178,20 @@ class MainViewController: UIViewController {
             }
             
             cell.heartBtn.rx.tap.subscribe(onNext: {[unowned self] _ in
-                if heartBool {
-                    heartBool.toggle()
+                if  heartBool {
                     deleteFlagIt.accept(row)
-                    cell.heartBtn.setImage(.init(systemName: "heart"), for: .normal)
                 }
                 else {
-                    heartBool.toggle()
                     flagIt.accept(row)
-                    cell.heartBtn.setImage(.init(systemName: "heart.fill"), for: .normal)
+                }
+            }).disposed(by: cell.disposebag)
+            
+            output.flagItResult.asObservable().subscribe(onNext: { bool in
+                self.heartBool = bool
+                if bool {
+                    cell.heartBtn.setImage(.init(systemName: "heart.fill"), for: .normal)                }
+                else {
+                    cell.heartBtn.setImage(.init(systemName: "heart"), for: .normal)
                 }
             }).disposed(by: cell.disposebag)
         }.disposed(by: disposebag)
@@ -185,11 +207,16 @@ class MainViewController: UIViewController {
             vc.postId = id
             self.navigationController?.pushViewController(vc, animated: true)
         }).disposed(by: disposebag)
+        
+        output.PostCount.asObservable().subscribe(onNext: {[unowned self] data in
+            pageAllLabel.text = "/" + String(data / 16)
+            pageLabel.text = String(page)
+        }).disposed(by: disposebag)
     }
     
     private func setupView() {
-        [searchField, searchBtn, bennerImgView, label, label2, label3, pageFrontBtn, pageBackBTn,
-         mainCollectionView].forEach{view.addSubview($0)}
+        [searchField, searchBtn, bennerImgView, label, label2, label3, pageAllLabel, pageLabel,
+         pageFrontBtn, pageBackBTn, mainCollectionView].forEach{view.addSubview($0)}
         
         self.searchField.snp.makeConstraints {
             $0.top.equalToSuperview().offset(100)
@@ -224,14 +251,26 @@ class MainViewController: UIViewController {
             $0.leading.equalToSuperview().offset(36)
         }
         
+        self.pageAllLabel.snp.makeConstraints {
+            $0.centerY.equalTo(pageFrontBtn)
+            $0.trailing.equalTo(pageBackBTn.snp.leading).offset(-12)
+        }
+        
+        self.pageLabel.snp.makeConstraints {
+            $0.centerY.equalTo(pageAllLabel)
+            $0.trailing.equalTo(pageAllLabel.snp.leading).offset(-3)
+        }
+        
         self.pageFrontBtn.snp.makeConstraints {
-            $0.top.equalTo(self.bennerImgView.snp.bottom).offset(31)
+            $0.centerY.equalTo(label3)
             $0.trailing.equalToSuperview().offset(-39)
+            $0.width.height.equalTo(20)
         }
         
         self.pageBackBTn.snp.makeConstraints {
-            $0.top.equalTo(self.bennerImgView.snp.bottom).offset(31)
+            $0.centerY.equalTo(label3)
             $0.trailing.equalTo(self.pageFrontBtn.snp.leading).offset(-12)
+            $0.width.height.equalTo(20)
         }
         
         self.mainCollectionView.snp.makeConstraints {
