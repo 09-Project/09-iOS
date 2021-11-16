@@ -175,15 +175,15 @@ class MyPageViewController: UIViewController {
         let output = model.transform(input)
         
         output.myInfo.subscribe(onNext: { [self] data in
-            let url = URL(string: data.profileUrl)
+            let url = URL(string: data.profile_url)
             let img = try? Data(contentsOf: url!)
             profileImg.image = UIImage(data: img!)
             nameLabel.text = data.name
             introduceLabel.text = data.introduction
-            productNum.text = String(data.allPostCount)
-            prizeNum.text = String(data.likePostCount)
-            receiveNum.text = String(data.getLikesCount)
-            transactionNum.text = String(data.completedPostCount)
+            productNum.text = String(data.all_post_count)
+            prizeNum.text = String(data.like_post_count)
+            receiveNum.text = String(data.get_likes_count)
+            transactionNum.text = String(data.completed_post_count)
         }).disposed(by: disposebag)
         
         output.post.bind(to: collectionView.rx.items(cellIdentifier: "cell", cellType: MainCollectionViewCell.self)) { row, items, cell in
