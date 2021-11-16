@@ -18,6 +18,7 @@ class MainCollectionViewCell: UICollectionViewCell {
     
     lazy var titleLabel = UILabel().then {
         $0.font = .init(name: Font.fontMedium.rawValue, size: 14)
+        $0.textAlignment = .left
     }
     
     lazy var locationLabel = UILabel().then {
@@ -57,6 +58,8 @@ class MainCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         [endView, endLabel].forEach{$0.isHidden = true}
+        label.clipsToBounds = true
+        label.layer.cornerRadius = 2
         setup()
     }
     
@@ -69,6 +72,7 @@ class MainCollectionViewCell: UICollectionViewCell {
             $0.top.equalToSuperview().offset(0)
             $0.leading.equalToSuperview().offset(8)
             $0.trailing.equalToSuperview().offset(-8)
+            $0.width.height.lessThanOrEqualTo(160)
         }
         
         self.heartBtn.snp.makeConstraints {
@@ -79,13 +83,13 @@ class MainCollectionViewCell: UICollectionViewCell {
         }
         
         self.titleLabel.snp.makeConstraints {
-            $0.top.equalTo(self.imgView.snp.bottom).offset(3)
-            $0.leading.lessThanOrEqualToSuperview().offset(8)
-            $0.trailing.greaterThanOrEqualToSuperview().offset(-8)
+            $0.top.equalTo(imgView.snp.bottom).offset(3)
+            $0.leading.equalToSuperview().offset(8)
+            $0.height.equalTo(20)
         }
         
         self.pinImg.snp.makeConstraints {
-            $0.top.equalTo(self.titleLabel.snp.bottom).offset(0)
+            $0.top.equalTo(self.titleLabel.snp.bottom)
             $0.leading.equalToSuperview().offset(8)
             $0.height.equalTo(12)
             $0.width.equalTo(8)
