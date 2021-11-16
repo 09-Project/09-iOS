@@ -21,14 +21,12 @@ class SignUpViewModel: ViewModelType {
     }
     
     struct Output {
-        let isEnable: Driver<Bool>
         let result: PublishRelay<Bool>
     }
     
     func transform(_ input: Input) -> Output {
         let api = Service()
         let info = Driver.combineLatest(input.name, input.username, input.password)
-        let isEnable = info.map {!$0.0.isEmpty && !$0.1.isEmpty && !$0.2.isEmpty}
         let result = PublishRelay<Bool>()
         
         input.doneTap.asObservable()
@@ -37,13 +35,12 @@ class SignUpViewModel: ViewModelType {
                 api.signUp(name, userN, userP)
             }.subscribe(onNext: { res in
                 switch res {
-                case .ok:
+                case .createOk:
                     result.accept(true)
                 default:
                     result.accept(false)
                 }
             }).disposed(by: disposebag)
-        return Output(isEnable: isEnable.asDriver(),
-                      result: result)
+        return Output(result: result)
     }
 }
