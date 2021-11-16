@@ -17,9 +17,12 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     private var buyBtnBool = true
     private var giveBtnBool = true
     private let postImg = UIImage.init(named: "postImg")
+    private let model = AddPostViewModel()
     
     private let picker = UIImagePickerController()
     private var img = PublishRelay<Data>()
+    private let post = PublishRelay<Void>()
+    
     private lazy var scrollView = UIScrollView()
     
     private lazy var View = UIView().then {
@@ -137,6 +140,7 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        bindViewModel()
         view.backgroundColor = .white
         navigationItem.title = "게시물 작성"
         navigationItem.rightBarButtonItem = okBtn
@@ -150,7 +154,6 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         giveBtn.rx.tap.subscribe(onNext: {
             self.giveBtnDidTap()
         }).disposed(by: disposebag)
-        
         content.delegate = self
         picker.delegate = self
         price.Txt.delegate = self
@@ -224,17 +227,15 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     }
     
     private func bindViewModel() {
-        let model = AddPostViewModel()
         let input = AddPostViewModel.Input(
             title: titleTxt.rx.text.orEmpty.asDriver(),
             content: content.rx.text.orEmpty.asDriver(),
-            price: Int(price.Txt.text!),
+            price: price.Txt.rx.text.orEmpty.asDriver(),
             transactionRegion: area.Txt.rx.text.orEmpty.asDriver(),
             openChatLink: openChat.Txt.rx.text.orEmpty.asDriver(),
             image: img.asDriver(onErrorJustReturn: (postImg?.jpegData(compressionQuality: 0.8))!),
             doneTap: okBtn.rx.tap.asSignal()
         )
-        
         let output = model.transform(input)
         
         output.result.asObservable().subscribe(onNext: { [unowned self] bool in
@@ -245,10 +246,6 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
                     self.navigationController?.popViewController(animated: true)
                 })
             }
-        }).disposed(by: disposebag)
-        
-        output.isEnable.asObservable().subscribe(onNext: { [unowned self] bool in
-            okBtn.isEnabled = bool
         }).disposed(by: disposebag)
     }
     
