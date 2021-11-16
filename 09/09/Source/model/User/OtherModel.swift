@@ -17,5 +17,5 @@ struct OtherModel: Codable {
 
 
 struct OtherList: Codable {
-    var OtherList: [OtherModel]
+    var otherList: [OtherModel]
 }
