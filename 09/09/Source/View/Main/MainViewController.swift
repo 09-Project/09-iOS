@@ -193,7 +193,7 @@ class MainViewController: UIViewController {
                 else {
                     cell.heartBtn.setImage(.init(systemName: "heart"), for: .normal)
                 }
-            }).disposed(by: cell.disposebag)
+            }).disposed(by: self.disposebag)
         }.disposed(by: disposebag)
         
         output.refreshResult.subscribe(onNext: { bool in
