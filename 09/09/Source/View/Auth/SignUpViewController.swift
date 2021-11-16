@@ -187,11 +187,6 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
             doneTap: signupBtn.rx.tap.asSignal())
         
         let output = viewModel.transform(input)
-        output.isEnable.drive(signupBtn.rx.isEnabled).disposed(by: disposebag)
-        output.isEnable.drive(onNext: {[unowned self] bool in
-            self.Btn(self.signupBtn)
-        }).disposed(by: disposebag)
-        
         output.result.subscribe(onNext: {[unowned self] bool in
             if bool {
                 self.navigationController?.popViewController(animated: true)
@@ -200,7 +195,6 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
                 self.idErrorLabel.isHidden = false
                 nickErrorLabel.isHidden = false
             }
-            
         }).disposed(by: disposebag)
     }
     
@@ -332,18 +326,6 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
-}
-
-extension SignUpViewController {
-    private func Btn(_ sender: UIButton){
-        if sender.isEnabled{
-            sender.isEnabled = true
-        }
-        else {
-            sender.isEnabled = false
-        }
-    }
-
 }
 
 
