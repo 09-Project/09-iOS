@@ -9,12 +9,12 @@ import Foundation
 
 struct ProfileModel: Codable {
     var name = String()
-    var profileUrl = String()
+    var profile_url = String()
     var introduction = String()
-    var allPostCount = Int()
-    var getLikesCount = Int()
-    var inProgressPostCount = Int()
-    var completedPostCount = Int()
-    var likePostCount = Int()
+    var all_post_count = Int()
+    var get_likes_count = Int()
+    var in_progress_postCount = Int()
+    var completed_post_count = Int()
+    var like_post_count = Int()
     
 }
