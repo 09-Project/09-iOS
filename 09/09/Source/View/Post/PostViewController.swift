@@ -95,25 +95,31 @@ class PostViewController: UIViewController {
         $0.font = .init(name: Font.fontBold.rawValue, size: 14)
     }
     
+    private lazy var line = UIView().then {
+        $0.backgroundColor = .init(named: "borderColor")
+    }
+    
     private lazy var heartBtn = UIButton(type: .system).then {
         $0.backgroundColor = .white
-        $0.layer.maskedCorners  = .layerMinXMinYCorner
-        $0.layer.maskedCorners = .layerMinXMaxYCorner
-        $0.layer.cornerRadius = 5
-        $0.setTitle("\t찜하기", for: .normal)
-        $0.layer.borderColor = UIColor.init(named: "borderColor")?.cgColor
+        $0.titleLabel?.font = .init(name: Font.fontRegular.rawValue, size: 12)
+        $0.setTitle("  찜하기", for: .normal)
+        $0.semanticContentAttribute = .forceLeftToRight
     }
     
     private lazy var chatBtn = UIButton(type: .system).then {
         $0.backgroundColor = .white
-        $0.layer.maskedCorners = .layerMaxXMinYCorner
-        $0.layer.maskedCorners = .layerMaxXMaxYCorner
-        $0.layer.cornerRadius  = 5
-        $0.layer.borderWidth = 0.5
-        $0.layer.borderColor = UIColor.init(named: "borderColor")?.cgColor
+        $0.titleLabel?.font = .init(name: Font.fontRegular.rawValue, size: 12)
         $0.setImage(.init(named: "chatImg"), for: .normal)
         $0.semanticContentAttribute = .forceLeftToRight
-        $0.setTitle("\t채팅", for: .normal)
+        $0.setTitle("  채팅", for: .normal)
+        $0.tintColor = .init(named: "borderColor")
+    }
+    
+    private lazy var btnView = UIView().then {
+        $0.backgroundColor = .white
+        $0.layer.cornerRadius = 10
+        $0.layer.borderWidth = 1
+        $0.layer.borderColor = UIColor.init(named: "borderColor")?.cgColor
     }
     
     private lazy var lineView = UIView().then {
@@ -126,6 +132,9 @@ class PostViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        heartBtn.clipsToBounds = true
+        chatBtn.clipsToBounds = true
+        heartBtn.imageView!.preferredSymbolConfiguration = UIImage.SymbolConfiguration(pointSize: 8)
         view.backgroundColor = .white
         bindViewModel()
         buyLabel.layer.cornerRadius = 3
@@ -135,7 +144,7 @@ class PostViewController: UIViewController {
         self.collectionView.register(MainCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         heartBtn.rx.tap.subscribe(onNext: { [unowned self] _ in
             if heartBool {
-                flagIt.onNext(postId)
+                deleteFlagIt.onNext(postId)
             }
             else {
                 flagIt.onNext(postId)
@@ -145,23 +154,13 @@ class PostViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         setup()
-        if heartBool {
-            heartBtn.setImage(.init(systemName: "heart.fill"), for: .normal)
-            heartBtn.semanticContentAttribute = .forceLeftToRight
-            heartBtn.tintColor = .init(named: "heartColor")
-        }
-        else {
-            heartBtn.setImage(.init(systemName: "heart"), for: .normal)
-            heartBtn.semanticContentAttribute = .forceLeftToRight
-            heartBtn.tintColor = .init(named: "borderColor")
-        }
     }
     
     private func bindViewModel() {
         let input = PostViewModel.Input (
             getDetail: getDetail.asDriver(onErrorJustReturn: ()),
             post_id: postId,
-            getPost: getPost.asSignal(onErrorJustReturn: ()),
+            getPost: getPost.asDriver(),
             flagIt: flagIt.asDriver(onErrorJustReturn: 0),
             deleteFlagIt: deleteFlagIt.asDriver(onErrorJustReturn: 0)
         )
@@ -173,25 +172,14 @@ class PostViewController: UIViewController {
             let data = try? Data(contentsOf: url!)
             cell.imgView.image = UIImage(data: data!)!
             cell.titleLabel.text! = items.title
-            self.heartBool = items.liked
-            
-            if self.heartBool {
-                cell.heartBtn.setImage(.init(systemName: "heart.fill"), for: .normal)
+            if items.liked {
+                cell.heartBtn.setImage(.init(systemName: "suit.heart.fill"), for: .normal)
+                cell.heartBtn.tintColor = .init(named: "heartColor")
             }
             else {
-                cell.heartBtn.setImage(.init(systemName: "heart"), for: .normal)
+                cell.heartBtn.setImage(.init(systemName: "suit.heart"), for: .normal)
+                cell.heartBtn.tintColor = .init(named: "borderColor")
             }
-            
-            cell.heartBtn.rx.tap.subscribe(onNext: {[unowned self] _ in
-                if heartBool {
-                    deleteFlagIt.onNext(row)
-                    cell.heartBtn.setImage(.init(systemName: "heart"), for: .normal)
-                }
-                else {
-                    flagIt.onNext(row)
-                    cell.heartBtn.setImage(.init(systemName: "heart.fill"), for: .normal)
-                }
-            }).disposed(by: cell.disposebag)
         }.disposed(by: disposebag)
         
         output.postInformation.subscribe(onNext: { [unowned self] model in
@@ -203,10 +191,20 @@ class PostViewController: UIViewController {
             profileImg.image = UIImage(data: data1!)
             name.text = model!.member_info.member_name
             titleLabel.text = model?.title
-            heartBool = model!.liked
+            heartBool = model?.liked ?? false
+            contentLabel.text = model?.content
+            if heartBool {
+                heartBtn.setImage(.init(systemName: "suit.heart.fill"), for: .normal)
+                heartBtn.tintColor = .init(named: "heartColor")
+            }
+            else {
+                heartBtn.setImage(.init(systemName: "suit.heart"), for: .normal)
+                heartBtn.tintColor = .init(named: "borderColor")
+            }
             if model?.price == nil || model?.price == 0 {
                 priceLabel.isHidden = true
                 label.text = "무료나눔"
+                wonLabel.isHidden = true
             }
             else {
                 priceLabel.text = String(model?.price ?? 0)
@@ -215,16 +213,29 @@ class PostViewController: UIViewController {
             areaLabel.text = model?.transaction_region
             contentLabel.text = model?.content
         }).disposed(by: disposebag)
+        
+        output.flagItResult.asObservable().subscribe(onNext: { [unowned self] bool in
+            heartBool = bool
+            if bool {
+                heartBtn.setImage(.init(systemName: "suit.heart.fill"), for: .normal)
+                heartBtn.tintColor = .init(named: "heartColor")
+            }
+            else {
+                heartBtn.setImage(.init(systemName: "suit.heart"), for: .normal)
+                heartBtn.tintColor = .init(named: "borderColor")
+            }
+        }).disposed(by: disposebag)
     }
     
     private func setup() {
         [imgView, profileImg, name, profileBtn, titleLabel, priceLabel, wonLabel,
-         pinImg, areaLabel, buyLabel, contentLabel, label, heartBtn, chatBtn, lineView, collectionView]
+         pinImg, areaLabel, buyLabel, contentLabel, label, btnView, line, heartBtn, chatBtn,
+         lineView, collectionView]
             .forEach{view.addSubview($0)}
         
         self.imgView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview().offset(0)
-            $0.height.equalTo(300)
+            $0.height.lessThanOrEqualTo(300)
         }
         
         self.profileImg.snp.makeConstraints {
@@ -279,19 +290,33 @@ class PostViewController: UIViewController {
             $0.height.equalTo(20)
         }
         
-        self.heartBtn.snp.makeConstraints {
-            $0.top.equalTo(self.label.snp.bottom).offset(19)
+        self.btnView.snp.makeConstraints {
+            $0.top.equalTo(buyLabel.snp.bottom).offset(10)
+            $0.centerX.equalToSuperview()
             $0.leading.equalToSuperview().offset(39)
+            $0.trailing.equalToSuperview().offset(-39)
+            $0.height.equalTo(30)
+        }
+        
+        self.line.snp.makeConstraints {
+            $0.top.equalTo(btnView.snp.top)
+            $0.bottom.equalTo(btnView.snp.bottom)
+            $0.centerX.equalToSuperview()
+            $0.width.equalTo(1)
+        }
+        
+        self.heartBtn.snp.makeConstraints {
+            $0.centerY.equalTo(btnView)
+            $0.leading.equalTo(btnView.snp.leading).offset(45)
         }
         
         self.chatBtn.snp.makeConstraints {
-            $0.top.equalTo(self.label.snp.bottom).offset(19)
-            $0.leading.equalTo(self.heartBtn.snp.trailing).offset(0)
-            $0.trailing.equalToSuperview().offset(-39)
+            $0.centerY.equalTo(btnView)
+            $0.trailing.equalTo(btnView.snp.trailing).offset(-65)
         }
         
         self.contentLabel.snp.makeConstraints {
-            $0.top.equalTo(self.heartBtn.snp.bottom).offset(24)
+            $0.top.equalTo(self.btnView.snp.bottom).offset(10)
             $0.leading.trailing.equalToSuperview().inset(39)
         }
         
@@ -308,7 +333,9 @@ class PostViewController: UIViewController {
         
         self.collectionView.snp.makeConstraints {
             $0.top.equalTo(self.label.snp.bottom).offset(16)
-            $0.leading.trailing.bottom.equalToSuperview()
+            $0.leading.equalToSuperview().offset(16)
+            $0.trailing.equalToSuperview().offset(-16)
+            $0.bottom.equalToSuperview().offset(0)
         }
     }
 }
@@ -325,7 +352,7 @@ extension PostViewController: UICollectionViewDelegateFlowLayout{
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         let width = collectionView.frame.width / 3 - 1
-        let size = CGSize(width: width, height: width)
+        let size = CGSize(width: width, height: width+30)
         
         return size
     }
