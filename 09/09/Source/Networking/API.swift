@@ -66,7 +66,6 @@ extension API: TargetType {
         case .deleteProducts(let id):
             return "/post/\(id)"
         case .seeProducts(let id):
-            print("path")
             return "/post/\(id)"
         case .products:
             return "/post"
@@ -77,7 +76,6 @@ extension API: TargetType {
         case .putProducts(let id):
             return "/post/\(id)"
         case .postProducts:
-            print("hello")
             return "/post"
         case .end(let id):
             return "/post/\(id)"
@@ -99,7 +97,6 @@ extension API: TargetType {
         case .likeObj, .signUp, .signIn, .postProducts:
             return .post
         case .profile, .seeLikePost,.getInformation, .seeProducts, .products, .other, .search, .seeDeletePost, .myPage:
-            print("get")
             return .get
         case .putProducts, .changepw, .changeInformation:
             return .patch
@@ -112,10 +109,11 @@ extension API: TargetType {
     
     var headers: [String: String]? {
         switch self {
-        case .signIn, .signUp:
+        case .signIn, .signUp, .products:
             return ["Content-Type" : "application/json"]
         case .refreshToken:
-            guard let refreshToken = Token.refreshToken else {return ["Content-Type" : "application/json"]}
+            guard let refreshToken = Token.refreshToken else {
+                return ["Content-Type" : "application/json"]}
             return ["X-Refresh-Token" : refreshToken]
             
         case .postProducts, .putProducts, .changeInformation:
@@ -123,7 +121,6 @@ extension API: TargetType {
             return ["Authorization" : "Bearer " + token, "Content-Type" : "multipart/form-data"]
             
         default:
-            print("header")
             guard let token = Token.accessToken else {return ["Content-Type" : "application/json"]}
             return ["Authorization" : "Bearer " + token]
         }
@@ -134,12 +131,12 @@ extension API: TargetType {
         case .postProducts(let title, let content, let price, let transactionRegion,
                            let openChatLink, let image):
             var multipartFormData = [MultipartFormData]()
-            multipartFormData.append(MultipartFormData(provider: .data(image), name: "image", fileName: "image.jpg"))
+            multipartFormData.append(MultipartFormData(provider: .data(image), name: "image", fileName: "image.jpg", mimeType: "image/jpg"))
             multipartFormData.append(MultipartFormData(provider: .data(title.data(using: .utf8)!), name: "title", mimeType: "text/plain"))
             multipartFormData.append(MultipartFormData(provider: .data(content.data(using: .utf8)!), name: "content", mimeType: "text/plain"))
             multipartFormData.append(MultipartFormData(provider: .data(price.description.data(using: .utf8)!), name: "price", mimeType: "text/plain"))
-            multipartFormData.append(MultipartFormData(provider: .data(transactionRegion.data(using: .utf8)!), name: "transaction_region", mimeType: "text/plain"))
-            multipartFormData.append(MultipartFormData(provider: .data(openChatLink.data(using: .utf8)!), name: "open_chat_link", mimeType: "text/plain"))
+            multipartFormData.append(MultipartFormData(provider: .data(transactionRegion.data(using: .utf8)!), name: "transactionRegion", mimeType: "text/plain"))
+            multipartFormData.append(MultipartFormData(provider: .data(openChatLink.data(using: .utf8)!), name: "openChatLink", mimeType: "text/plain"))
             return .uploadMultipart(multipartFormData)
             
         case .changeInformation(let name, let introduce, let profileUrl):
@@ -168,7 +165,7 @@ extension API: TargetType {
         case .putProducts(let postID, let title, let content, let price, let transactionRegion,
                           let openChatLink, let image):
             var multipartFormData = [MultipartFormData]()
-            multipartFormData.append(MultipartFormData(provider: .data(postID.description.data(using: .utf8)!), name: "postID", mimeType: "text/plain"))
+            multipartFormData.append(MultipartFormData(provider: .data(postID.description.data(using: .utf8)!), name: "post_id", mimeType: "text/plain"))
             multipartFormData.append(MultipartFormData(provider: .data(image), name: "image", fileName: "image.jpg", mimeType: "image/jpg"))
             multipartFormData.append(MultipartFormData(provider: .data(title.data(using: .utf8)!), name: "title", mimeType: "text/plain"))
             multipartFormData.append(MultipartFormData(provider: .data(content.data(using: .utf8)!), name: "content", mimeType: "text/plain"))
