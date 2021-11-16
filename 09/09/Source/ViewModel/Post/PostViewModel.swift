@@ -12,12 +12,11 @@ import RxCocoa
 class PostViewModel: ViewModelType {
     
     private let disposebag = DisposeBag()
-    private var posts = [PostModel]()
     
     struct Input {
         let getDetail: Driver<Void>
         let post_id: Int
-        let getPost: Signal<Void>
+        let getPost: Driver<Void>
         let flagIt: Driver<Int>
         let deleteFlagIt: Driver<Int>
     }
@@ -53,10 +52,10 @@ class PostViewModel: ViewModelType {
             api.like(num)
         }.subscribe(onNext: { res in
             switch res {
-            case .ok:
-                flagItResult.accept(false)
-            default:
+            case .createOk:
                 flagItResult.accept(true)
+            default:
+                flagItResult.accept(false)
             }
         }).disposed(by: disposebag)
         
@@ -64,10 +63,10 @@ class PostViewModel: ViewModelType {
             api.deleteLike(num)
         }.subscribe(onNext: { res in
             switch res {
-            case .ok:
-                flagItResult.accept(true)
-            default:
+            case .deleteOk:
                 flagItResult.accept(false)
+            default:
+                flagItResult.accept(true)
             }
         }).disposed(by: disposebag)
         
