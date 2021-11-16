@@ -15,7 +15,7 @@ class AddPostViewModel: ViewModelType {
     struct Input {
         let title: Driver<String>
         let content: Driver<String>
-        let price: Int?
+        let price: Driver<String>
         let transactionRegion: Driver<String>
         let openChatLink: Driver<String>
         let image: Driver<Data>
@@ -23,23 +23,19 @@ class AddPostViewModel: ViewModelType {
     }
     
     struct Output{
-        let isEnable: Driver<Bool>
         let result: PublishRelay<Bool>
     }
     
     func transform(_ input: Input) -> Output {
         let api = Service()
         let result = PublishRelay<Bool>()
-        let info = Driver.combineLatest(input.title, input.content, input.transactionRegion,
-                                        input.openChatLink, input.image)
-        let isEnabel = info.map { !$0.0.isEmpty && !$0.1.isEmpty && !$0.2.isEmpty && !$0.3.isEmpty
-            && !$0.4.isEmpty
-        }
+        let info = Driver.combineLatest(input.title, input.content, input.price,
+                                        input.transactionRegion, input.openChatLink, input.image)
         
         input.doneTap.asObservable()
             .withLatestFrom(info)
-            .flatMap { title, content, transactionRegion, openChatLink, image in
-                api.post(title: title, content: content, price: input.price ?? 0, transactionRegion: transactionRegion, openChatLink: openChatLink, image: image)
+            .flatMap { title, content, transactionRegion, price, openChatLink, image in
+                api.post(title: title, content: content, price: Int(price) ?? 0 , transactionRegion: transactionRegion, openChatLink: openChatLink, image: image)
             }.subscribe(onNext: { res in
                 switch res {
                 case .createOk:
@@ -49,6 +45,6 @@ class AddPostViewModel: ViewModelType {
                 }
             }).disposed(by: disposebag)
         
-        return Output(isEnable: isEnabel.asDriver(onErrorJustReturn: false), result: result)
+        return Output(result: result)
     }
 }
