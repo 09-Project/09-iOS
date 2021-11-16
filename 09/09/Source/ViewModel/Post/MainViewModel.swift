@@ -12,8 +12,6 @@ class MainViewModel: ViewModelType {
     
     private let disposebag = DisposeBag()
     
-    private var posts = [PostModel]()
-    
     struct Input {
         let getPost: Signal<Void>
         let getMorePost: Signal<Void>
@@ -24,6 +22,7 @@ class MainViewModel: ViewModelType {
         let deleteFlagIt: Driver<Int>
         let refresh: Driver<Void>
         let loadDetail: Signal<IndexPath>
+        let count: Driver<Void>
     }
     
     struct Output {
@@ -32,6 +31,7 @@ class MainViewModel: ViewModelType {
         let flagItResult: PublishRelay<Bool>
         let refreshResult: PublishRelay<Bool>
         let detailIndex: Signal<Int>
+        let PostCount: PublishRelay<Int>
     }
     
     func transform(_ input: Input) -> Output {
@@ -41,6 +41,7 @@ class MainViewModel: ViewModelType {
         let flagItResult = PublishRelay<Bool>()
         let refreshResult = PublishRelay<Bool>()
         let detailIndex = PublishRelay<Int>()
+        let count = PublishRelay<Int>()
         
         var page = 0
         
@@ -94,7 +95,7 @@ class MainViewModel: ViewModelType {
         }).disposed(by: disposebag)
         
         input.flagIt.asObservable().flatMap{ row in
-            api.like(self.posts[row].id)
+            api.like(post.value[row].id)
         }.subscribe(onNext: { res in
             switch res {
             case .createOk:
@@ -105,7 +106,7 @@ class MainViewModel: ViewModelType {
         }).disposed(by: disposebag)
         
         input.deleteFlagIt.asObservable().flatMap{ row in
-            api.delete(self.posts[row].id)
+            api.deleteLike(post.value[row].id)
         }.subscribe(onNext: { res in
             switch res {
             case .deleteOk:
@@ -130,8 +131,21 @@ class MainViewModel: ViewModelType {
             let value = post.value
             detailIndex.accept(value[index.row].id)
         }).disposed(by: disposebag)
+        
+        input.count.asObservable().flatMap{ _ in
+            api.products(page: 0)
+        }.subscribe(onNext: { data, res in
+            switch res {
+            case .ok:
+                count.accept(data!.count)
+            default:
+                count.accept(0)
+            }
+        }).disposed(by: disposebag)
 
-        return Output(getPostResult: getPostResult, post: post, flagItResult: flagItResult, refreshResult: refreshResult, detailIndex: detailIndex.asSignal())
+        return Output(getPostResult: getPostResult, post: post, flagItResult: flagItResult,
+                      refreshResult: refreshResult, detailIndex: detailIndex.asSignal(),
+                      PostCount: count)
     }
 }
 
