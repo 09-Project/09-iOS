@@ -40,7 +40,7 @@ class PostViewModel: ViewModelType {
         }.subscribe(onNext: { data, res in
             switch res {
             case .ok:
-                post.accept(data!.OtherList)
+                post.accept(data!)
                 getPostResult.accept(true)
             default:
                 print(res)
