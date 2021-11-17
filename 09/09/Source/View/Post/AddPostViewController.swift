@@ -18,6 +18,7 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     private var giveBtnBool = true
     private let postImg = UIImage.init(named: "postImg")
     private let model = AddPostViewModel()
+    private let priceValue = PublishRelay<String>()
     
     private let picker = UIImagePickerController()
     private var img = PublishRelay<Data>()
@@ -173,6 +174,14 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
                 self.numLabel.text = "(\(num!)/200)"
             }
         }).disposed(by: disposebag)
+        okBtn.rx.tap.subscribe(onNext: {[unowned self] _ in
+            if price.isHidden {
+                priceValue.accept("0")
+            }
+            else {
+                priceValue.accept(price.Txt.text!)
+            }
+        }).disposed(by: disposebag)
     }
     
     
@@ -230,7 +239,7 @@ class AddPostViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         let input = AddPostViewModel.Input(
             title: titleTxt.rx.text.orEmpty.asDriver(),
             content: content.rx.text.orEmpty.asDriver(),
-            price: price.Txt.rx.text.orEmpty.asDriver(),
+            price: priceValue.asDriver(onErrorJustReturn: "0"),
             transactionRegion: area.Txt.rx.text.orEmpty.asDriver(),
             openChatLink: openChat.Txt.rx.text.orEmpty.asDriver(),
             image: img.asDriver(onErrorJustReturn: (postImg?.jpegData(compressionQuality: 0.8))!),
