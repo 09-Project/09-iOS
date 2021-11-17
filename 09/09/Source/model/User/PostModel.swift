@@ -17,7 +17,7 @@ struct PostModel: Codable {
     let created_date: String
     let updated_date: String
     let image: String
-    let liked: Bool
+    var liked: Bool
 }
 
 struct Posts: Codable {
