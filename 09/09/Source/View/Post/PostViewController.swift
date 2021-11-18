@@ -13,7 +13,8 @@ class PostViewController: UIViewController {
     
     private let disposebag = DisposeBag()
     var postId = Int()
-    let viewModel = PostViewModel()
+    private var member_id = Int()
+    private let viewModel = PostViewModel()
     
     private let getDetail = BehaviorRelay<Void>(value: ())
     private let getPost = BehaviorRelay<Void>(value: ())
@@ -150,6 +151,11 @@ class PostViewController: UIViewController {
                 flagIt.onNext(postId)
             }
         }).disposed(by: disposebag)
+        profileBtn.rx.tap.subscribe(onNext: { _ in
+            let vc = ProfileViewController()
+            vc.member_id = self.member_id
+            self.navigationController?.pushViewController( vc, animated: true)
+        }).disposed(by: disposebag)
     }
     
     override func viewDidLayoutSubviews() {
@@ -172,7 +178,6 @@ class PostViewController: UIViewController {
         let output = viewModel.transform(input)
         
         output.post.bind(to: collectionView.rx.items(cellIdentifier: "cell", cellType: MainCollectionViewCell.self)) { row, items, cell in
-            print(items)
             let url = URL(string: items.image)
             let data = try? Data(contentsOf: url!)
             cell.imgView.image = UIImage(data: data!)!
@@ -196,6 +201,7 @@ class PostViewController: UIViewController {
             let data1 = try? Data(contentsOf: url1!)
             profileImg.image = UIImage(data: data1!)
             name.text = model!.member_info.member_name
+            member_id = model!.member_info.member_id
             titleLabel.text = model?.title
             heartBool = model?.liked ?? false
             contentLabel.text = model?.content
