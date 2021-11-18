@@ -15,6 +15,7 @@ class ChangeProfileViewController: UIViewController, UITextFieldDelegate {
     private let img = PublishRelay<Data>()
     private let picker = UIImagePickerController()
     let profileImage = UIImage.init(named: "ProfileImg")
+    let model = ChangeProfileViewModel()
     
     private lazy var profile = UIImageView().then {
         $0.layer.cornerRadius = 5
@@ -27,10 +28,18 @@ class ChangeProfileViewController: UIViewController, UITextFieldDelegate {
         $0.tintColor = .white
     }
     
-    private lazy var nickName = customView().then {
-        $0.Label.text = "닉네임"
-        $0.Label.font = .init(name: Font.fontMedium.rawValue, size: 14)
-        $0.Txt.font = .init(name: Font.fontRegular.rawValue, size: 14)
+    private lazy var nickName = UIView().then {
+        $0.backgroundColor = .white
+    }
+    
+    private lazy var nickLabel = UILabel().then {
+        $0.font = .init(name: Font.fontMedium.rawValue, size: 14)
+        $0.text = "닉네임"
+        $0.textColor = .black
+    }
+    
+    private lazy var nickTxt = UITextField().then {
+        $0.font = .init(name: Font.fontRegular.rawValue, size: 14)
     }
     
     private lazy var introduceLabel = UILabel().then {
@@ -66,48 +75,53 @@ class ChangeProfileViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        bindViewModel()
         view.backgroundColor = .white
         navigationItem.title = "프로필 수정"
-        nickName.Txt.delegate = self
+        nickTxt.delegate = self
         picker.delegate = self
         
-        nickName.Txt.rx.text.subscribe(onNext : { [unowned self] str in
+        pencilBtn.rx.tap.subscribe(onNext: { [unowned self] _ in
+            openLibary()
+        }).disposed(by: disposeBag)
+        
+        nickTxt.rx.text.subscribe(onNext : { [unowned self] str in
             let num = str?.count
             numLabel.text = "(\(num!)/20)"
         }).disposed(by: disposeBag)
         
         introduceTxtField.rx.text.subscribe(onNext: { [unowned self] str in
             let num = str?.count
-            numLabel2.text = "(\(num!)/200"
+            numLabel2.text = "(\(num!)/200)"
         }).disposed(by: disposeBag)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         img.accept(profileImage!.jpegData(compressionQuality: 0.8)!)
+        introduceTxtField.layer.addBorder([.top, .bottom],
+                                          color: .init(named: "placeholderColor")!, width: 0.5)
+        nickName.layer.addBorder([.bottom, .top],
+                                 color: .init(named: "placeholderColor")!, width: 0.5)
     }
     
     private func bindViewModel() {
-        let model = ChangeProfileViewModel()
         let input = ChangeProfileViewModel.Input(
-            name: nickName.Txt.rx.text.orEmpty.asDriver(),
+            name: nickTxt.rx.text.orEmpty.asDriver(),
             introduction: introduceTxtField.rx.text.orEmpty.asDriver(),
-            profileURL: img.asDriver(
-                onErrorJustReturn: (profileImage?.jpegData(compressionQuality: 0.8))!
-            ),
-            doneTap: changeBtn.rx.tap.asDriver())
+            profileURL: img.asDriver(onErrorJustReturn: (profileImage?.jpegData(compressionQuality: 0.8))!),
+            doneTap: changeBtn.rx.tap.asSignal())
         
         let output = model.transform(input)
         
-        output.result.subscribe(onNext: { [weak self] bool in
+        output.result.subscribe(onNext: { [unowned self] bool in
             if bool {
-                self!.okAlert(title: "프로필을 바꾸시는데 성공하셨습니다.", action: { ACTION in
-                    self!.navigationController?.popViewController(animated: true)
+                okAlert(title: "프로필을 바꾸시는데 성공하셨습니다.", action: { ACTION in
+                    navigationController?.popViewController(animated: true)
                 })
             }
             else {
-                self!.okAlert(title: "프로필을 바꾸시는데 실패하셨습니다.", action: { ACTION in
-                    self!.navigationController?.popViewController(animated: true)
+                okAlert(title: "프로필을 바꾸시는데 실패하셨습니다.", action: { ACTION in
+                    navigationController?.popViewController(animated: true)
                 })
             }
         }).disposed(by: disposeBag)
@@ -118,52 +132,66 @@ class ChangeProfileViewController: UIViewController, UITextFieldDelegate {
         setup()
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
     private func setup() {
-        [profile, pencilBtn, nickName, introduceLabel, introduceTxtField, changeBtn,
-         numLabel, numLabel2].forEach{view.addSubview($0)}
+        [profile, pencilBtn, nickName, nickTxt, nickLabel, introduceLabel, introduceTxtField,
+         changeBtn, numLabel, numLabel2].forEach{view.addSubview($0)}
         
         profile.snp.makeConstraints {
-            $0.top.equalToSuperview().inset(86)
-            $0.leading.equalToSuperview().inset(39)
+            $0.top.equalToSuperview().offset(100)
+            $0.leading.equalToSuperview().offset(39)
             $0.height.width.equalTo(88)
         }
         
         pencilBtn.snp.makeConstraints {
-            $0.top.equalToSuperview().inset(86)
-            $0.leading.equalToSuperview().inset(39)
-            $0.height.width.equalTo(88)
+            $0.top.leading.trailing.bottom.equalTo(profile)
         }
         
         nickName.snp.makeConstraints {
-            $0.top.equalTo(profile.snp.bottom).inset(60)
+            $0.top.equalTo(nickLabel.snp.bottom).offset(20)
             $0.leading.trailing.equalToSuperview()
         }
         
         numLabel.snp.makeConstraints {
-            $0.top.equalTo(nickName.View.snp.top).inset(16)
-            $0.trailing.equalToSuperview().inset(-39)
+            $0.centerY.equalTo(nickTxt)
+            $0.trailing.equalToSuperview().offset(-39)
+        }
+        
+        nickLabel.snp.makeConstraints {
+            $0.top.equalTo(pencilBtn.snp.bottom).offset(60)
+            $0.leading.equalToSuperview().offset(39)
+        }
+        
+        nickTxt.snp.makeConstraints {
+            $0.top.equalTo(nickName.snp.top).offset(15)
+            $0.leading.equalToSuperview().offset(39)
+            $0.trailing.equalToSuperview().offset(-39)
         }
         
         introduceLabel.snp.makeConstraints {
-            $0.top.equalTo(nickName.View.snp.bottom).inset(50)
-            $0.leading.equalToSuperview().inset(39)
+            $0.top.equalTo(nickTxt.snp.bottom).offset(50)
+            $0.leading.equalToSuperview().offset(39)
         }
         
         introduceTxtField.snp.makeConstraints {
-            $0.top.equalTo(introduceLabel.snp.bottom).inset(22)
+            $0.top.equalTo(introduceLabel.snp.bottom).offset(22)
             $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(150)
         }
         
         numLabel2.snp.makeConstraints {
-            $0.top.equalTo(introduceTxtField.snp.bottom).inset(-17)
-            $0.trailing.equalToSuperview().inset(-39)
+            $0.bottom.equalTo(introduceTxtField.snp.bottom).offset(-17)
+            $0.trailing.equalToSuperview().offset(-39)
         }
         
         changeBtn.snp.makeConstraints {
-            $0.top.equalTo(introduceTxtField.snp.bottom).inset(158)
+            $0.top.equalTo(introduceTxtField.snp.bottom).offset(158)
             $0.height.equalTo(45)
-            $0.leading.equalToSuperview().inset(39)
-            $0.trailing.equalToSuperview().inset(-39)
+            $0.leading.equalToSuperview().offset(39)
+            $0.trailing.equalToSuperview().offset(-39)
         }
     }
 }
