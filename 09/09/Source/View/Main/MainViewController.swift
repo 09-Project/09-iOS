@@ -9,6 +9,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 import SideMenu
+import Alamofire
 
 class MainViewController: UIViewController {
     
@@ -126,8 +127,8 @@ class MainViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        mainCollectionView.reloadData()
         getData.accept(())
+        mainCollectionView.reloadData()
         refreshToken.onNext(())
         self.navigationItem.hidesBackButton = true
     }
@@ -158,7 +159,7 @@ class MainViewController: UIViewController {
             cell.imgView.image = UIImage(data: data!)
             cell.titleLabel.text = items.title
             cell.locationLabel.text = items.transaction_region
-            self.heartBool = items.liked
+            cell.bool = items.liked
             
             if items.price == 0 || items.price == nil {
                 cell.label.isHidden = true
@@ -170,30 +171,31 @@ class MainViewController: UIViewController {
                 cell.priceLabel.text = String(items.price ?? 0) + "원"
             }
             
-            if items.liked {
+            if cell.bool {
                 cell.heartBtn.setImage(.init(systemName: "heart.fill"), for: .normal)
             }
             else {
                 cell.heartBtn.setImage(.init(systemName: "heart"), for: .normal)
             }
             
-            cell.heartBtn.rx.tap.subscribe(onNext: {[unowned self] _ in
-                if  heartBool {
-                    deleteFlagIt.accept(row)
+            cell.heartBtn.rx.tap.subscribe(onNext: { _ in
+                if cell.bool {
+                    self.deleteFlagIt.accept(row)
                 }
                 else {
-                    flagIt.accept(row)
+                    self.flagIt.accept(row)
                 }
+                
+                output.flagItResult.subscribe(onNext: { bool in
+                    cell.bool = bool
+                    if cell.bool {
+                        cell.heartBtn.setImage(.init(systemName: "heart.fill"), for: .normal)
+                    }
+                    else {
+                        cell.heartBtn.setImage(.init(systemName: "heart"), for: .normal)
+                    }
+                }).disposed(by: self.disposebag)
             }).disposed(by: cell.disposebag)
-            
-            output.flagItResult.asObservable().subscribe(onNext: { bool in
-                self.heartBool = bool
-                if bool {
-                    cell.heartBtn.setImage(.init(systemName: "heart.fill"), for: .normal)                }
-                else {
-                    cell.heartBtn.setImage(.init(systemName: "heart"), for: .normal)
-                }
-            }).disposed(by: self.disposebag)
         }.disposed(by: disposebag)
         
         output.refreshResult.subscribe(onNext: { bool in
