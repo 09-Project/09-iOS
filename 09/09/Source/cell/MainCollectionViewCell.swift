@@ -10,7 +10,8 @@ import RxSwift
 
 class MainCollectionViewCell: UICollectionViewCell {
     
-    let disposebag = DisposeBag()
+    var disposebag = DisposeBag()
+    var bool = Bool()
     
     lazy var imgView = UIImageView().then {
         $0.contentMode = .scaleAspectFit
