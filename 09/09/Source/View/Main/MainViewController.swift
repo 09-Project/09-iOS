@@ -185,7 +185,6 @@ class MainViewController: UIViewController {
                 else {
                     self.flagIt.accept(row)
                 }
-                
                 output.flagItResult.subscribe(onNext: { bool in
                     cell.bool = bool
                     if cell.bool {
@@ -196,6 +195,8 @@ class MainViewController: UIViewController {
                     }
                 }).disposed(by: self.disposebag)
             }).disposed(by: cell.disposebag)
+            
+            
         }.disposed(by: disposebag)
         
         output.refreshResult.subscribe(onNext: { bool in
@@ -285,7 +286,7 @@ class MainViewController: UIViewController {
     
 }
 
-extension MainViewController: UICollectionViewDelegateFlowLayout {
+extension MainViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 8
@@ -302,5 +303,6 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
         
         return size
     }
+    
 }
 
