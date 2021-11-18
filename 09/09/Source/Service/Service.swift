@@ -131,10 +131,10 @@ final class Service {
             .catch{ [unowned self] in return .just(setNetworkError($0))}
     }
     
-    func seeLikePost() -> Single<(Posts?, networkingResult)> {
+    func seeLikePost() -> Single<([PostModel]?, networkingResult)> {
         return provider.rx.request(.seeLikePost)
             .filterSuccessfulStatusCodes()
-            .map(Posts.self)
+            .map([PostModel].self)
             .map{return ($0, .ok)}
             .catch { error in
                 print(error)
@@ -178,10 +178,10 @@ final class Service {
             .catch{ [unowned self] in return .just(setNetworkError($0))}
     }
     
-    func seeDeletePost(_ memberID: Int) -> Single<(Posts?, networkingResult)> {
+    func seeDeletePost(_ memberID: Int) -> Single<([PostModel]?, networkingResult)> {
         return provider.rx.request(.seeDeletePost(memberID))
             .filterSuccessfulStatusCodes()
-            .map(Posts.self)
+            .map([PostModel].self)
             .map{return ($0, .ok)}
             .catch { error in
                 print(error)
