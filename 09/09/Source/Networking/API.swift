@@ -60,7 +60,7 @@ extension API: TargetType {
         case .getInformation:
             return "/member/information"
         case .profile(let id):
-            return "/memeber/\(id)"
+            return "/member/\(id)"
         case .changeInformation:
             return "/member/information"
         case .deleteProducts(let id):
@@ -88,6 +88,7 @@ extension API: TargetType {
         case .seeDeletePost(let id):
             return "/member/completed/\(id)"
         case .myPage:
+            print("page")
             return "/member/my-page"
         }
     }
@@ -109,7 +110,7 @@ extension API: TargetType {
     
     var headers: [String: String]? {
         switch self {
-        case .signIn, .signUp, .products:
+        case .signIn, .signUp:
             return ["Content-Type" : "application/json"]
         case .refreshToken:
             guard let refreshToken = Token.refreshToken else {
@@ -170,8 +171,8 @@ extension API: TargetType {
             multipartFormData.append(MultipartFormData(provider: .data(title.data(using: .utf8)!), name: "title", mimeType: "text/plain"))
             multipartFormData.append(MultipartFormData(provider: .data(content.data(using: .utf8)!), name: "content", mimeType: "text/plain"))
             multipartFormData.append(MultipartFormData(provider: .data(price.description.data(using: .utf8)!), name: "price", mimeType: "text/plain"))
-            multipartFormData.append(MultipartFormData(provider: .data(transactionRegion.data(using: .utf8)!), name: "transaction_region", mimeType: "text/plain"))
-            multipartFormData.append(MultipartFormData(provider: .data(openChatLink.data(using: .utf8)!), name: "open_chat_link", mimeType: "text/plain"))
+            multipartFormData.append(MultipartFormData(provider: .data(transactionRegion.data(using: .utf8)!), name: "transactionRegion", mimeType: "text/plain"))
+            multipartFormData.append(MultipartFormData(provider: .data(openChatLink.data(using: .utf8)!), name: "openChatLink", mimeType: "text/plain"))
             
             return .uploadMultipart(multipartFormData)
             
