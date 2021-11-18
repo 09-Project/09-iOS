@@ -13,35 +13,32 @@ struct MyPageViewModel: ViewModelType {
     private let disposebag = DisposeBag()
     
     struct Input {
-        let getUserInfo: Driver<Void>
-        let getPost: Driver<Void>
-        let getLikePost: Driver<Void>
-        let getDetail: Driver<Void>
+        let getUserInfo: Signal<Void>
+        let getPost: Signal<Void>
+        let getLikePost: Signal<Void>
+        let getDetail: Signal<Void>
         let memberID: Int
     }
     
     struct Output {
-        let getUserInfoResult: PublishRelay<Bool>
-        let myInfo: PublishRelay<ProfileModel>
+        let myInfo: PublishRelay<ProfileModel?>
         let post: BehaviorRelay<[PostModel]>
-        let getPostResult: PublishRelay<Bool>
     }
     
     func transform(_ input: Input) -> Output {
         let api = Service()
-        let getInfoResult = PublishRelay<Bool>()
-        let userInfo = PublishRelay<ProfileModel>()
+        let userInfo = PublishRelay<ProfileModel?>()
         let post = BehaviorRelay<[PostModel]>(value: [])
-        let getPostResult = PublishRelay<Bool>()
         
         input.getUserInfo.asObservable().flatMap { _ in
             api.myPage()
         }.subscribe(onNext: { data, res in
+            print(data!)
             switch res {
             case .ok:
-                userInfo.accept(data!.self)
+                userInfo.accept(data!)
             default:
-                getInfoResult.accept(false)
+                userInfo.accept(nil)
             }
         }).disposed(by: disposebag)
         
@@ -52,7 +49,7 @@ struct MyPageViewModel: ViewModelType {
             case .ok:
                 post.accept(data!.posts)
             default:
-                getPostResult.accept(false)
+                print(data)
             }
         }).disposed(by: disposebag)
         
@@ -61,9 +58,9 @@ struct MyPageViewModel: ViewModelType {
         }.subscribe(onNext: { data, res in
             switch res {
             case .ok:
-                post.accept(data!.posts)
+                post.accept(data!)
             default:
-                getPostResult.accept(false)
+                print(data)
             }
         }).disposed(by: disposebag)
         
@@ -72,13 +69,12 @@ struct MyPageViewModel: ViewModelType {
         }.subscribe(onNext: { data, res in
             switch res {
             case .ok:
-                post.accept(data!.posts)
+                post.accept(data!)
             default:
-                getPostResult.accept(false)
+                print(data)
             }
         }).disposed(by: disposebag)
         
-        return Output(getUserInfoResult: getInfoResult, myInfo: userInfo, post: post,
-                      getPostResult: getPostResult)
+        return Output(myInfo: userInfo, post: post)
     }
 }
