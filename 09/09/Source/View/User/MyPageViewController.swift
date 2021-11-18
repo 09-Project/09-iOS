@@ -15,8 +15,9 @@ class MyPageViewController: UIViewController {
     
     private let disposebag = DisposeBag()
     private let viewmodel = MyPageViewModel()
+    private var gearBool = false
     
-    private let getProfileData = BehaviorRelay<Void>(value: ())
+    private let getProfileData = PublishRelay<Void>()
     
     private lazy var profileImg = UIImageView().then {
         $0.layer.cornerRadius = 10
@@ -35,19 +36,25 @@ class MyPageViewController: UIViewController {
         $0.layer.cornerRadius = 1
     }
     
-    private lazy var chngProfileBtn = UIButton(type: .system).then {
-        $0.setTitle("프로필 설정", for: .normal)
-        $0.titleLabel?.font = .init(name: Font.fontRegular.rawValue, size: 11)
-    }
-    
-    private lazy var chngPwBtn = UIButton(type: .system).then {
-        $0.setTitle("비밀번호 변경", for: .normal)
-        $0.titleLabel?.font = .init(name: Font.fontRegular.rawValue, size: 11)
-    }
-    
     private lazy var gearBtn = UIButton(type: .system).then {
         $0.setImage(.init(named: "gearImg"), for: .normal)
         $0.tintColor = .init(named: "mainColor")
+    }
+    
+    private lazy var btnView = UIView().then {
+        $0.layer.cornerRadius = 10
+        $0.backgroundColor = .white
+        $0.layer.borderWidth = 1
+    }
+    
+    private lazy var changeInfoBtn = UIButton(type: .system).then {
+        $0.setTitle("프로필 수정", for: .normal)
+        $0.setTitleColor(.black, for: .normal)
+    }
+    
+    private lazy var changePwBtn = UIButton(type: .system).then {
+        $0.setTitleColor(.black, for: .normal)
+        $0.setTitle("비밀번호 변경", for: .normal)
     }
     
     private lazy var introduceLabel = UILabel().then {
@@ -152,48 +159,89 @@ class MyPageViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .white
+        bindViewModel()
         collectionView.rx.setDelegate(self).disposed(by: disposebag)
         collectionView.register(MainCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
-        view.backgroundColor = .white
         setBtn()
         logoutBtn.rx.tap.subscribe(onNext: { _ in
-            self.navigationController?.popViewController(animated: true)
-            Token.logOut()
+            self.alert(title: "로그아웃 하시겠습니까?", action: { ACTION in
+                Token.logOut()
+                self.navigationController?.popViewController(animated: true)
+            })
+        }).disposed(by: disposebag)
+        gearBtn.rx.tap.subscribe(onNext: {[unowned self] _ in
+            btnView.isHidden = gearBool
+            changePwBtn.isHidden = gearBool
+            changeInfoBtn.isHidden = gearBool
+            gearBool.toggle()
+        }).disposed(by: disposebag)
+        changePwBtn.rx.tap.subscribe(onNext: { _ in
+            self.pushVC(ChangePasswordViewController())
+        }).disposed(by: disposebag)
+        changeInfoBtn.rx.tap.subscribe(onNext: { _ in
+            self.pushVC(ChangeProfileViewController())
         }).disposed(by: disposebag)
     }
     
     override func viewDidLayoutSubviews() {
         setNavigationItem()
         setupView()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        btnView.isHidden = true
+        changePwBtn.isHidden = true
+        changeInfoBtn.isHidden = true
+        gearBool = false
+        changeInfoBtn.layer.addBorder([.bottom], color: .init(named: "borderColor")!, width: 1)
+        changeInfoBtn.clipsToBounds = true
         getProfileData.accept(())
     }
     
     private func bindViewModel() {
-        let model = MyPageViewModel()
-        let input = MyPageViewModel.Input(getUserInfo: getProfileData.asDriver(), getPost: postBtn.rx.tap.asDriver(), getLikePost: likePostBtn.rx.tap.asDriver(), getDetail: detailBtn.rx.tap.asDriver(), memberID: memberID)
+        let input = MyPageViewModel.Input(getUserInfo: getProfileData.asSignal(),
+                                          getPost: postBtn.rx.tap.asSignal(),
+                                          getLikePost: likePostBtn.rx.tap.asSignal(),
+                                          getDetail: detailBtn.rx.tap.asSignal(),
+                                          memberID: memberID)
         
-        let output = model.transform(input)
+        let output = viewmodel.transform(input)
         
-        output.myInfo.subscribe(onNext: { [self] data in
-            let url = URL(string: data.profile_url)
+        output.myInfo.subscribe(onNext: { [unowned self] data in
+            if data?.profile_url != nil {
+            let url = URL(string: data!.profile_url ?? "")
             let img = try? Data(contentsOf: url!)
-            profileImg.image = UIImage(data: img!)
-            nameLabel.text = data.name
-            introduceLabel.text = data.introduction
-            productNum.text = String(data.all_post_count)
-            prizeNum.text = String(data.like_post_count)
-            receiveNum.text = String(data.get_likes_count)
-            transactionNum.text = String(data.completed_post_count)
+             profileImg.image = UIImage(data: img!)}
+            memberID = data!.member_id
+            nameLabel.text = data!.name
+            introduceLabel.text = data!.introduction ?? ""
+            productNum.text = String(data!.all_posts_count)
+            prizeNum.text = String(data!.like_posts_count)
+            receiveNum.text = String(data!.get_likes_count)
+            transactionNum.text = String(data!.completed_posts_count)
         }).disposed(by: disposebag)
         
-        output.post.bind(to: collectionView.rx.items(cellIdentifier: "cell", cellType: MainCollectionViewCell.self)) { row, items, cell in
+        output.post.bind(to: collectionView.rx.items(cellIdentifier: "cell",
+                                                     cellType: MainCollectionViewCell.self))
+        { row, items, cell in
             let url = URL(string: items.image)
             let data = try? Data(contentsOf: url!)
             cell.imgView.image = UIImage(data: data!)
             cell.titleLabel.text = items.title
-            cell.priceLabel.text = String(items.price ?? 0)
-            cell.label.text = items.purpose
             cell.locationLabel.text = items.transaction_region
+            if items.price == 0 || items.price == nil {
+                cell.priceLabel.isHidden = true
+                cell.label.text! = "무료나눔"
+            } else {
+                cell.priceLabel.text = String(items.price ?? 0)
+                cell.label.text! = "공동구매"
+            }
+            if items.liked {
+                cell.heartBtn.setImage(.init(systemName: "heart.fill"), for: .normal)
+            } else {
+                cell.heartBtn.setImage(.init(systemName: "heart"), for: .normal)
+            }
         }.disposed(by: disposebag)
     }
     
@@ -224,9 +272,10 @@ class MyPageViewController: UIViewController {
     }
     
     private func setupView() {
-        [profileImg, nameLabel, gearBtn, introduceLabel, productView, productNum, productLabel,
-         prizeView, prizeNum, prizeLabel, receiveView, receiveNum, receiveLabel, transactionView,
-         transactionNum, transactionLabel, collectionView, postBtn, likePostBtn, detailBtn].forEach {self.view.addSubview($0)}
+        [profileImg, nameLabel, gearBtn, introduceLabel, btnView, changeInfoBtn, changePwBtn,
+         productView, productNum, productLabel,  prizeView, prizeNum, prizeLabel, receiveView,
+         receiveNum, receiveLabel, transactionView,  transactionNum, transactionLabel,
+         collectionView, postBtn, likePostBtn, detailBtn].forEach {self.view.addSubview($0)}
         
         
         self.profileImg.snp.makeConstraints {
@@ -246,6 +295,23 @@ class MyPageViewController: UIViewController {
             $0.height.width.equalTo(14)
         }
         
+        self.btnView.snp.makeConstraints {
+            $0.centerY.equalTo(gearBtn)
+            $0.leading.equalTo(self.gearBtn.snp.trailing).offset(8)
+            $0.width.equalTo(120)
+            $0.height.equalTo(80)
+        }
+        
+        self.changeInfoBtn.snp.makeConstraints {
+            $0.top.equalTo(self.btnView.snp.top).offset(5)
+            $0.centerX.equalTo(btnView)
+        }
+        
+        self.changePwBtn.snp.makeConstraints {
+            $0.top.equalTo(changeInfoBtn.snp.bottom).offset(15)
+            $0.centerX.equalTo(btnView)
+        }
+        
         self.introduceLabel.snp.makeConstraints {
             $0.top.equalTo(self.nameLabel.snp.bottom).offset(5)
             $0.leading.equalTo(self.profileImg.snp.trailing).offset(23)
@@ -260,8 +326,7 @@ class MyPageViewController: UIViewController {
         
         self.productNum.snp.makeConstraints {
             $0.top.equalTo(self.productView.snp.top).offset(12)
-            $0.leading.lessThanOrEqualTo(self.productView.snp.leading).offset(18)
-            $0.trailing.greaterThanOrEqualTo(self.productView.snp.trailing).offset(-19)
+            $0.centerX.equalTo(productView)
         }
         
         self.productLabel.snp.makeConstraints {
@@ -279,8 +344,7 @@ class MyPageViewController: UIViewController {
         
         self.prizeNum.snp.makeConstraints {
             $0.top.equalTo(self.prizeView.snp.top).offset(12)
-            $0.leading.lessThanOrEqualTo(self.prizeView.snp.leading).offset(27)
-            $0.trailing.greaterThanOrEqualTo(self.prizeView.snp.trailing).offset(-27)
+            $0.centerX.equalTo(prizeView)
         }
         
         self.prizeLabel.snp.makeConstraints {
@@ -298,8 +362,7 @@ class MyPageViewController: UIViewController {
         
         self.receiveNum.snp.makeConstraints {
             $0.top.equalTo(self.receiveView.snp.top).offset(12)
-            $0.leading.lessThanOrEqualTo(self.receiveView.snp.leading).offset(21)
-            $0.trailing.greaterThanOrEqualTo(self.receiveView.snp.trailing).offset(-21)
+            $0.centerX.equalTo(receiveView)
         }
         
         self.receiveLabel.snp.makeConstraints {
@@ -318,8 +381,7 @@ class MyPageViewController: UIViewController {
         
         self.transactionNum.snp.makeConstraints {
             $0.top.equalTo(self.transactionView.snp.top).offset(12)
-            $0.leading.lessThanOrEqualTo(self.transactionView.snp.leading).offset(21)
-            $0.trailing.greaterThanOrEqualTo(self.transactionView.snp.trailing).offset(-21)
+            $0.centerX.equalTo(transactionView)
         }
         
         self.transactionLabel.snp.makeConstraints {
