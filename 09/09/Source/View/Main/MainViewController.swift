@@ -186,8 +186,8 @@ class MainViewController: UIViewController {
                     self.flagIt.accept(row)
                 }
                 output.flagItResult.subscribe(onNext: { bool in
-                    cell.bool = bool
-                    if cell.bool {
+                    self.heartBool = bool
+                    if bool {
                         cell.heartBtn.setImage(.init(systemName: "heart.fill"), for: .normal)
                     }
                     else {
@@ -195,8 +195,6 @@ class MainViewController: UIViewController {
                     }
                 }).disposed(by: self.disposebag)
             }).disposed(by: cell.disposebag)
-            
-            
         }.disposed(by: disposebag)
         
         output.refreshResult.subscribe(onNext: { bool in
@@ -302,6 +300,12 @@ extension MainViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
         let size = CGSize(width: width, height: width)
         
         return size
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        let cell = MainCollectionViewCell()
+        cell.disposebag = DisposeBag()
+        cell.heartBtn.isSelected = false
     }
     
 }
