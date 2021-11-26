@@ -108,7 +108,7 @@ class MainCollectionViewCell: UICollectionViewCell {
         }
         
         self.priceLabel.snp.makeConstraints {
-            $0.top.equalTo(self.titleLabel.snp.bottom).offset(6)
+            $0.top.equalTo(self.locationLabel.snp.bottom).offset(2)
             $0.trailing.equalToSuperview().offset(-5)
             $0.bottom.equalToSuperview().offset(-5)
         }

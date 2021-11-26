@@ -34,7 +34,7 @@ class AddPostViewModel: ViewModelType {
         
         input.doneTap.asObservable()
             .withLatestFrom(info)
-            .flatMap { title, content, transactionRegion, price, openChatLink, image in
+            .flatMap { title, content, price, transactionRegion, openChatLink, image in
                 api.post(title: title, content: content, price: Int(price) ?? 0 , transactionRegion: transactionRegion, openChatLink: openChatLink, image: image)
             }.subscribe(onNext: { res in
                 switch res {
